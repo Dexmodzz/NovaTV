@@ -581,6 +581,8 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
                     updateNovaHeader();
                 }
             });
+            // ...or are moved by a new layout without scrolling
+            grid.getViewTreeObserver().addOnGlobalLayoutListener(this::updateNovaHeader);
         }
 
         mNovaHeader.show(isControlsShown() && !isNovaHeaderCovered(grid), mIsUIAnimationsEnabled);

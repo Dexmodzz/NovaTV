@@ -82,8 +82,13 @@
     <!-- Player header -->
     <dimen name="nova_player_header_padding_h">56dp</dimen>
     <dimen name="nova_player_header_padding_top">28dp</dimen>
-    <dimen name="nova_player_header_avatar_size">44dp</dimen>
-    <dimen name="nova_player_header_title_size">20sp</dimen>
+    <dimen name="nova_player_header_avatar_size">28dp</dimen>
+    <!-- Room kept free on both sides of the centered title (the clock is in the right corner) -->
+    <dimen name="nova_player_header_side_space">120dp</dimen>
+    <dimen name="nova_player_time_min_width">56dp</dimen>
+    <!-- Centered rows: no negative start offset -->
+    <dimen name="lb_playback_transport_controlbar_margin_start">0dp</dimen>
+    <dimen name="nova_player_header_title_size">22sp</dimen>
     <dimen name="nova_player_header_subtitle_size">14sp</dimen>
     <!-- Thicker progress bar -->
     <dimen name="lb_playback_transport_progressbar_bar_height">6dp</dimen>

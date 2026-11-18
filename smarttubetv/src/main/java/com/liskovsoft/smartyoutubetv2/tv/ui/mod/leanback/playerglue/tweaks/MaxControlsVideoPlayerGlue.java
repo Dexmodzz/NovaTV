@@ -56,6 +56,15 @@ public abstract class MaxControlsVideoPlayerGlue<T extends PlayerAdapter>
                         // NovaTV: the title is shown in the player top header (empty text = hidden by leanback)
                         viewHolder.getTitle().setText(null);
                         viewHolder.getSubtitle().setText(glue.getSubtitle());
+                        // NovaTV: centered info line (views, date, likes) and chapter name
+                        if (viewHolder.view.getLayoutParams() != null) {
+                            viewHolder.view.getLayoutParams().width = android.view.ViewGroup.LayoutParams.MATCH_PARENT;
+                        }
+                        viewHolder.getSubtitle().setGravity(android.view.Gravity.CENTER_HORIZONTAL);
+                        viewHolder.getBody().setGravity(android.view.Gravity.CENTER_HORIZONTAL);
+                        // The leanback style sets textAlignment=viewStart, which wins over gravity
+                        viewHolder.getSubtitle().setTextAlignment(android.view.View.TEXT_ALIGNMENT_CENTER);
+                        viewHolder.getBody().setTextAlignment(android.view.View.TEXT_ALIGNMENT_CENTER);
                         // MOD: add extra title line
                         //viewHolder.getBody().setText(glue.getBody());
                     }
