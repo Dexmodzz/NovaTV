@@ -110,6 +110,11 @@ android {
 
             if (keystorePropertiesFile.exists()) {
                 signingConfig signingConfigs.release
+            } else {
+                // NovaTV: without keystore.properties sign the release with the standard Android debug key,
+                // so the fast release build (no network profiler/body logger, see SharedModules OkHttpCommons)
+                // can always be built and installed over a debug build without losing app data.
+                signingConfig signingConfigs.debug
             }
         }
         // Use same key for release and debug for testing
