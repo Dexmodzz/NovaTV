@@ -35,6 +35,8 @@
         android:src="@mipmap/novatv_logo"/>
 
     <!-- Start search button -->
+    <!-- NovaTV: hidden on request (search starts from the keyboard enter key or by voice).
+         Kept in the layout because SearchSupportFragment/ChannelHeaderPresenter look it up by id. -->
     <androidx.leanback.widget.SearchOrbView
         android:id="@+id/lb_search_bar_search_orb"
         android:layout_width="wrap_content"
@@ -42,6 +44,7 @@
         android:layout_centerVertical="true"
         android:layout_marginEnd="@dimen/search_bar_right_items_margin"
         android:layout_alignParentEnd="true"
+        android:visibility="gone"
         android:focusable="true"
         android:focusableInTouchMode="false"
         app:searchOrbColor="@color/orb_color"
@@ -54,8 +57,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_marginEnd="@dimen/nova_space_l"
-        android:layout_toStartOf="@+id/lb_search_bar_search_orb"
+        android:layout_marginEnd="@dimen/search_bar_right_items_margin"
+        android:layout_alignParentEnd="true"
         android:focusable="true"
         android:focusableInTouchMode="false"
         app:searchOrbIcon="@drawable/search_bar_settings_orb"
