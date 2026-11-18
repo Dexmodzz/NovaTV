@@ -86,5 +86,5 @@
     <color name="nova_player_button">#B31C1C1F</color>
     <color name="nova_player_buffered">#66FFFFFF</color>
     <color name="nova_player_scrim">#F20F0F10</color>
-    <color name="nova_player_scrim_top">#CC0F0F10</color>
+    <color name="nova_player_scrim_top">#F20F0F10</color>
 </resources>

@@ -80,6 +80,7 @@ import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.tweaks.Playb
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.mod.SeekModePlaybackFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.mod.surface.SurfacePlaybackFragmentGlueHost;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.other.BackboneQueueNavigator;
+import com.liskovsoft.smartyoutubetv2.tv.ui.playback.other.NovaPlayerHeader;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.other.VideoPlayerGlue;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.other.VideoPlayerGlue.OnActionClickedListener;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.previewtimebar.StoryboardSeekDataProvider;
@@ -123,6 +124,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     private DoubleTapPlayerAdapter mDoubleTapPlayerAdapter;
     private YouTubeOverlay mYouTubeOverlay;
     private Boolean mIsControlsShownPreviously;
+    private NovaPlayerHeader mNovaHeader; // NovaTV: top header
     private Video mPendingFocus;
     private String mSelectedVideoId;
 
@@ -187,6 +189,8 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
      * Update background depending what's shown: controls or suggestions
      */
     private void updatePlayerBackground() {
+        updateNovaHeader(); // NovaTV: header only with the controls (not over suggestions)
+
         if (isOverlayShown()) {
             setBackgroundResource(isSuggestionsShown() ? R.drawable.player_background_suggestions : R.drawable.player_background_controls);
         }
@@ -470,6 +474,8 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
 
         initializeGlobalClock();
 
+        initializeNovaHeader();
+
         initializeGlobalEndingTime();
 
         initializePixelRatio();
@@ -539,6 +545,66 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         DateTimeView clock = getView().findViewById(R.id.global_time);
         clock.showDate(false);
         clock.setVisibility(getPlayerData().isGlobalClockEnabled() ? View.VISIBLE : View.GONE);
+    }
+
+    /**
+     * NovaTV: top header. The player clock setting now drives the header clock.
+     */
+    private void initializeNovaHeader() {
+        if (getView() == null) {
+            return;
+        }
+
+        mNovaHeader = NovaPlayerHeader.create(getView());
+
+        if (mNovaHeader != null) {
+            mNovaHeader.setClockEnabled(getPlayerData().isClockEnabled());
+            mNovaHeader.bind(getVideo());
+            mNovaHeader.show(isControlsShown(), false);
+        }
+    }
+
+    private void updateNovaHeader() {
+        if (mNovaHeader == null) {
+            return;
+        }
+
+        androidx.leanback.widget.VerticalGridView grid =
+                mRowsSupportFragment != null ? mRowsSupportFragment.getVerticalGridView() : null;
+
+        if (grid != null && grid.getTag(R.id.nova_player_header) == null) {
+            // Rows can scroll up under the header (e.g. while the video is loading): follow them
+            grid.setTag(R.id.nova_player_header, Boolean.TRUE);
+            grid.addOnScrollListener(new androidx.recyclerview.widget.RecyclerView.OnScrollListener() {
+                @Override
+                public void onScrolled(@NonNull androidx.recyclerview.widget.RecyclerView recyclerView, int dx, int dy) {
+                    updateNovaHeader();
+                }
+            });
+        }
+
+        mNovaHeader.show(isControlsShown() && !isNovaHeaderCovered(grid), mIsUIAnimationsEnabled);
+    }
+
+    /**
+     * NovaTV: the controls row reaches the header area -> hide the header instead of overlapping.
+     */
+    private boolean isNovaHeaderCovered(androidx.leanback.widget.VerticalGridView grid) {
+        if (grid == null || grid.getLayoutManager() == null) {
+            return false;
+        }
+
+        View controlsRow = grid.getLayoutManager().findViewByPosition(0);
+
+        if (controlsRow == null) {
+            return false;
+        }
+
+        int[] gridPos = new int[2];
+        grid.getLocationInWindow(gridPos);
+        int rowTop = gridPos[1] + controlsRow.getTop();
+
+        return rowTop < mNovaHeader.getBottomInWindow();
     }
 
     private void initializeGlobalEndingTime() {
@@ -844,6 +910,10 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
             mPlayerGlue.setSubtitle(video.getSecondTitleFull() != null ? createSubtitle(video) : "...");
             mPlayerGlue.setVideo(video);
         }
+
+        if (mNovaHeader != null) {
+            mNovaHeader.bind(video);
+        }
     }
 
     @Override
@@ -857,7 +927,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     }
 
     private CharSequence createSubtitle(Video video) {
-        CharSequence result = video.getSecondTitleFull();
+        CharSequence result = novaStripAuthor(video, video.getSecondTitleFull());
 
         if (getContext() != null && video.isLive) {
             result = TextUtils.concat( result, " ", Video.TERTIARY_TEXT_DELIM, " ", Utils.color(getContext().getString(R.string.badge_live), ContextCompat.getColor(getContext(), R.color.red)));
@@ -871,11 +941,42 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
             result = TextUtils.concat(result, " ", Video.TERTIARY_TEXT_DELIM, " ", video.dislikeCount, Helpers.NON_BREAKING_SPACE, Helpers.THUMB_DOWN); // color of thumb cannot be changed
         }
 
-        if (getContext() != null && video.subscriberCount != null) {
+        // NovaTV: subscribers are shown in the top header
+        if (getContext() != null && video.subscriberCount != null && mNovaHeader == null) {
             result = TextUtils.concat(result, " ", Video.TERTIARY_TEXT_DELIM, " ", video.subscriberCount.replace(" ", Helpers.NON_BREAKING_SPACE));
         }
 
         return result;
+    }
+
+    /**
+     * NovaTV: "Channel • views • date" -> "views • date" (the channel is in the top header).
+     */
+    private CharSequence novaStripAuthor(Video video, CharSequence secondTitle) {
+        if (mNovaHeader == null || secondTitle == null || video.getAuthor() == null) {
+            return secondTitle;
+        }
+
+        String text = secondTitle.toString();
+
+        if (!text.startsWith(video.getAuthor())) {
+            return secondTitle;
+        }
+
+        // Skip "Author", any kind of spaces (incl. non-breaking), the delimiter and the spaces after it
+        int pos = video.getAuthor().length();
+        while (pos < text.length() && isNovaSpace(text.charAt(pos))) pos++;
+        if (!text.startsWith(Video.TERTIARY_TEXT_DELIM, pos)) {
+            return secondTitle;
+        }
+        pos += Video.TERTIARY_TEXT_DELIM.length();
+        while (pos < text.length() && isNovaSpace(text.charAt(pos))) pos++;
+
+        return pos < text.length() ? secondTitle.subSequence(pos, secondTitle.length()) : secondTitle;
+    }
+
+    private static boolean isNovaSpace(char c) {
+        return Character.isWhitespace(c) || Character.isSpaceChar(c);
     }
 
     private CharSequence createNextTitle(Video video) {
@@ -1220,6 +1321,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     @Override
     public void showControlsOverlay(boolean runAnimation) {
         super.showControlsOverlay(mIsUIAnimationsEnabled);
+        updateNovaHeader();
 
         // Do throttle. Called so many times. Rely on boxing because initial state is unknown.
         if (mIsControlsShownPreviously != null && mIsControlsShownPreviously) {
@@ -1242,6 +1344,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     @Override
     public void hideControlsOverlay(boolean runAnimation) {
         super.hideControlsOverlay(mIsUIAnimationsEnabled);
+        updateNovaHeader();
 
         // Do throttle. Called so many times. Rely on boxing because initial state is unknown.
         if (mIsControlsShownPreviously != null && !mIsControlsShownPreviously) {

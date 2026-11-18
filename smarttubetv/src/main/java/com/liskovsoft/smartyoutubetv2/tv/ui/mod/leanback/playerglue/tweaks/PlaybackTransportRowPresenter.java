@@ -93,6 +93,7 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
         final TextView mEndingTime;
         final TextView mQualityInfo;
         final TextView mDateTime;
+        final TextView mNovaSponsorChip; // NovaTV
         final ViewGroup mAdditionalInfo;
         final ViewGroup mTimeInfo;
         final ViewGroup mTopEdge;
@@ -437,6 +438,7 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
             mTotalTime = (TextView) rootView.findViewById(R.id.total_time);
             mQualityInfo = (TextView) rootView.findViewById(com.liskovsoft.smartyoutubetv2.tv.R.id.quality_info);
             mDateTime = (TextView) rootView.findViewById(com.liskovsoft.smartyoutubetv2.tv.R.id.date_time);
+            mNovaSponsorChip = (TextView) rootView.findViewById(com.liskovsoft.smartyoutubetv2.tv.R.id.nova_sponsor_chip);
             mEndingTime = (TextView) rootView.findViewById(com.liskovsoft.smartyoutubetv2.tv.R.id.ending_time);
             mEndingTimeFormat = rootView.getContext().getString(com.liskovsoft.smartyoutubetv2.tv.R.string.player_ending_time);
             mRemainingTimeFormat = rootView.getContext().getString(com.liskovsoft.smartyoutubetv2.tv.R.string.player_remaining_time);
@@ -793,11 +795,8 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
         }
 
         void setDateVisibility(boolean isVisible) {
-            if (mPlayerData.isClockEnabled()) {
-                mDateTime.setVisibility(View.VISIBLE);
-            } else {
-                mDateTime.setVisibility(View.GONE);
-            }
+            // NovaTV: the clock lives in the player top header (same setting: PlayerData.isClockEnabled())
+            mDateTime.setVisibility(View.GONE);
         }
 
         void setSeekPreviewTitle(String title) {
@@ -811,6 +810,25 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
 
         void setSeekBarSegments(List<SeekBarSegment> segments) {
             mProgressBar.setSegments(segments);
+
+            // NovaTV: "SponsorBlock: N" chip (the same segments drawn on the bar, chapter marks excluded)
+            if (mNovaSponsorChip != null) {
+                int chapterColor = androidx.core.content.ContextCompat.getColor(mNovaSponsorChip.getContext(),
+                        com.liskovsoft.smartyoutubetv2.common.R.color.black);
+                int count = 0;
+                if (segments != null) {
+                    for (SeekBarSegment segment : segments) {
+                        if (segment.color != chapterColor) {
+                            count++;
+                        }
+                    }
+                }
+                if (count > 0) {
+                    mNovaSponsorChip.setText(mNovaSponsorChip.getResources().getQuantityString(
+                            com.liskovsoft.smartyoutubetv2.tv.R.plurals.novatv_sponsorblock_segments, count, count));
+                }
+                mNovaSponsorChip.setVisibility(count > 0 ? View.VISIBLE : View.GONE);
+            }
         }
 
         void setPlay(boolean play) {

@@ -19,7 +19,7 @@
                 android:angle="270"
                 android:centerY="0.45"
                 android:startColor="@color/nova_player_scrim_top"
-                android:centerColor="#660F0F10"
+                android:centerColor="#A60F0F10"
                 android:endColor="#000F0F10"
                 android:type="linear" />
         </shape>

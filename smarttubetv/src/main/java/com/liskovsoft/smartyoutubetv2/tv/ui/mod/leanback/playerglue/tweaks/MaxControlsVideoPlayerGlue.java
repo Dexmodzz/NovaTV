@@ -53,7 +53,8 @@ public abstract class MaxControlsVideoPlayerGlue<T extends PlayerAdapter>
                         fixThumbOverlapping(viewHolder);
 
                         PlaybackBaseControlGlue<?> glue = (PlaybackBaseControlGlue<?>) obj;
-                        viewHolder.getTitle().setText(glue.getTitle());
+                        // NovaTV: the title is shown in the player top header (empty text = hidden by leanback)
+                        viewHolder.getTitle().setText(null);
                         viewHolder.getSubtitle().setText(glue.getSubtitle());
                         // MOD: add extra title line
                         //viewHolder.getBody().setText(glue.getBody());

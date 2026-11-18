@@ -130,6 +130,27 @@
                     android:layout_alignParentEnd="true"
                     android:layout_below="@+id/quality_info"
                     style="?attr/playbackControlsTimeStyle" />
+                <!-- NovaTV: number of SponsorBlock segments of this video -->
+                <TextView
+                    android:id="@+id/nova_sponsor_chip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_below="@+id/quality_info"
+                    android:layout_marginTop="@dimen/nova_space_xs"
+                    android:background="@drawable/novatv_sponsor_chip_bg"
+                    android:drawableStart="@drawable/novatv_sponsor_dot"
+                    android:drawablePadding="@dimen/nova_space_s"
+                    android:gravity="center_vertical"
+                    android:paddingStart="@dimen/nova_space_m"
+                    android:paddingEnd="@dimen/nova_space_m"
+                    android:paddingTop="@dimen/nova_space_xs"
+                    android:paddingBottom="@dimen/nova_space_xs"
+                    android:includeFontPadding="false"
+                    android:singleLine="true"
+                    android:textColor="@color/nova_text_primary"
+                    android:textSize="@dimen/nova_player_label_size"
+                    android:visibility="gone" />
             </RelativeLayout>
         </RelativeLayout>
 

@@ -3,4 +3,8 @@
 <resources>
     <string name="novatv_chip_all">All</string>
     <string name="novatv_voice_search">Voice search</string>
+    <plurals name="novatv_sponsorblock_segments">
+        <item quantity="one">SponsorBlock: %d segment</item>
+        <item quantity="other">SponsorBlock: %d segments</item>
+    </plurals>
 </resources>

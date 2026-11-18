@@ -2,4 +2,8 @@
 <resources>
     <string name="novatv_chip_all">Tutti</string>
     <string name="novatv_voice_search">Ricerca vocale</string>
+    <plurals name="novatv_sponsorblock_segments">
+        <item quantity="one">SponsorBlock: %d salto</item>
+        <item quantity="other">SponsorBlock: %d salti</item>
+    </plurals>
 </resources>
