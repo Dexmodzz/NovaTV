@@ -1,6 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.tv.presenter;
 
 import android.content.Context;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
@@ -20,6 +21,7 @@ import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
+import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.util.ViewUtil;
@@ -30,10 +32,24 @@ public class IconHeaderItemPresenter extends RowHeaderPresenter {
     private final int mResId;
     private final String mIconUrl;
     private Drawable mDefaultIcon;
+    // NovaTV: rail styling
+    private final boolean mIsHidden;
+    private int mAccentColor;
+    private int mIdleIconColor;
+    private int mSelectedTextColor;
+    private int mIdleTextColor;
 
     public IconHeaderItemPresenter(int resId, String iconUrl) {
+        this(resId, iconUrl, false);
+    }
+
+    /**
+     * @param isHidden NovaTV: section shown as a chip, the rail item takes no space and can't be focused
+     */
+    public IconHeaderItemPresenter(int resId, String iconUrl, boolean isHidden) {
         mResId = resId;
         mIconUrl = iconUrl;
+        mIsHidden = isHidden;
     }
 
     @Override
@@ -45,7 +61,18 @@ public class IconHeaderItemPresenter extends RowHeaderPresenter {
         mDefaultIcon = new ColorDrawable(ContextCompat.getColor(viewGroup.getContext(), R.color.lb_grey));
 
         View view = inflater.inflate(R.layout.icon_header_item, null);
-        view.setAlpha(mUnselectedAlpha); // Initialize icons to be at half-opacity.
+        // NovaTV: inflated without parent, so restore the fixed rail item width
+        view.setLayoutParams(new ViewGroup.LayoutParams(
+                viewGroup.getResources().getDimensionPixelSize(R.dimen.nova_rail_item_width), ViewGroup.LayoutParams.WRAP_CONTENT));
+        // NovaTV: selection is shown with background + accent instead of opacity
+        mUnselectedAlpha = 1.0f;
+
+        Context context = viewGroup.getContext();
+        int accentRes = Helpers.getThemeAttr(context, R.attr.novaAccent);
+        mAccentColor = ContextCompat.getColor(context, accentRes > 0 ? accentRes : R.color.nova_accent);
+        mIdleIconColor = ContextCompat.getColor(context, R.color.nova_text_secondary);
+        mSelectedTextColor = ContextCompat.getColor(context, R.color.nova_text_primary);
+        mIdleTextColor = ContextCompat.getColor(context, R.color.nova_text_secondary);
 
         return new ViewHolder(view);
     }
@@ -61,7 +88,8 @@ public class IconHeaderItemPresenter extends RowHeaderPresenter {
         }
 
         View rootView = viewHolder.view;
-        rootView.setFocusable(true);
+        rootView.setFocusable(!mIsHidden);
+        applyHidden(rootView);
 
         ImageView iconView = rootView.findViewById(R.id.header_icon);
         if (iconView != null) {
@@ -83,6 +111,10 @@ public class IconHeaderItemPresenter extends RowHeaderPresenter {
         if (label != null) {
             label.setText(headerItem.getName());
         }
+
+        if (viewHolder instanceof RowHeaderPresenter.ViewHolder) {
+            applySelected(rootView, ((RowHeaderPresenter.ViewHolder) viewHolder).getSelectLevel() > 0.5f);
+        }
     }
 
     @Override
@@ -96,6 +128,38 @@ public class IconHeaderItemPresenter extends RowHeaderPresenter {
     protected void onSelectLevelChanged(RowHeaderPresenter.ViewHolder holder) {
         holder.view.setAlpha(mUnselectedAlpha + holder.getSelectLevel() *
                 (1.0f - mUnselectedAlpha));
+        applySelected(holder.view, holder.getSelectLevel() > 0.5f);
+    }
+
+    /**
+     * NovaTV: hidden rail items collapse to zero size. The Leanback wrapper (parent) is hidden too,
+     * so GridLayoutManager.canScrollTo() skips it during dpad navigation.
+     */
+    private void applyHidden(View rootView) {
+        int visibility = mIsHidden ? View.GONE : View.VISIBLE;
+        rootView.setVisibility(visibility);
+
+        if (rootView.getParent() instanceof View) {
+            ((View) rootView.getParent()).setVisibility(visibility);
+        }
+    }
+
+    /**
+     * NovaTV: selected item = #26262A rounded background, accent icon, primary label.
+     */
+    private void applySelected(View rootView, boolean selected) {
+        rootView.setBackgroundResource(selected ? R.drawable.novatv_rail_item_selected : 0);
+
+        ImageView iconView = rootView.findViewById(R.id.header_icon);
+        // Remote icons (channel avatars) keep their colors
+        if (iconView != null && mIconUrl == null) {
+            iconView.setColorFilter(selected ? mAccentColor : mIdleIconColor, PorterDuff.Mode.SRC_IN);
+        }
+
+        TextView label = rootView.findViewById(R.id.header_label);
+        if (label != null) {
+            label.setTextColor(selected ? mSelectedTextColor : mIdleTextColor);
+        }
     }
 
     private final RequestListener<Drawable> mErrorListener = new RequestListener<Drawable>() {

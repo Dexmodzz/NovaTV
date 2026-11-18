@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <!-- MOD: add custom widgets to the title -->
+<!-- NovaTV: header = logo | wide search pill (+ mic) | pip, language, clock/date, avatar,
+     with a row of category chips below. All upstream ids are kept (TitleView/NavigateTitleView use them). -->
 
 <!--
      Copyright (C) 2014 The Android Open Source Project
@@ -20,73 +22,209 @@
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
        xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <include layout="@layout/lb_title_view_logo"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-    <!-- MOD: add additional buttons -->
-    <LinearLayout android:layout_width="wrap_content"
-                  android:layout_height="wrap_content"
-                  android:orientation="horizontal"
-                  android:layout_gravity="center_vertical|start">
-        <androidx.leanback.widget.SearchOrbView
-            android:id="@+id/title_orb"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:transitionGroup="true"
-            android:layout_gravity="center_vertical|start"
-            android:nextFocusRight="@id/account_orb"
-            android:visibility="invisible" />
+        <LinearLayout
+            android:id="@+id/nova_top_bar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/nova_header_height"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
-        <com.liskovsoft.smartyoutubetv2.tv.ui.widgets.search.LongClickSearchOrbView
-            android:id="@+id/account_orb"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:transitionGroup="true"
-            android:layout_marginStart="@dimen/search_bar_right_items_margin"
-            android:nextFocusLeft="@id/title_orb"
-            android:nextFocusRight="@id/language_orb"
-            app:searchOrbIcon="@drawable/browse_title_account"
-            app:searchOrbColor="@color/orb_color"
-            app:searchOrbBrightColor="@color/orb_bright_color"
-            app:searchOrbIconColor="@color/orb_icon_color"
-            android:visibility="gone" />
+            <!-- Logo (badge) + fallback title -->
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical">
+                <ImageView
+                    android:id="@+id/title_badge"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/nova_header_logo_height"
+                    android:maxWidth="@dimen/lb_browse_title_icon_max_width"
+                    android:adjustViewBounds="true"
+                    android:src="@null"
+                    android:visibility="gone"
+                    style="?attr/browseTitleIconStyle"/>
 
-        <androidx.leanback.widget.SearchOrbView
-            android:id="@+id/language_orb"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:transitionGroup="true"
-            android:layout_marginStart="@dimen/search_bar_right_items_margin"
-            android:nextFocusLeft="@id/account_orb"
-            android:nextFocusRight="@id/exit_pip"
-            app:searchOrbIcon="@drawable/search_bar_language_orb"
-            app:searchOrbColor="@color/orb_color"
-            app:searchOrbBrightColor="@color/orb_bright_color"
-            app:searchOrbIconColor="@color/orb_icon_color"
-            android:visibility="gone" />
+                <TextView
+                    android:id="@+id/title_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/lb_browse_title_height"
+                    style="?attr/browseTitleTextStyle"/>
+            </FrameLayout>
 
-        <androidx.leanback.widget.SearchOrbView
-            android:id="@+id/exit_pip"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:transitionGroup="true"
-            android:layout_marginStart="@dimen/search_bar_right_items_margin"
-            android:nextFocusLeft="@id/language_orb"
-            app:searchOrbIcon="@drawable/browse_title_pip"
-            app:searchOrbColor="@color/orb_color"
-            app:searchOrbBrightColor="@color/orb_bright_color"
-            app:searchOrbIconColor="@color/orb_icon_color"
-            android:visibility="gone" />
+            <!-- Leanback search affordance: kept for the TitleView contract, replaced by the pill -->
+            <androidx.leanback.widget.SearchOrbView
+                android:id="@+id/title_orb"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:transitionGroup="true"
+                android:layout_gravity="center_vertical"
+                android:visibility="gone" />
 
-        <com.liskovsoft.smartyoutubetv2.tv.ui.widgets.marqueetextviewcompat.TitleMarqueeTextViewCompat
-            android:id="@+id/pip_title"
-            android:layout_width="wrap_content"
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1"/>
+
+            <!-- Search pill -->
+            <LinearLayout
+                android:id="@+id/nova_search_pill"
+                android:layout_width="@dimen/nova_search_pill_width"
+                android:layout_height="@dimen/nova_search_pill_height"
+                android:addStatesFromChildren="true"
+                android:background="@drawable/novatv_search_pill_bg"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingStart="@dimen/nova_space_s"
+                android:paddingEnd="@dimen/nova_space_xs"
+                android:visibility="invisible">
+
+                <LinearLayout
+                    android:id="@+id/nova_search_field"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingStart="@dimen/nova_space_s">
+                    <ImageView
+                        android:layout_width="@dimen/nova_header_icon_size"
+                        android:layout_height="@dimen/nova_header_icon_size"
+                        android:src="@drawable/lb_ic_in_app_search"
+                        android:tint="@color/nova_text_secondary"
+                        android:importantForAccessibility="no"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/nova_space_m"
+                        android:singleLine="true"
+                        android:text="@string/action_search"
+                        android:textColor="@color/nova_text_secondary"
+                        android:textSize="@dimen/nova_text_title"/>
+                </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/nova_search_mic"
+                    android:layout_width="@dimen/nova_search_mic_size"
+                    android:layout_height="@dimen/nova_search_mic_size"
+                    android:background="@drawable/novatv_circle_focus_bg"
+                    android:clickable="true"
+                    android:contentDescription="@string/novatv_voice_search"
+                    android:duplicateParentState="false"
+                    android:focusable="true"
+                    android:padding="@dimen/nova_space_s"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/lb_ic_search_mic_out"/>
+            </LinearLayout>
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1"/>
+
+            <!-- Return to the background video -->
+            <androidx.leanback.widget.SearchOrbView
+                android:id="@+id/exit_pip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:transitionGroup="true"
+                android:layout_marginStart="@dimen/nova_space_l"
+                app:searchOrbIcon="@drawable/browse_title_pip"
+                app:searchOrbColor="@color/orb_color"
+                app:searchOrbBrightColor="@color/orb_bright_color"
+                app:searchOrbIconColor="@color/orb_icon_color"
+                android:visibility="gone" />
+
+            <com.liskovsoft.smartyoutubetv2.tv.ui.widgets.marqueetextviewcompat.TitleMarqueeTextViewCompat
+                android:id="@+id/pip_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/nova_space_s"
+                android:layout_gravity="center_vertical"
+                android:maxWidth="@dimen/nova_pip_title_max_width"
+                android:textSize="@dimen/nova_text_body"
+                android:textColor="@color/nova_text_secondary"
+                style="?attr/browseTitleTextStyle"
+                android:ellipsize="marquee"
+                android:visibility="gone" />
+
+            <androidx.leanback.widget.SearchOrbView
+                android:id="@+id/language_orb"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:transitionGroup="true"
+                android:layout_marginStart="@dimen/nova_space_l"
+                app:searchOrbIcon="@drawable/search_bar_language_orb"
+                app:searchOrbColor="@color/orb_color"
+                app:searchOrbBrightColor="@color/orb_bright_color"
+                app:searchOrbIconColor="@color/orb_icon_color"
+                android:visibility="gone" />
+
+            <!-- Clock + date -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/nova_space_xl"
+                android:gravity="end"
+                android:orientation="vertical">
+                <com.liskovsoft.smartyoutubetv2.tv.ui.widgets.time.DateTimeView
+                    android:id="@+id/global_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/nova_header_clock_size"
+                    android:textColor="@color/nova_text_primary"
+                    android:textStyle="bold"
+                    android:includeFontPadding="false"
+                    android:visibility="gone" />
+                <com.liskovsoft.smartyoutubetv2.tv.ui.widgets.time.DateTimeView
+                    android:id="@+id/global_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/nova_text_caption"
+                    android:textColor="@color/nova_text_secondary"
+                    android:includeFontPadding="false"
+                    android:visibility="gone" />
+            </LinearLayout>
+
+            <!-- Profile avatar -->
+            <com.liskovsoft.smartyoutubetv2.tv.ui.widgets.search.LongClickSearchOrbView
+                android:id="@+id/account_orb"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:transitionGroup="true"
+                android:layout_marginStart="@dimen/nova_space_l"
+                app:searchOrbIcon="@drawable/browse_title_account"
+                app:searchOrbColor="@color/nova_surface_2"
+                app:searchOrbBrightColor="@color/nova_border"
+                app:searchOrbIconColor="@color/orb_icon_color"
+                android:visibility="gone" />
+        </LinearLayout>
+
+        <!-- Category chips -->
+        <HorizontalScrollView
+            android:id="@+id/nova_chips_scroll"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/search_bar_right_items_margin"
-            android:layout_gravity="center_vertical"
-            android:maxWidth="@dimen/pip_title_max_width"
-            android:textSize="@dimen/pip_title_size"
-            style="?attr/browseTitleTextStyle"
-            android:ellipsize="marquee"
-            android:visibility="gone" />
+            android:layout_marginTop="@dimen/nova_space_s"
+            android:clipToPadding="false"
+            android:fillViewport="false"
+            android:focusable="false"
+            android:overScrollMode="never"
+            android:scrollbars="none"
+            android:visibility="gone">
+            <LinearLayout
+                android:id="@+id/nova_chips"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingTop="4dp"
+                android:paddingBottom="4dp"/>
+        </HorizontalScrollView>
     </LinearLayout>
 </merge>

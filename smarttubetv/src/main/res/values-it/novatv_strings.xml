@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="novatv_chip_all">Tutti</string>
+    <string name="novatv_voice_search">Ricerca vocale</string>
+</resources>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- NovaTV: header search pill. Uses addStatesFromChildren: highlighted while a child is focused. -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_focused="true">
+        <shape android:shape="rectangle">
+            <solid android:color="@color/nova_surface_2"/>
+            <stroke android:width="2dp" android:color="@color/nova_focus_outline"/>
+            <corners android:radius="@dimen/nova_radius_pill"/>
+        </shape>
+    </item>
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="@color/nova_surface"/>
+            <stroke android:width="@dimen/nova_border_width" android:color="@color/nova_border"/>
+            <corners android:radius="@dimen/nova_radius_pill"/>
+        </shape>
+    </item>
+</selector>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- NovaTV UI strings -->
+<resources>
+    <string name="novatv_chip_all">All</string>
+    <string name="novatv_voice_search">Voice search</string>
+</resources>

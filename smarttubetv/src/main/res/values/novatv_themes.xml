@@ -22,6 +22,19 @@
         <item name="android:progressDrawable">@drawable/novatv_progress_green</item>
     </style>
 
+    <!-- Narrow side rail: headers grid fits the 112dp rail -->
+    <style name="NovaRailGridStyle" parent="BrowseHeaderStyle">
+        <item name="android:paddingStart">8dp</item>
+        <item name="android:paddingEnd">8dp</item>
+        <item name="android:verticalSpacing">4dp</item>
+    </style>
+
+    <!-- Compact header (title view): leaves room for the chips row above the content -->
+    <style name="NovaTitleViewStyle" parent="Widget.Leanback.TitleView">
+        <item name="android:paddingTop">14dp</item>
+        <item name="android:paddingBottom">6dp</item>
+    </style>
+
     <!-- ===================== Dark (default) ===================== -->
     <style name="App.Theme.Nova.Dark.Browse" parent="App.Theme.Leanback.Browse">
         <item name="android:windowBackground">@color/nova_bg</item>
@@ -32,6 +45,8 @@
         <item name="cardSelectedBackground">@color/nova_text_primary</item>
         <item name="cardProgressStyle">@style/NovaProgress.Orange</item>
         <item name="appLogo">@mipmap/novatv_logo</item>
+        <item name="headersVerticalGridStyle">@style/NovaRailGridStyle</item>
+        <item name="browseTitleViewStyle">@style/NovaTitleViewStyle</item>
         <item name="novaAccent">@color/nova_accent</item>
         <item name="android:colorAccent" tools:targetApi="21">@color/nova_accent</item>
         <item name="android:colorPrimary" tools:targetApi="21">@color/nova_surface</item>

@@ -6,7 +6,11 @@ import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
+import android.view.FocusFinder;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.HorizontalScrollView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -22,6 +26,7 @@ import com.liskovsoft.mediaserviceinterfaces.oauth.Account;
 import com.liskovsoft.sharedutils.locale.LocaleUtility;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.SearchPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.AccountSelectionPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.AccountSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.LanguageSettingsPresenter;
@@ -39,6 +44,7 @@ import com.liskovsoft.smartyoutubetv2.tv.ui.widgets.search.LongClickSearchOrbVie
 import com.liskovsoft.smartyoutubetv2.tv.ui.widgets.time.DateTimeView;
 import com.liskovsoft.smartyoutubetv2.tv.util.ViewUtil;
 
+import java.util.List;
 import java.util.Locale;
 
 import static androidx.leanback.widget.TitleViewAdapter.BRANDING_VIEW_VISIBLE;
@@ -69,6 +75,37 @@ public class NavigateTitleView extends TitleView implements OnDataChange, Accoun
     private boolean mIsAccountViewEnabled;
     private boolean mIsLanguageViewEnabled;
     private boolean mIsGlobalClockEnabled;
+    // NovaTV: search pill + category chips
+    private ViewGroup mTopBar;
+    private View mSearchPill;
+    private View mSearchField;
+    private View mSearchMic;
+    private HorizontalScrollView mChipsScroll;
+    private LinearLayout mChipsContainer;
+    private boolean mIsSearchPillEnabled;
+    private boolean mIsChipsRowWanted;
+    private int mActiveChipId = -1;
+    private OnChipClickListener mOnChipClickListener;
+
+    /**
+     * NovaTV: category chip pressed
+     */
+    public interface OnChipClickListener {
+        void onChipClick(int sectionId);
+    }
+
+    /**
+     * NovaTV: chip data (section id + label)
+     */
+    public static class Chip {
+        public final int sectionId;
+        public final CharSequence title;
+
+        public Chip(int sectionId, CharSequence title) {
+            this.sectionId = sectionId;
+            this.title = title;
+        }
+    }
 
     public NavigateTitleView(Context context) {
         super(context);
@@ -86,6 +123,11 @@ public class NavigateTitleView extends TitleView implements OnDataChange, Accoun
 
     @Override
     public View focusSearch(View focused, int direction) {
+        View novaResult = novaFocusSearch(focused, direction);
+        if (novaResult != null) {
+            return novaResult;
+        }
+
         View nextFoundFocusableViewInLayout = null;
 
         // Only concerned about focusing left and right at the moment
@@ -123,8 +165,183 @@ public class NavigateTitleView extends TitleView implements OnDataChange, Accoun
 
     @Override
     protected boolean onRequestFocusInDescendants(int direction, Rect previouslyFocusedRect) {
+        // NovaTV: coming up from the rows lands on the active chip, otherwise on the search pill
+        if (direction == View.FOCUS_UP && focusActiveChip()) {
+            return true;
+        }
+
+        if (mSearchField != null && mSearchField.getVisibility() == View.VISIBLE && mSearchPill.getVisibility() == View.VISIBLE
+                && mSearchField.requestFocus()) {
+            return true;
+        }
+
         // Gives focus to the SearchOrb first....if not...default to normal descendant focus search
         return getSearchAffordanceView().requestFocus() || super.onRequestFocusInDescendants(direction, previouslyFocusedRect);
+    }
+
+    /**
+     * NovaTV: dpad navigation inside the two header rows (top bar and chips).
+     * Returns null to fall back to the stock behavior.
+     */
+    @Nullable
+    private View novaFocusSearch(View focused, int direction) {
+        if (focused == null || mTopBar == null) {
+            return null;
+        }
+
+        boolean inChips = isChild(mChipsContainer, focused);
+        boolean inTopBar = !inChips && isChild(mTopBar, focused);
+
+        if (!inChips && !inTopBar) {
+            return null;
+        }
+
+        if (direction == View.FOCUS_LEFT || direction == View.FOCUS_RIGHT) {
+            View next = FocusFinder.getInstance().findNextFocus(inChips ? mChipsContainer : mTopBar, focused, direction);
+
+            if (next != null) {
+                return next;
+            }
+
+            // End of the row: stay. Start of the row: stock behavior (opens the side rail).
+            boolean towardEnd = (direction == View.FOCUS_RIGHT) != (getLayoutDirection() == View.LAYOUT_DIRECTION_RTL);
+            return towardEnd ? focused : null;
+        }
+
+        if (direction == View.FOCUS_DOWN && inTopBar && isChipsRowVisible()) {
+            View chip = getActiveChip();
+            return chip != null ? chip : focused;
+        }
+
+        if (direction == View.FOCUS_UP && inChips) {
+            if (mSearchPill.getVisibility() == View.VISIBLE) {
+                return mSearchField;
+            }
+            View first = FocusFinder.getInstance().findNextFocus(mTopBar, null, View.FOCUS_RIGHT);
+            return first != null ? first : focused;
+        }
+
+        return null;
+    }
+
+    private static boolean isChild(ViewGroup parent, View view) {
+        if (parent == null) {
+            return false;
+        }
+
+        View current = view;
+        while (current != null) {
+            if (current == parent) {
+                return true;
+            }
+            current = current.getParent() instanceof View ? (View) current.getParent() : null;
+        }
+
+        return false;
+    }
+
+    // ===================== NovaTV: category chips =====================
+
+    /**
+     * Rebuild the chips. First chip should be the "All" one.
+     */
+    public void setChips(List<Chip> chips, OnChipClickListener listener) {
+        init();
+
+        if (mChipsContainer == null) {
+            return;
+        }
+
+        mOnChipClickListener = listener;
+        mChipsContainer.removeAllViews();
+
+        int height = getResources().getDimensionPixelSize(R.dimen.nova_chip_height);
+        int paddingH = getResources().getDimensionPixelSize(R.dimen.nova_chip_padding_h);
+        int spacing = getResources().getDimensionPixelSize(R.dimen.nova_chip_spacing);
+
+        for (Chip chip : chips) {
+            TextView chipView = new TextView(getContext());
+            chipView.setText(chip.title);
+            chipView.setTag(chip.sectionId);
+            chipView.setSingleLine(true);
+            chipView.setGravity(android.view.Gravity.CENTER);
+            chipView.setPadding(paddingH, 0, paddingH, 0);
+            chipView.setTextSize(android.util.TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(R.dimen.nova_text_body));
+            chipView.setTextColor(ContextCompat.getColorStateList(getContext(), R.color.novatv_chip_text));
+            chipView.setBackgroundResource(R.drawable.novatv_chip_bg);
+            chipView.setFocusable(true);
+            chipView.setClickable(true);
+            chipView.setSelected(chip.sectionId == mActiveChipId);
+            chipView.setOnClickListener(v -> {
+                if (mOnChipClickListener != null) {
+                    mOnChipClickListener.onChipClick((int) v.getTag());
+                }
+            });
+            chipView.setOnFocusChangeListener((v, hasFocus) -> {
+                if (hasFocus) {
+                    mChipsScroll.requestChildRectangleOnScreen(mChipsContainer,
+                            new Rect(v.getLeft() - spacing, 0, v.getRight() + spacing, v.getHeight()), false);
+                }
+            });
+            com.liskovsoft.smartyoutubetv2.common.misc.NovaFonts.apply(chipView);
+
+            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, height);
+            lp.setMarginEnd(spacing);
+            mChipsContainer.addView(chipView, lp);
+        }
+
+        updateChipsVisibility();
+    }
+
+    /**
+     * Highlight the chip of the open section and show the row only on Home/category sections.
+     */
+    public void setActiveChip(int sectionId, boolean showRow) {
+        mActiveChipId = sectionId;
+        mIsChipsRowWanted = showRow;
+
+        if (mChipsContainer != null) {
+            for (int i = 0; i < mChipsContainer.getChildCount(); i++) {
+                View chip = mChipsContainer.getChildAt(i);
+                chip.setSelected(chip.getTag() instanceof Integer && (int) chip.getTag() == sectionId);
+            }
+        }
+
+        updateChipsVisibility();
+    }
+
+    private void updateChipsVisibility() {
+        if (mChipsScroll == null) {
+            return;
+        }
+
+        boolean visible = mIsChipsRowWanted && mChipsContainer.getChildCount() > 1 && mSearchVisibility == View.VISIBLE;
+        mChipsScroll.setVisibility(visible ? View.VISIBLE : View.GONE);
+    }
+
+    private boolean isChipsRowVisible() {
+        return mChipsScroll != null && mChipsScroll.getVisibility() == View.VISIBLE;
+    }
+
+    @Nullable
+    private View getActiveChip() {
+        if (!isChipsRowVisible() || mChipsContainer.getChildCount() == 0) {
+            return null;
+        }
+
+        for (int i = 0; i < mChipsContainer.getChildCount(); i++) {
+            View chip = mChipsContainer.getChildAt(i);
+            if (chip.isSelected()) {
+                return chip;
+            }
+        }
+
+        return mChipsContainer.getChildAt(0);
+    }
+
+    private boolean focusActiveChip() {
+        View chip = getActiveChip();
+        return chip != null && chip.requestFocus();
     }
 
     @Override
@@ -148,9 +365,14 @@ public class NavigateTitleView extends TitleView implements OnDataChange, Accoun
         mBrandingVisibility = (flags & BRANDING_VIEW_VISIBLE) == BRANDING_VIEW_VISIBLE
                 ? View.VISIBLE : View.INVISIBLE;
 
-        if (mIsSearchOrbEnabled) {
-            mSearchOrbView.setVisibility(View.GONE);
+        // NovaTV: the leanback orb is replaced by the search pill
+        mSearchOrbView.setVisibility(View.GONE);
+
+        if (mSearchPill != null) {
+            mSearchPill.setVisibility(mIsSearchPillEnabled ? mSearchVisibility : View.GONE);
         }
+
+        updateChipsVisibility();
 
         if (mIsAccountViewEnabled) {
             mAccountView.setVisibility(mSearchVisibility);
@@ -194,6 +416,30 @@ public class NavigateTitleView extends TitleView implements OnDataChange, Accoun
 
         mSearchOrbView = findViewById(R.id.title_orb);
 
+        // NovaTV
+        mTopBar = findViewById(R.id.nova_top_bar);
+        mSearchPill = findViewById(R.id.nova_search_pill);
+        mSearchField = findViewById(R.id.nova_search_field);
+        mSearchMic = findViewById(R.id.nova_search_mic);
+        mChipsScroll = findViewById(R.id.nova_chips_scroll);
+        mChipsContainer = findViewById(R.id.nova_chips);
+
+        if (mSearchField != null) {
+            mSearchField.setOnClickListener(v -> SearchPresenter.instance(getContext()).startSearch(null));
+            mSearchMic.setOnClickListener(v -> SearchPresenter.instance(getContext()).startVoice());
+            TooltipCompatHandler.setTooltipText(mSearchMic, getContext().getString(R.string.novatv_voice_search));
+            // Chain with the tooltip's focus listener (dark icon on the white focused disc)
+            OnFocusChangeListener tooltipListener = mSearchMic.getOnFocusChangeListener();
+            mSearchMic.setOnFocusChangeListener((v, hasFocus) -> {
+                ((android.widget.ImageView) v).setColorFilter(
+                        ContextCompat.getColor(getContext(), hasFocus ? R.color.nova_text_on_light : R.color.nova_text_primary));
+                if (tooltipListener != null) {
+                    tooltipListener.onFocusChange(v, hasFocus);
+                }
+            });
+            ((android.widget.ImageView) mSearchMic).setColorFilter(ContextCompat.getColor(getContext(), R.color.nova_text_primary));
+        }
+
         mAccountView = findViewById(R.id.account_orb);
         mAccountView.setOnOrbClickedListener(v -> AccountSelectionPresenter.instance(getContext()).nextAccountOrDialog());
         mAccountView.setOnOrbLongClickedListener(v -> {
@@ -231,7 +477,12 @@ public class NavigateTitleView extends TitleView implements OnDataChange, Accoun
         mIsLanguageViewEnabled = mainUIData.isTopButtonEnabled(MainUIData.TOP_BUTTON_CHANGE_LANGUAGE);
         mIsGlobalClockEnabled = GeneralData.instance(getContext()).isGlobalClockEnabled();
 
-        mSearchOrbView.setVisibility(mIsSearchOrbEnabled ? View.VISIBLE : View.GONE);
+        // NovaTV: TOP_BUTTON_SEARCH now drives the search pill
+        mIsSearchPillEnabled = !mIsSearchOrbEnabled && mSearchPill != null;
+        mSearchOrbView.setVisibility(View.GONE);
+        if (mSearchPill != null) {
+            mSearchPill.setVisibility(mIsSearchPillEnabled ? View.VISIBLE : View.GONE);
+        }
         mAccountView.setVisibility(mIsAccountViewEnabled ? View.VISIBLE : View.GONE);
         mLanguageView.setVisibility(mIsLanguageViewEnabled ? View.VISIBLE : View.GONE);
         mGlobalClock.setVisibility(mIsGlobalClockEnabled ? View.VISIBLE : View.GONE);

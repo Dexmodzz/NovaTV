@@ -9,12 +9,14 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.leanback.app.BrowseSupportFragment;
 import androidx.leanback.app.HeadersSupportFragment;
 import androidx.leanback.widget.ArrayObjectAdapter;
+import androidx.leanback.widget.BrowseFrameLayout;
 import androidx.leanback.widget.HeaderItem;
 import androidx.leanback.widget.ListRowPresenter;
 import androidx.leanback.widget.PageRow;
@@ -38,8 +40,11 @@ import com.liskovsoft.smartyoutubetv2.tv.presenter.IconHeaderItemPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.dialog.ErrorDialogFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.headers.ExtendedHeadersSupportFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.misc.ProgressBarManager;
+import com.liskovsoft.smartyoutubetv2.tv.ui.widgets.browse.NavigateTitleView;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /*
@@ -95,6 +100,8 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
         View root = super.onCreateView(inflater, container, savedInstanceState);
 
         mProgressBarManager.setRootView((ViewGroup) root);
+
+        novaSetupRailFocus(root);
 
         return root;
     }
@@ -155,6 +162,7 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
                 (row) -> {
                     focusOnContentIfNeeded();
                     mBrowsePresenter.onSectionFocused(getSelectedHeaderId());
+                    novaUpdateActiveChip();
                 }
         );
 
@@ -210,7 +218,9 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
                 Presenter presenter = mPresenterMap.get(o.hashCode());
 
                 if (presenter == null) {
-                    presenter = new IconHeaderItemPresenter(getHeaderResId(o), getIconUrl(o));
+                    // NovaTV: category sections live in the chips row, not in the rail
+                    boolean isHidden = o instanceof PageRow && NovaSections.isChipSection(((PageRow) o).getHeaderItem().getId());
+                    presenter = new IconHeaderItemPresenter(getHeaderResId(o), getIconUrl(o), isHidden);
                     mPresenterMap.put(o.hashCode(), presenter);
                 }
 
@@ -304,6 +314,7 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
     public void removeAllSections() {
         mSections.clear();
         mSectionRowAdapter.clear();
+        novaRefreshChips();
     }
 
     @Override
@@ -417,6 +428,8 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
         } else {
             mSectionRowAdapter.add(index, pageRow);
         }
+
+        novaRefreshChips();
     }
 
     private void removeHeader(BrowseSection header) {
@@ -432,6 +445,114 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
         if (foundHeader != null) {
             mSectionRowAdapter.remove(foundHeader);
         }
+
+        novaRefreshChips();
+    }
+
+    // ===================== NovaTV: category chips =====================
+
+    @Nullable
+    private NavigateTitleView getNovaTitleView() {
+        View titleView = getTitleView();
+        return titleView instanceof NavigateTitleView ? (NavigateTitleView) titleView : null;
+    }
+
+    /**
+     * Chips = "All" (Home) + every enabled category section, in the user's section order.
+     */
+    private void novaRefreshChips() {
+        NavigateTitleView titleView = getNovaTitleView();
+
+        if (titleView == null || getContext() == null) {
+            return;
+        }
+
+        List<NavigateTitleView.Chip> chips = new ArrayList<>();
+
+        for (Object item : mSectionRowAdapter.unmodifiableList()) {
+            HeaderItem header = ((PageRow) item).getHeaderItem();
+            int id = (int) header.getId();
+
+            if (NovaSections.isAllChip(id)) {
+                chips.add(0, new NavigateTitleView.Chip(id, getString(R.string.novatv_chip_all)));
+            } else if (NovaSections.isChipSection(id)) {
+                chips.add(new NavigateTitleView.Chip(id, header.getName()));
+            }
+        }
+
+        titleView.setChips(chips, sectionId -> selectSection(indexOf(sectionId), true));
+        novaUpdateActiveChip();
+    }
+
+    /**
+     * Category sections have no visible rail item. When the rail opens while one of them is selected,
+     * select Home first (categories live "inside" Home), otherwise Leanback would move to a random section.
+     */
+    private void novaSetupRailFocus(View root) {
+        BrowseFrameLayout frame = root != null ? root.findViewById(R.id.browse_frame) : null;
+
+        if (frame != null && frame.getOnFocusSearchListener() != null) {
+            BrowseFrameLayout.OnFocusSearchListener stockListener = frame.getOnFocusSearchListener();
+            frame.setOnFocusSearchListener((focused, direction) -> {
+                View result = stockListener.onFocusSearch(focused, direction);
+                if (result != null && getHeadersSupportFragment() != null && result == getHeadersSupportFragment().getVerticalGridView()) {
+                    novaSelectRailSectionIfHidden();
+                }
+                return result;
+            });
+        }
+
+        // Back key opens the rail too
+        setBrowseTransitionListener(new BrowseTransitionListener() {
+            @Override
+            public void onHeadersTransitionStart(boolean withHeaders) {
+                if (withHeaders) {
+                    novaSelectRailSectionIfHidden();
+                }
+            }
+        });
+    }
+
+    private void novaSelectRailSectionIfHidden() {
+        if (mSectionRowAdapter == null || mSectionRowAdapter.size() == 0) {
+            return;
+        }
+
+        int position = getSelectedPosition();
+
+        if (position < 0 || position >= mSectionRowAdapter.size() || !NovaSections.isChipSection(getSelectedHeaderId())) {
+            return;
+        }
+
+        int target = -1;
+
+        for (int i = 0; i < mSectionRowAdapter.size(); i++) {
+            long id = ((PageRow) mSectionRowAdapter.get(i)).getHeaderItem().getId();
+            if (NovaSections.isAllChip(id)) {
+                target = i;
+                break;
+            }
+            if (target == -1 && !NovaSections.isChipSection(id)) {
+                target = i; // first visible rail item as fallback
+            }
+        }
+
+        if (target != -1) {
+            setSelectedPosition(target, false);
+        }
+    }
+
+    private void novaUpdateActiveChip() {
+        NavigateTitleView titleView = getNovaTitleView();
+
+        if (titleView == null || mSectionRowAdapter == null) {
+            return;
+        }
+
+        int position = getSelectedPosition();
+        // Nothing selected yet (sections are still being added)
+        int sectionId = position >= 0 && position < mSectionRowAdapter.size() ? getSelectedHeaderId() : -1;
+        titleView.setActiveChip(sectionId, NovaSections.showsChips(sectionId));
     }
 
     @Override

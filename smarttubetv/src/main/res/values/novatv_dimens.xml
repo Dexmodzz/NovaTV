@@ -31,4 +31,28 @@
     <dimen name="nova_text_title">18sp</dimen>
     <dimen name="nova_text_body">14sp</dimen>
     <dimen name="nova_text_caption">12sp</dimen>
+
+    <!-- Header (title view) -->
+    <dimen name="nova_header_height">52dp</dimen>
+    <dimen name="nova_header_logo_height">30dp</dimen>
+    <dimen name="nova_header_icon_size">24dp</dimen>
+    <dimen name="nova_header_clock_size">22sp</dimen>
+    <dimen name="nova_search_pill_width">480dp</dimen>
+    <dimen name="nova_search_pill_height">44dp</dimen>
+    <dimen name="nova_search_mic_size">36dp</dimen>
+    <dimen name="nova_pip_title_max_width">260dp</dimen>
+
+    <!-- Category chips -->
+    <dimen name="nova_chip_height">36dp</dimen>
+    <dimen name="nova_chip_padding_h">18dp</dimen>
+    <dimen name="nova_chip_spacing">10dp</dimen>
+
+    <!-- Side rail (Leanback headers) -->
+    <dimen name="lb_browse_headers_width">112dp</dimen>
+    <!-- No zoom on the selected rail item (Leanback default 1.2) -->
+    <item name="lb_browse_header_select_scale" format="float" type="dimen">1.0</item>
+    <dimen name="nova_rail_item_width">96dp</dimen>
+    <dimen name="nova_rail_item_padding">10dp</dimen>
+    <dimen name="nova_rail_icon_size">28dp</dimen>
+    <dimen name="nova_rail_label_size">11sp</dimen>
 </resources>
