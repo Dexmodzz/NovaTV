@@ -16,6 +16,7 @@ import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData.ColorScheme;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.utils.ClickbaitRemover;
+import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +31,8 @@ public class MainUISettingsPresenter extends BasePresenter<Void> {
         if (mRestartApp) {
             mRestartApp = false;
             MessageHelpers.showLongMessage(getContext(), R.string.msg_restart_app);
+            // NovaTV: apply the new size right away (a half-applied scale cuts the UI and stalls the rows)
+            Utils.restartTheApp(getContext());
         }
     };
 

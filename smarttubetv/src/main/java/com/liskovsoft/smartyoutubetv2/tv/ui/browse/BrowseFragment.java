@@ -485,6 +485,21 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
     }
 
     /**
+     * NovaTV: while the rail is open Leanback shows the title with only the search part when the content
+     * is scrolled down. Our search pill and chips are a full header, so they would be drawn over the cards:
+     * keep the header hidden unless the content is at the top (branding visible).
+     */
+    @Override
+    public void showTitle(int flags) {
+        if ((flags & androidx.leanback.widget.TitleViewAdapter.BRANDING_VIEW_VISIBLE) == 0) {
+            showTitle(false);
+            return;
+        }
+
+        super.showTitle(flags);
+    }
+
+    /**
      * Category sections have no visible rail item. When the rail opens while one of them is selected,
      * select Home first (categories live "inside" Home), otherwise Leanback would move to a random section.
      */

@@ -9,6 +9,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
+import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +21,8 @@ public class UIScaleSettingsPresenter extends BasePresenter<Void> {
         if (mRestartApp) {
             mRestartApp = false;
             MessageHelpers.showLongMessage(getContext(), R.string.msg_restart_app);
+            // NovaTV: apply the new scale right away
+            Utils.restartTheApp(getContext());
         }
     };
 
