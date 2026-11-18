@@ -7,6 +7,9 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Current accent color resource, readable from code via Helpers.getThemeAttr() -->
     <attr name="novaAccent" format="reference"/>
+    <!-- Accent-dependent drawables (no ?attr colors inside drawables before API 21) -->
+    <attr name="novaChipBg" format="reference"/>
+    <attr name="novaPlayBg" format="reference"/>
 
     <!-- Card watch-progress styles, one per accent -->
     <style name="NovaProgress.Orange" parent="@android:style/Widget.ProgressBar.Horizontal">
@@ -82,4 +85,46 @@
         <item name="shelfBackground">@color/nova_bg_oled</item>
     </style>
     <style name="App.Theme.Nova.Oled.Preferences" parent="App.Theme.Nova.Dark.Preferences"/>
+
+    <!-- ===================== Accent overlays (NovaTVData.applyAccent) ===================== -->
+    <style name="NovaAccent.Orange" parent="">
+        <item name="novaAccent">@color/nova_accent_orange</item>
+        <item name="brandAccentColor">@color/nova_accent_orange</item>
+        <item name="android:colorAccent" tools:targetApi="21">@color/nova_accent_orange</item>
+        <item name="playbackProgressPrimaryColor">@color/nova_accent_orange</item>
+        <item name="playbackControlsIconHighlightColor">@color/nova_accent_orange</item>
+        <item name="cardProgressStyle">@style/NovaProgress.Orange</item>
+        <item name="novaChipBg">@drawable/novatv_chip_bg</item>
+        <item name="novaPlayBg">@drawable/novatv_player_play_bg</item>
+    </style>
+    <style name="NovaAccent.Blue" parent="">
+        <item name="novaAccent">@color/nova_accent_blue</item>
+        <item name="brandAccentColor">@color/nova_accent_blue</item>
+        <item name="android:colorAccent" tools:targetApi="21">@color/nova_accent_blue</item>
+        <item name="playbackProgressPrimaryColor">@color/nova_accent_blue</item>
+        <item name="playbackControlsIconHighlightColor">@color/nova_accent_blue</item>
+        <item name="cardProgressStyle">@style/NovaProgress.Blue</item>
+        <item name="novaChipBg">@drawable/novatv_chip_bg_blue</item>
+        <item name="novaPlayBg">@drawable/novatv_player_play_bg_blue</item>
+    </style>
+    <style name="NovaAccent.Violet" parent="">
+        <item name="novaAccent">@color/nova_accent_violet</item>
+        <item name="brandAccentColor">@color/nova_accent_violet</item>
+        <item name="android:colorAccent" tools:targetApi="21">@color/nova_accent_violet</item>
+        <item name="playbackProgressPrimaryColor">@color/nova_accent_violet</item>
+        <item name="playbackControlsIconHighlightColor">@color/nova_accent_violet</item>
+        <item name="cardProgressStyle">@style/NovaProgress.Violet</item>
+        <item name="novaChipBg">@drawable/novatv_chip_bg_violet</item>
+        <item name="novaPlayBg">@drawable/novatv_player_play_bg_violet</item>
+    </style>
+    <style name="NovaAccent.Green" parent="">
+        <item name="novaAccent">@color/nova_accent_green</item>
+        <item name="brandAccentColor">@color/nova_accent_green</item>
+        <item name="android:colorAccent" tools:targetApi="21">@color/nova_accent_green</item>
+        <item name="playbackProgressPrimaryColor">@color/nova_accent_green</item>
+        <item name="playbackControlsIconHighlightColor">@color/nova_accent_green</item>
+        <item name="cardProgressStyle">@style/NovaProgress.Green</item>
+        <item name="novaChipBg">@drawable/novatv_chip_bg_green</item>
+        <item name="novaPlayBg">@drawable/novatv_player_play_bg_green</item>
+    </style>
 </resources>

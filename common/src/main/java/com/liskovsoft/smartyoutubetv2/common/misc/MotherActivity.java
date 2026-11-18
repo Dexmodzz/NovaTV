@@ -24,6 +24,7 @@ import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
+import com.liskovsoft.smartyoutubetv2.common.prefs.NovaTVData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
@@ -79,6 +80,7 @@ public class MotherActivity extends FragmentActivity {
 
         initDpi();
         initTheme();
+        NovaTVData.instance(this).applyAccent(this); // NovaTV: accent color overlay
 
         // Search Fullscreen routine inside onPause() method
         if (!mIsFullscreenModeEnabled) {

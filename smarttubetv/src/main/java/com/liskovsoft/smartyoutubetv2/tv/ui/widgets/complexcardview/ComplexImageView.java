@@ -167,7 +167,9 @@ public class ComplexImageView extends RelativeLayout {
                 mCreateAndStartPlayer = this::createAndStartPlayer;
             }
 
-            Utils.postDelayed(mCreateAndStartPlayer, PLAYER_START_DELAY_MS);
+            // NovaTV: configurable preview delay (default PLAYER_START_DELAY_MS)
+            Utils.postDelayed(mCreateAndStartPlayer,
+                    com.liskovsoft.smartyoutubetv2.common.prefs.NovaTVData.instance(getContext()).getPreviewDelayMs());
         }
     }
 

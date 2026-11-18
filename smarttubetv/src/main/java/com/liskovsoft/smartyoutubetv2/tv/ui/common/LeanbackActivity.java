@@ -29,6 +29,10 @@ public abstract class LeanbackActivity extends MotherActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // NovaTV: focus animations setting (card zoom). Before super: fragments create their presenters there.
+        com.liskovsoft.smartyoutubetv2.tv.util.ViewUtil.FOCUS_ZOOM_FACTOR =
+                com.liskovsoft.smartyoutubetv2.common.prefs.NovaTVData.instance(this).isFocusAnimationsEnabled()
+                        ? androidx.leanback.widget.FocusHighlight.ZOOM_FACTOR_SMALL : androidx.leanback.widget.FocusHighlight.ZOOM_FACTOR_NONE;
         super.onCreate(savedInstanceState);
         mBackgroundManager = new UriBackgroundManager(this);
         mModeSyncManager = ModeSyncManager.instance();

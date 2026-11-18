@@ -30,14 +30,16 @@ public class SettingsCardPresenter extends Presenter {
                 ContextCompat.getColor(context, Helpers.getThemeAttr(context, R.attr.cardDefaultBackground));
         mDefaultTextColor =
                 ContextCompat.getColor(context, R.color.card_default_text);
-        mSelectedBackgroundColor =
-                ContextCompat.getColor(context, R.color.card_selected_background_white);
-        mSelectedTextColor =
-                ContextCompat.getColor(context, R.color.card_selected_text_grey);
+        // NovaTV: focus = white ring (as on video cards), the label keeps its colors
+        mSelectedBackgroundColor = mDefaultBackgroundColor;
+        mSelectedTextColor = mDefaultTextColor;
 
         @SuppressLint("InflateParams")
         View container = LayoutInflater.from(context).inflate(R.layout.settings_card, null);
         container.setBackgroundColor(mDefaultBackgroundColor);
+        if (android.os.Build.VERSION.SDK_INT >= 23) {
+            container.setForeground(ContextCompat.getDrawable(context, R.drawable.novatv_settings_card_fg));
+        }
         //if (VERSION.SDK_INT >= 23 && MainUIData.instance(context).isUiTweakEnabled(MainUIData.UI_TWEAK_ROUNDED_CORNERS)) {
         //    container.setForeground(ContextCompat.getDrawable(context, R.drawable.lb_card_outline));
         //}

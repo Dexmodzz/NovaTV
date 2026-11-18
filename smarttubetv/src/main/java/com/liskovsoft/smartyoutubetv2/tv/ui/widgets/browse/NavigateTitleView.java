@@ -268,7 +268,8 @@ public class NavigateTitleView extends TitleView implements OnDataChange, Accoun
             chipView.setPadding(paddingH, 0, paddingH, 0);
             chipView.setTextSize(android.util.TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(R.dimen.nova_text_body));
             chipView.setTextColor(ContextCompat.getColorStateList(getContext(), R.color.novatv_chip_text));
-            chipView.setBackgroundResource(R.drawable.novatv_chip_bg);
+            int chipBg = com.liskovsoft.sharedutils.helpers.Helpers.getThemeAttr(getContext(), R.attr.novaChipBg); // accent dependent
+            chipView.setBackgroundResource(chipBg > 0 ? chipBg : R.drawable.novatv_chip_bg);
             chipView.setFocusable(true);
             chipView.setClickable(true);
             chipView.setSelected(chip.sectionId == mActiveChipId);

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- NovaTV: category chip. selected = active category (white), focused = white outline -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_selected="true" android:state_focused="true">
+        <shape android:shape="rectangle">
+            <solid android:color="@color/nova_text_primary"/>
+            <stroke android:width="3dp" android:color="@color/nova_accent_blue"/>
+            <corners android:radius="@dimen/nova_radius_pill"/>
+        </shape>
+    </item>
+    <item android:state_selected="true">
+        <shape android:shape="rectangle">
+            <solid android:color="@color/nova_text_primary"/>
+            <corners android:radius="@dimen/nova_radius_pill"/>
+        </shape>
+    </item>
+    <item android:state_focused="true">
+        <shape android:shape="rectangle">
+            <solid android:color="@color/nova_surface_2"/>
+            <stroke android:width="3dp" android:color="@color/nova_focus_outline"/>
+            <corners android:radius="@dimen/nova_radius_pill"/>
+        </shape>
+    </item>
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="@color/nova_surface_2"/>
+            <corners android:radius="@dimen/nova_radius_pill"/>
+        </shape>
+    </item>
+</selector>

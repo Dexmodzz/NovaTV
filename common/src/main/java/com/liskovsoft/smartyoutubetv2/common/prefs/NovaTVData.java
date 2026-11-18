@@ -1,0 +1,77 @@
+package com.liskovsoft.smartyoutubetv2.common.prefs;
+
+import android.app.Activity;
+import android.content.Context;
+import android.content.SharedPreferences;
+
+/**
+ * NovaTV: settings added by the reskin.<br/>
+ * Kept in their own preferences file, so the upstream data format (MainUIData, GeneralData...)
+ * is never touched and stays compatible with upstream updates.
+ */
+public final class NovaTVData {
+    private static final String PREFS_NAME = "novatv_prefs";
+    private static final String KEY_ACCENT = "accent";
+    private static final String KEY_PREVIEW_DELAY_MS = "preview_delay_ms";
+    private static final String KEY_FOCUS_ANIMATIONS = "focus_animations";
+
+    public static final int ACCENT_ORANGE = 0;
+    public static final int ACCENT_BLUE = 1;
+    public static final int ACCENT_VIOLET = 2;
+    public static final int ACCENT_GREEN = 3;
+    /** Theme overlays defined in the app module (smarttubetv/res/values/novatv_themes.xml) */
+    private static final String[] ACCENT_STYLES = {"NovaAccent.Orange", "NovaAccent.Blue", "NovaAccent.Violet", "NovaAccent.Green"};
+
+    public static final int PREVIEW_DELAY_DEFAULT_MS = 2_000;
+
+    private static NovaTVData sInstance;
+    private final SharedPreferences mPrefs;
+
+    private NovaTVData(Context context) {
+        mPrefs = context.getApplicationContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+    }
+
+    public static NovaTVData instance(Context context) {
+        if (sInstance == null) {
+            sInstance = new NovaTVData(context);
+        }
+
+        return sInstance;
+    }
+
+    public int getAccent() {
+        int accent = mPrefs.getInt(KEY_ACCENT, ACCENT_ORANGE);
+        return accent >= 0 && accent < ACCENT_STYLES.length ? accent : ACCENT_ORANGE;
+    }
+
+    public void setAccent(int accent) {
+        mPrefs.edit().putInt(KEY_ACCENT, accent).apply();
+    }
+
+    public int getPreviewDelayMs() {
+        return mPrefs.getInt(KEY_PREVIEW_DELAY_MS, PREVIEW_DELAY_DEFAULT_MS);
+    }
+
+    public void setPreviewDelayMs(int delayMs) {
+        mPrefs.edit().putInt(KEY_PREVIEW_DELAY_MS, delayMs).apply();
+    }
+
+    public boolean isFocusAnimationsEnabled() {
+        return mPrefs.getBoolean(KEY_FOCUS_ANIMATIONS, true);
+    }
+
+    public void setFocusAnimationsEnabled(boolean enabled) {
+        mPrefs.edit().putBoolean(KEY_FOCUS_ANIMATIONS, enabled).apply();
+    }
+
+    /**
+     * Applies the accent color overlay on top of the activity theme. Call right after setTheme().
+     */
+    public void applyAccent(Activity activity) {
+        int styleId = activity.getResources().getIdentifier(ACCENT_STYLES[getAccent()], "style", activity.getPackageName());
+
+        if (styleId != 0) {
+            activity.getTheme().applyStyle(styleId, true);
+        }
+    }
+}

@@ -32,7 +32,8 @@ public class ViewUtil {
     /**
      * Focused card zoom factor
      */
-    public static final int FOCUS_ZOOM_FACTOR = FocusHighlight.ZOOM_FACTOR_SMALL;
+    // NovaTV: not final, ZOOM_FACTOR_NONE when focus animations are disabled (see LeanbackActivity)
+    public static int FOCUS_ZOOM_FACTOR = FocusHighlight.ZOOM_FACTOR_SMALL;
     //public static final int FOCUS_ZOOM_FACTOR = FocusHighlight.ZOOM_FACTOR_NONE;
     /**
      * Dim focused card?

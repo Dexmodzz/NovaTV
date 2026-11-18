@@ -108,8 +108,10 @@ public class ControlButtonPresenterSelector extends PresenterSelector {
             }
 
             boolean isPlayPause = action instanceof PlaybackControlsRow.PlayPauseAction;
+            int playBg = com.liskovsoft.sharedutils.helpers.Helpers.getThemeAttr(mFocusableView.getContext(),
+                    com.liskovsoft.smartyoutubetv2.tv.R.attr.novaPlayBg); // accent dependent
             mFocusableView.setBackgroundResource(isPlayPause
-                    ? com.liskovsoft.smartyoutubetv2.tv.R.drawable.novatv_player_play_bg
+                    ? (playBg > 0 ? playBg : com.liskovsoft.smartyoutubetv2.tv.R.drawable.novatv_player_play_bg)
                     : com.liskovsoft.smartyoutubetv2.tv.R.drawable.novatv_player_button_bg);
 
             if (isPlayPause) {

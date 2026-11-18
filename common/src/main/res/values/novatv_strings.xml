@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- NovaTV settings strings -->
+<resources>
+    <string name="novatv_settings">NovaTV</string>
+    <string name="novatv_theme">Theme</string>
+    <string name="novatv_theme_dark">Dark</string>
+    <string name="novatv_theme_oled">OLED (pure black)</string>
+    <string name="novatv_accent">Accent color</string>
+    <string name="novatv_accent_orange">Orange</string>
+    <string name="novatv_accent_blue">Blue</string>
+    <string name="novatv_accent_violet">Violet</string>
+    <string name="novatv_accent_green">Green</string>
+    <string name="novatv_cards_per_row">Cards per row</string>
+    <string name="novatv_preview">Preview on the selected card</string>
+    <string name="novatv_preview_off">Off</string>
+    <string name="novatv_preview_delay">Preview delay</string>
+    <string name="novatv_seconds">%s s</string>
+    <string name="novatv_clock">Clock</string>
+    <string name="novatv_clock_show">Show clock and date</string>
+    <string name="novatv_animations">Animations</string>
+    <string name="novatv_focus_animations">Focus animations (card zoom)</string>
+</resources>

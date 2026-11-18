@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- NovaTV: settings tile focus ring -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_focused="true">
+        <shape android:shape="rectangle">
+            <stroke android:width="@dimen/nova_focus_outline_width" android:color="@color/nova_focus_outline"/>
+            <corners android:radius="@dimen/nova_radius_card"/>
+        </shape>
+    </item>
+    <item android:drawable="@android:color/transparent"/>
+</selector>
