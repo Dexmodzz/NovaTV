@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import com.liskovsoft.appupdatechecker2.AppUpdateChecker;
 import com.liskovsoft.appupdatechecker2.AppUpdateCheckerListener;
+import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.errors.ErrorFragmentData;
@@ -50,6 +51,14 @@ public class AppUpdatePresenter extends BasePresenter<Void> implements AppUpdate
 
     public void start(boolean forceCheck) {
         mIsForceCheck = forceCheck;
+
+        // NovaTV: forks must never download the upstream SmartTube APK
+        if (!Helpers.equalsAny(getContext().getPackageName(), Utils.KNOWN_PACKAGES)) {
+            if (forceCheck) {
+                MessageHelpers.showMessage(getContext(), R.string.update_not_found);
+            }
+            return;
+        }
 
         if (forceCheck) {
             LoadingManager.showLoading(getContext(), true);
