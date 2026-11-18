@@ -65,7 +65,7 @@
     <dimen name="lb_browse_headers_width">112dp</dimen>
     <!-- No zoom on the selected rail item (Leanback default 1.2) -->
     <item name="lb_browse_header_select_scale" format="float" type="dimen">1.0</item>
-    <dimen name="nova_rail_item_width">96dp</dimen>
+    <dimen name="nova_rail_item_width">88dp</dimen>
     <dimen name="nova_rail_item_padding">10dp</dimen>
     <dimen name="nova_rail_icon_size">28dp</dimen>
     <dimen name="nova_rail_label_size">11sp</dimen>
