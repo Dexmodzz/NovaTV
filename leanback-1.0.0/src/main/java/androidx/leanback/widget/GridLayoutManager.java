@@ -3315,11 +3315,14 @@ final class GridLayoutManager extends RecyclerView.LayoutManager {
                 result = focused;
             }
         } else if (movement == NEXT_ROW) {
-            if (isScroll || (mFlag & PF_FOCUS_OUT_SIDE_END) == 0) {
+            // MOD: NovaTV: interruptible navigation. Don't swallow the key while this grid is still
+            // scrolling: focus leaves right away and the scroll finishes on its own (e.g. right + down).
+            if ((mFlag & PF_FOCUS_OUT_SIDE_END) == 0) {
                 result = focused;
             }
         } else if (movement == PREV_ROW) {
-            if (isScroll || (mFlag & PF_FOCUS_OUT_SIDE_START) == 0) {
+            // MOD: NovaTV: interruptible navigation (see above)
+            if ((mFlag & PF_FOCUS_OUT_SIDE_START) == 0) {
                 result = focused;
             }
         }
