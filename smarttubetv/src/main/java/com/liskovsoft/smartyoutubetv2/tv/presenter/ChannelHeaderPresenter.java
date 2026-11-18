@@ -104,6 +104,11 @@ public class ChannelHeaderPresenter extends RowPresenter {
         SpeechOrbView speechOrbView = searchBar.findViewById(R.id.lb_search_bar_speech_orb);
         SearchEditText searchTextEditor = searchBar.findViewById(R.id.lb_search_text_editor);
         SearchOrbView searchSettingsOrbView = searchBar.findViewById(R.id.search_settings_orb);
+        // NovaTV: no app logo inside the channel page search bar
+        View novaLogo = searchBar.findViewById(R.id.nova_search_screen_logo);
+        if (novaLogo != null) {
+            novaLogo.setVisibility(View.GONE);
+        }
         // Default recognizer. Used when there's no speech callbacks specified.
         searchBar.setSpeechRecognizer(SpeechRecognizer.createSpeechRecognizer(context));
         searchBar.setOnFocusChangeListener((v, focused) -> {

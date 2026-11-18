@@ -40,6 +40,11 @@
     <dimen name="nova_search_pill_width">480dp</dimen>
     <dimen name="nova_search_pill_height">44dp</dimen>
     <dimen name="nova_search_mic_size">36dp</dimen>
+    <dimen name="nova_search_screen_pill_height">56dp</dimen>
+    <!-- Search screen: aligns the logo with the home header one (SearchBar already has a start padding) -->
+    <dimen name="nova_search_screen_logo_margin">18dp</dimen>
+    <!-- Voice orb fits inside the pill, also when zoomed on focus (Leanback default 52dp) -->
+    <dimen name="lb_search_bar_speech_orb_size">40dp</dimen>
     <dimen name="nova_pip_title_max_width">260dp</dimen>
 
     <!-- Search screen: the dark field is always fully opaque (Leanback fades it to 20%/70%) -->

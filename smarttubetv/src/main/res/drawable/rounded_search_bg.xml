@@ -1,14 +1,20 @@
-<!-- NovaTV: dark pill search field (was a light grey #EEEEEE pill) -->
-<shape xmlns:android="http://schemas.android.com/apk/res/android">
-    <solid android:color="@color/nova_surface_2"/>
-
-    <stroke android:width="@dimen/nova_border_width" android:color="@color/nova_border"/>
-
-    <corners android:radius="@dimen/nova_radius_pill"/>
-
-    <padding
-        android:left="6dp"
-        android:top="6dp"
-        android:right="6dp"
-        android:bottom="6dp"/>
-</shape>
+<!-- NovaTV: dark pill search field (was a light grey #EEEEEE pill).
+     White outline while the field or the mic inside it is focused (addStatesFromChildren). -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_focused="true">
+        <shape>
+            <solid android:color="@color/nova_surface_2"/>
+            <stroke android:width="2dp" android:color="@color/nova_focus_outline"/>
+            <corners android:radius="@dimen/nova_radius_pill"/>
+            <padding android:left="6dp" android:top="6dp" android:right="6dp" android:bottom="6dp"/>
+        </shape>
+    </item>
+    <item>
+        <shape>
+            <solid android:color="@color/nova_surface_2"/>
+            <stroke android:width="@dimen/nova_border_width" android:color="@color/nova_border"/>
+            <corners android:radius="@dimen/nova_radius_pill"/>
+            <padding android:left="6dp" android:top="6dp" android:right="6dp" android:bottom="6dp"/>
+        </shape>
+    </item>
+</selector>

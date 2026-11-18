@@ -14,85 +14,25 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
+
 <!-- MOD: Enable single click touch mode (focusableInTouchMode=false) -->
+<!-- NovaTV: same look as the home header: one wide pill = search icon | text field | mic,
+     search settings and submit as round buttons on the right. All upstream ids are kept
+     (SearchBar, SearchSupportFragment and ChannelHeaderPresenter look them up). -->
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
        xmlns:app="http://schemas.android.com/apk/res-auto">
-    <androidx.leanback.widget.SpeechOrbView
-            android:id="@+id/lb_search_bar_speech_orb"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginStart="@dimen/lb_search_bar_speech_orb_margin_start"
-            android:focusable="true"
-            android:focusableInTouchMode="false"
-            >
-        <!-- Should be commented out? Fix voice search activation after fragment restore? -->
-        <requestFocus/>
-    </androidx.leanback.widget.SpeechOrbView>
 
-    <!-- MOD: rounded search bg (old value: lb_in_app_search_bg) -->
-    <RelativeLayout
-            android:id="@+id/lb_search_bar_items"
-            android:layout_width="@dimen/lb_search_bar_items_width"
-            android:layout_height="@dimen/lb_search_bar_items_height"
-            android:layout_toEndOf="@+id/lb_search_bar_speech_orb"
-            android:layout_centerVertical="true"
-            android:layout_marginStart="@dimen/lb_search_bar_items_margin_start"
-            android:layout_marginTop="@dimen/lb_search_bar_inner_margin_top"
-            android:layout_marginBottom="@dimen/lb_search_bar_inner_margin_bottom"
-            android:background="@drawable/rounded_search_bg"
-            >
-
-        <ImageView
-                android:id="@+id/lb_search_bar_badge"
-                android:layout_width="@dimen/lb_search_bar_icon_width"
-                android:layout_height="@dimen/lb_search_bar_icon_height"
-                android:layout_gravity="center_vertical|start"
-                android:layout_centerVertical="true"
-                android:layout_marginStart="@dimen/lb_search_bar_icon_margin_start"
-                android:src="@null"
-                android:visibility="gone"
-                style="?attr/browseTitleIconStyle"/>
-
-        <androidx.leanback.widget.SearchEditText
-                    android:id="@+id/lb_search_text_editor"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical|start"
-                    android:layout_marginStart="@dimen/lb_search_bar_edit_text_margin_start"
-                    android:layout_centerVertical="true"
-                    android:cursorVisible="true"
-                    android:layout_toEndOf="@+id/lb_search_bar_badge"
-                    android:editable="true"
-                    android:background="@null"
-                    android:fontFamily="sans-serif"
-                    android:focusable="true"
-                    android:focusableInTouchMode="true"
-                    android:imeOptions="normal|flagNoExtractUi|actionSearch"
-                    android:inputType="text|textAutoComplete"
-                    android:singleLine="true"
-                    android:textAlignment="viewStart"
-                    android:textColor="@color/lb_search_bar_text"
-                    android:textColorHint="@color/lb_search_bar_hint"
-                    android:textCursorDrawable="@drawable/search_bar_cursor"
-                    android:hint="@string/lb_search_bar_hint"
-                    android:textSize="@dimen/lb_search_bar_text_size"/>
-    </RelativeLayout>
-
-    <!-- NOTE: You need to create different icon sizes to overcome icon oversize bug -->
-    <androidx.leanback.widget.SearchOrbView
-        android:id="@+id/search_settings_orb"
+    <!-- NovaTV logo, as in the home header -->
+    <ImageView
+        android:id="@+id/nova_search_screen_logo"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/nova_header_logo_height"
+        android:layout_alignParentStart="true"
         android:layout_centerVertical="true"
-        android:layout_marginEnd="@dimen/search_bar_right_items_margin"
-        android:layout_toStartOf="@+id/lb_search_bar_search_orb"
-        android:focusable="true"
-        android:focusableInTouchMode="false"
-        app:searchOrbIcon="@drawable/search_bar_settings_orb"
-        app:searchOrbColor="@color/orb_color"
-        app:searchOrbBrightColor="@color/orb_bright_color"
-        app:searchOrbIconColor="@color/orb_icon_color" />
+        android:layout_marginStart="@dimen/nova_search_screen_logo_margin"
+        android:adjustViewBounds="true"
+        android:importantForAccessibility="no"
+        android:src="@mipmap/novatv_logo"/>
 
     <!-- Start search button -->
     <androidx.leanback.widget.SearchOrbView
@@ -107,4 +47,101 @@
         app:searchOrbColor="@color/orb_color"
         app:searchOrbBrightColor="@color/orb_bright_color"
         app:searchOrbIconColor="@color/orb_icon_color" />
+
+    <!-- NOTE: You need to create different icon sizes to overcome icon oversize bug -->
+    <androidx.leanback.widget.SearchOrbView
+        android:id="@+id/search_settings_orb"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="@dimen/nova_space_l"
+        android:layout_toStartOf="@+id/lb_search_bar_search_orb"
+        android:focusable="true"
+        android:focusableInTouchMode="false"
+        app:searchOrbIcon="@drawable/search_bar_settings_orb"
+        app:searchOrbColor="@color/orb_color"
+        app:searchOrbBrightColor="@color/orb_bright_color"
+        app:searchOrbIconColor="@color/orb_icon_color" />
+
+    <!-- The pill. SearchBar reads its background (mBarBackground). -->
+    <RelativeLayout
+            android:id="@+id/lb_search_bar_items"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/nova_search_screen_pill_height"
+            android:layout_toEndOf="@+id/nova_search_screen_logo"
+            android:layout_toStartOf="@+id/search_settings_orb"
+            android:layout_marginStart="@dimen/nova_space_l"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="@dimen/nova_space_xl"
+            android:layout_marginTop="@dimen/lb_search_bar_inner_margin_top"
+            android:layout_marginBottom="@dimen/lb_search_bar_inner_margin_bottom"
+            android:addStatesFromChildren="true"
+            android:clipChildren="false"
+            android:clipToPadding="false"
+            android:background="@drawable/rounded_search_bg"
+            >
+
+        <ImageView
+                android:id="@+id/nova_search_screen_icon"
+                android:layout_width="@dimen/nova_header_icon_size"
+                android:layout_height="@dimen/nova_header_icon_size"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="@dimen/nova_space_l"
+                android:src="@drawable/lb_ic_in_app_search"
+                android:tint="@color/nova_text_secondary"
+                android:importantForAccessibility="no"/>
+
+        <!-- Shown by SearchBar when a badge is set (e.g. channel avatar) -->
+        <ImageView
+                android:id="@+id/lb_search_bar_badge"
+                android:layout_width="@dimen/lb_search_bar_icon_width"
+                android:layout_height="@dimen/lb_search_bar_icon_height"
+                android:layout_centerVertical="true"
+                android:layout_toEndOf="@+id/nova_search_screen_icon"
+                android:layout_marginStart="@dimen/nova_space_s"
+                android:src="@null"
+                android:visibility="gone"
+                style="?attr/browseTitleIconStyle"/>
+
+        <androidx.leanback.widget.SpeechOrbView
+                android:id="@+id/lb_search_bar_speech_orb"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="@dimen/nova_space_xs"
+                android:focusable="true"
+                android:focusableInTouchMode="false"
+                >
+            <!-- Should be commented out? Fix voice search activation after fragment restore? -->
+            <requestFocus/>
+        </androidx.leanback.widget.SpeechOrbView>
+
+        <androidx.leanback.widget.SearchEditText
+                    android:id="@+id/lb_search_text_editor"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical|start"
+                    android:layout_marginStart="@dimen/nova_space_m"
+                    android:layout_marginEnd="@dimen/nova_space_s"
+                    android:layout_centerVertical="true"
+                    android:cursorVisible="true"
+                    android:layout_toEndOf="@+id/lb_search_bar_badge"
+                    android:layout_toStartOf="@+id/lb_search_bar_speech_orb"
+                    android:editable="true"
+                    android:background="@null"
+                    android:fontFamily="sans-serif"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:imeOptions="normal|flagNoExtractUi|actionSearch"
+                    android:inputType="text|textAutoComplete"
+                    android:singleLine="true"
+                    android:textAlignment="viewStart"
+                    android:textColor="@color/lb_search_bar_text"
+                    android:textColorHint="@color/lb_search_bar_hint"
+                    android:textCursorDrawable="@drawable/search_bar_cursor"
+                    android:hint="@string/lb_search_bar_hint"
+                    android:textSize="@dimen/nova_text_title"/>
+    </RelativeLayout>
 </merge>
