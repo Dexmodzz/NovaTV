@@ -92,8 +92,9 @@ public final class SeekBar extends View {
     public SeekBar(Context context, AttributeSet attrs) {
         super(context, attrs);
         setWillNotDraw(false);
-        mBackgroundPaint.setColor(Color.GRAY);
-        mSecondProgressPaint.setColor(Color.LTGRAY);
+        // NovaTV: track and buffered colors from the design tokens
+        mBackgroundPaint.setColor(androidx.core.content.ContextCompat.getColor(context, com.liskovsoft.smartyoutubetv2.tv.R.color.nova_track));
+        mSecondProgressPaint.setColor(androidx.core.content.ContextCompat.getColor(context, com.liskovsoft.smartyoutubetv2.tv.R.color.nova_player_buffered));
         mProgressPaint.setColor(Color.RED);
         mKnobPaint.setColor(Color.WHITE);
         mBarHeight = context.getResources().getDimensionPixelSize(

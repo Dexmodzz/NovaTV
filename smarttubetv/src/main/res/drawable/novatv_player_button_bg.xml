@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- NovaTV: player pill button. Focus = lighter surface + white ring (same language as the cards) -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_focused="true">
+        <shape android:shape="rectangle">
+            <solid android:color="@color/nova_border"/>
+            <stroke android:width="2dp" android:color="@color/nova_focus_outline"/>
+            <corners android:radius="@dimen/nova_radius_pill"/>
+        </shape>
+    </item>
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="@color/nova_player_button"/>
+            <corners android:radius="@dimen/nova_radius_pill"/>
+        </shape>
+    </item>
+</selector>

@@ -13,6 +13,7 @@
  */
 package com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.tooltips;
 
+import android.graphics.PorterDuff;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +21,7 @@ import android.view.ViewGroup;
 import android.view.accessibility.AccessibilityEvent;
 import android.widget.ImageView;
 import android.widget.TextView;
+import androidx.core.content.ContextCompat;
 import androidx.leanback.R;
 import androidx.leanback.widget.Action;
 import androidx.leanback.widget.PlaybackControlsRow;
@@ -74,12 +76,62 @@ public class ControlButtonPresenterSelector extends PresenterSelector {
         ImageView mIcon;
         TextView mLabel;
         View mFocusableView;
+        TextView mNovaLabel; // NovaTV: name shown when the button is focused
 
         public ActionViewHolder(View view) {
             super(view);
             mIcon = (ImageView) view.findViewById(R.id.icon);
             mLabel = (TextView) view.findViewById(R.id.label);
             mFocusableView = view.findViewById(R.id.button);
+            mNovaLabel = (TextView) view.findViewById(com.liskovsoft.smartyoutubetv2.tv.R.id.nova_button_label);
+
+            if (mNovaLabel != null) {
+                mFocusableView.setOnFocusChangeListener((v, hasFocus) -> updateNovaLabel());
+            }
+        }
+
+        void updateNovaLabel() {
+            if (mNovaLabel == null) {
+                return;
+            }
+
+            boolean show = mFocusableView.hasFocus() && !TextUtils.isEmpty(mNovaLabel.getText());
+            mNovaLabel.setVisibility(show ? View.VISIBLE : View.GONE);
+        }
+
+        /**
+         * NovaTV: play/pause is a white button with a dark icon, the others are dark pills.
+         */
+        void bindNovaStyle(Action action) {
+            if (mNovaLabel == null) {
+                return;
+            }
+
+            boolean isPlayPause = action instanceof PlaybackControlsRow.PlayPauseAction;
+            mFocusableView.setBackgroundResource(isPlayPause
+                    ? com.liskovsoft.smartyoutubetv2.tv.R.drawable.novatv_player_play_bg
+                    : com.liskovsoft.smartyoutubetv2.tv.R.drawable.novatv_player_button_bg);
+
+            if (isPlayPause) {
+                mIcon.setColorFilter(ContextCompat.getColor(mIcon.getContext(),
+                        com.liskovsoft.smartyoutubetv2.tv.R.color.nova_bg), PorterDuff.Mode.SRC_IN);
+            } else {
+                mIcon.clearColorFilter();
+            }
+
+            int size = mFocusableView.getResources().getDimensionPixelSize(isPlayPause
+                    ? com.liskovsoft.smartyoutubetv2.tv.R.dimen.nova_player_play_size
+                    : com.liskovsoft.smartyoutubetv2.tv.R.dimen.nova_player_button_size);
+            ViewGroup.LayoutParams lp = mFocusableView.getLayoutParams();
+            if (lp != null && lp.height != size) {
+                lp.height = size;
+                mFocusableView.setLayoutParams(lp);
+                mFocusableView.setMinimumWidth(size);
+            }
+
+            // The name is shown inline, no need for the label (it's used for text-only actions)
+            mNovaLabel.setText(isPlayPause || action.getIcon() == null ? null : action.getLabel1());
+            updateNovaLabel();
         }
     }
 
@@ -119,6 +171,7 @@ public class ControlButtonPresenterSelector extends PresenterSelector {
                     vh.mLabel.setText(null);
                 }
             }
+            vh.bindNovaStyle(action); // NovaTV
             CharSequence contentDescription = TextUtils.isEmpty(action.getLabel2())
                     ? action.getLabel1() : action.getLabel2();
             if (!TextUtils.equals(vh.mFocusableView.getContentDescription(), contentDescription)) {
@@ -127,7 +180,8 @@ public class ControlButtonPresenterSelector extends PresenterSelector {
                         AccessibilityEvent.TYPE_VIEW_ACCESSIBILITY_FOCUSED);
 
                 // MOD: enable control tooltips
-                if (tooltipsEnabled) {
+                // NovaTV: not when the name is already shown inside the focused button
+                if (tooltipsEnabled && vh.mNovaLabel == null) {
                     TooltipCompatHandler.setTooltipText(vh.mFocusableView, action.getLabel1());
                 }
             }
@@ -139,6 +193,10 @@ public class ControlButtonPresenterSelector extends PresenterSelector {
             vh.mIcon.setImageDrawable(null);
             if (vh.mLabel != null) {
                 vh.mLabel.setText(null);
+            }
+            if (vh.mNovaLabel != null) {
+                vh.mNovaLabel.setText(null);
+                vh.updateNovaLabel();
             }
             vh.mFocusableView.setContentDescription(null);
         }

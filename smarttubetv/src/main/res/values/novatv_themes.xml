@@ -62,7 +62,7 @@
         <item name="cardProgressStyle">@style/NovaProgress.Orange</item>
         <item name="novaAccent">@color/nova_accent</item>
         <item name="playbackProgressPrimaryColor">@color/nova_accent</item>
-        <item name="playbackProgressSecondaryColor">@color/nova_text_secondary</item>
+        <item name="playbackProgressSecondaryColor">@color/nova_player_buffered</item>
         <item name="playbackControlsIconHighlightColor">@color/nova_accent</item>
         <item name="android:colorAccent" tools:targetApi="21">@color/nova_accent</item>
     </style>

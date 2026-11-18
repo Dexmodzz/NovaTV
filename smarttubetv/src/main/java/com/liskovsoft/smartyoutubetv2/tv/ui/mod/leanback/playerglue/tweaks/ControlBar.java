@@ -13,6 +13,7 @@
  */
 package com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.tweaks;
 
+import android.animation.LayoutTransition;
 import android.content.Context;
 import android.graphics.Rect;
 import android.util.AttributeSet;
@@ -38,15 +39,35 @@ class ControlBar extends LinearLayout {
     private boolean mIsSharedFocusEnabled = true;
     private boolean mDefaultFocusToMiddle = true;
     private boolean mFocusRecovery = true;
+    private int mMinChildGap; // NovaTV
 
     public ControlBar(Context context, AttributeSet attrs) {
         super(context, attrs);
         resetFocus(); // MOD: reset global focus index
+        initNovaStyle();
     }
 
     public ControlBar(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         resetFocus(); // MOD: reset global focus index
+        initNovaStyle();
+    }
+
+    /**
+     * NovaTV: the focused button widens to show its name. Keep a minimum gap so it pushes
+     * its neighbours instead of overlapping them, and animate the change.
+     */
+    private void initNovaStyle() {
+        mMinChildGap = getResources().getDimensionPixelSize(com.liskovsoft.smartyoutubetv2.tv.R.dimen.nova_player_button_min_gap);
+
+        LayoutTransition transition = new LayoutTransition();
+        transition.disableTransitionType(LayoutTransition.APPEARING);
+        transition.disableTransitionType(LayoutTransition.DISAPPEARING);
+        transition.disableTransitionType(LayoutTransition.CHANGE_APPEARING);
+        transition.disableTransitionType(LayoutTransition.CHANGE_DISAPPEARING);
+        transition.enableTransitionType(LayoutTransition.CHANGING);
+        transition.setDuration(LayoutTransition.CHANGING, 160);
+        setLayoutTransition(transition);
     }
 
     void setDefaultFocusToMiddle(boolean defaultFocusToMiddle) {
@@ -137,7 +158,7 @@ class ControlBar extends LinearLayout {
             View first = getChildAt(i);
             View second = getChildAt(i+1);
             int measuredWidth = first.getMeasuredWidth() + second.getMeasuredWidth();
-            int marginStart = mChildMarginFromCenter - measuredWidth / 2;
+            int marginStart = Math.max(mChildMarginFromCenter - measuredWidth / 2, mMinChildGap); // NovaTV: min gap
             LayoutParams lp = (LayoutParams) second.getLayoutParams();
             int extraMargin = marginStart - lp.getMarginStart();
             lp.setMarginStart(marginStart);

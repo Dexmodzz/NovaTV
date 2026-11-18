@@ -69,4 +69,18 @@
     <dimen name="nova_rail_item_padding">10dp</dimen>
     <dimen name="nova_rail_icon_size">28dp</dimen>
     <dimen name="nova_rail_label_size">11sp</dimen>
+    <!-- Player (phase 4) -->
+    <dimen name="nova_player_button_size">48dp</dimen>
+    <dimen name="nova_player_play_size">56dp</dimen>
+    <dimen name="nova_player_button_padding">8dp</dimen>
+    <dimen name="nova_player_icon_size">28dp</dimen>
+    <dimen name="nova_player_label_size">15sp</dimen>
+    <dimen name="nova_player_label_max_width">150dp</dimen>
+    <!-- Min gap between player buttons (a widened, labeled button pushes its neighbours) -->
+    <dimen name="nova_player_button_min_gap">10dp</dimen>
+    <dimen name="nova_player_top_scrim_inset">360dp</dimen>
+    <!-- Thicker progress bar -->
+    <dimen name="lb_playback_transport_progressbar_bar_height">6dp</dimen>
+    <dimen name="lb_playback_transport_progressbar_active_bar_height">10dp</dimen>
+    <dimen name="lb_playback_transport_progressbar_active_radius">10dp</dimen>
 </resources>

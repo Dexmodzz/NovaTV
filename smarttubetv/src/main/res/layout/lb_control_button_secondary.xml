@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- NovaTV: player button = round pill (icon); the focused one widens and shows its name.
+     Leanback ids kept: button (focusable), icon, label (text-only actions). -->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:id="@+id/button"
+        style="?attr/playbackControlsButtonStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/nova_player_button_size"
+        android:minWidth="@dimen/nova_player_button_size"
+        android:layout_gravity="center"
+        android:background="@drawable/novatv_player_button_bg"
+        android:focusable="true"
+        android:clickable="true"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingStart="@dimen/nova_player_button_padding"
+        android:paddingEnd="@dimen/nova_player_button_padding">
+
+        <ImageView
+            android:id="@+id/icon"
+            android:layout_width="@dimen/nova_player_icon_size"
+            android:layout_height="@dimen/nova_player_icon_size"
+            android:duplicateParentState="true"
+            android:importantForAccessibility="no" />
+
+        <TextView
+            android:id="@+id/nova_button_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/nova_space_s"
+            android:layout_marginEnd="@dimen/nova_space_s"
+            android:maxWidth="@dimen/nova_player_label_max_width"
+            android:singleLine="true"
+            android:ellipsize="end"
+            android:includeFontPadding="false"
+            android:textColor="@color/nova_text_primary"
+            android:textSize="@dimen/nova_player_label_size"
+            android:visibility="gone" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:duplicateParentState="true"
+        style="?attr/playbackControlButtonLabelStyle" />
+
+</FrameLayout>
