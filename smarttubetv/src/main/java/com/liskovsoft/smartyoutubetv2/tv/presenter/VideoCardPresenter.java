@@ -27,6 +27,7 @@ import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.base.LongClickPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.video.GridFragmentHelper;
 import com.liskovsoft.smartyoutubetv2.tv.ui.widgets.complexcardview.ComplexImageCardView;
+import com.liskovsoft.smartyoutubetv2.tv.util.NovaAvatars;
 import com.liskovsoft.smartyoutubetv2.tv.util.ViewUtil;
 
 /*
@@ -39,6 +40,8 @@ public class VideoCardPresenter extends LongClickPresenter {
     private int mDefaultTextColor = -1;
     private int mSelectedBackgroundColor = -1;
     private int mSelectedTextColor = -1;
+    private int mContentTextColor = -1; // NovaTV: secondary text (channel, views, date)
+    private boolean mIsCardMultilineSubtitleEnabled;
     private int mCardPreviewType;
     private int mThumbQuality;
     private int mWidth;
@@ -54,14 +57,16 @@ public class VideoCardPresenter extends LongClickPresenter {
                 ContextCompat.getColor(context, R.color.card_default_text);
         mSelectedBackgroundColor =
                 ContextCompat.getColor(context, Helpers.getThemeAttr(context, R.attr.cardSelectedBackground));
-        mSelectedTextColor =
-                ContextCompat.getColor(context, R.color.card_selected_text_grey);
+        // NovaTV: focus is shown by the white ring + zoom, text keeps its colors
+        mSelectedTextColor = mDefaultTextColor;
+        mContentTextColor = ContextCompat.getColor(context, R.color.nova_text_secondary);
 
         mCardPreviewType = getCardPreviewType(context);
         mThumbQuality = getThumbQuality(context);
 
         boolean isCardMultilineTitleEnabled = isCardMultilineTitleEnabled(context);
         boolean isCardMultilineSubtitleEnabled = isCardMultilineSubtitleEnabled(context);
+        mIsCardMultilineSubtitleEnabled = isCardMultilineSubtitleEnabled;
         boolean isCardTextAutoScrollEnabled = isCardTextAutoScrollEnabled(context);
         float cardTextScrollSpeed = getCardTextScrollSpeed(context);
 
@@ -76,7 +81,8 @@ public class VideoCardPresenter extends LongClickPresenter {
         };
 
         cardView.setTitleLinesNum(isCardMultilineTitleEnabled ? 2 : 1);
-        cardView.setContentLinesNum(isCardMultilineSubtitleEnabled ? 2 : 1);
+        // NovaTV: with the avatar the text column is narrower: channel + "views · date" (may wrap) = 3 lines
+        cardView.setContentLinesNum(isCardMultilineSubtitleEnabled ? (isAvatarEnabled() ? 3 : 2) : 1);
         cardView.enableTextAutoScroll(isCardTextAutoScrollEnabled);
         cardView.setTextScrollSpeed(cardTextScrollSpeed);
         cardView.setFocusable(true);
@@ -84,6 +90,9 @@ public class VideoCardPresenter extends LongClickPresenter {
         cardView.enableBadge(isBadgeEnabled());
         cardView.enableTitle(isTitleEnabled());
         cardView.enableContent(isContentEnabled());
+        if (isAvatarEnabled()) {
+            cardView.enableAvatar();
+        }
         cardView.setBackgroundColor(mDefaultBackgroundColor); // background is temporarily visible during animations
         //if (VERSION.SDK_INT >= 23 && MainUIData.instance(context).isUiTweakEnabled(MainUIData.UI_TWEAK_ROUNDED_CORNERS)) {
         //    cardView.setForeground(ContextCompat.getDrawable(context, R.drawable.lb_card_outline));
@@ -112,7 +121,7 @@ public class VideoCardPresenter extends LongClickPresenter {
         }
         TextView contentText = view.findViewById(R.id.content_text);
         if (contentText != null) {
-            contentText.setTextColor(textColor);
+            contentText.setTextColor(mContentTextColor != -1 ? mContentTextColor : textColor);
         }
     }
 
@@ -126,7 +135,10 @@ public class VideoCardPresenter extends LongClickPresenter {
         Context context = cardView.getContext();
 
         cardView.setTitleText(video.getTitle());
-        cardView.setContentText(video.getSecondTitle());
+        cardView.setContentText(formatContent(video.getSecondTitle()));
+        if (cardView.getAvatarView() != null) {
+            NovaAvatars.bind(cardView.getAvatarView(), video);
+        }
         // Count progress that very close to zero. E.g. when user closed video immediately.
         cardView.setProgress(video.percentWatched > 0 && video.percentWatched < 1 ? 1 : Math.round(video.percentWatched));
         cardView.setBadgeText(
@@ -182,6 +194,7 @@ public class VideoCardPresenter extends LongClickPresenter {
         // Remove references to images so that the garbage collector can free up memory.
         cardView.setBadgeImage(null);
         cardView.setMainImage(null);
+        NovaAvatars.unbind(cardView.getAvatarView());
 
         // Cleanup Glide resources. https://chatgpt.com/share/682120c5-e428-8010-b848-371b2dec0cd5
         Glide.with(cardView.getContext().getApplicationContext()).clear(cardView.getMainImageView());
@@ -232,6 +245,55 @@ public class VideoCardPresenter extends LongClickPresenter {
 
     protected boolean isBadgeEnabled() {
         return true;
+    }
+
+    /**
+     * NovaTV: channel avatar next to the card text
+     */
+    protected boolean isAvatarEnabled() {
+        return isTitleEnabled() && isContentEnabled();
+    }
+
+    /**
+     * NovaTV: "Channel • 1M views • 2 days ago" becomes "Channel" + new line + "1M views · 2 days ago"
+     * when two subtitle lines are allowed. Styled text (e.g. colored LIVE badge) is left untouched.
+     */
+    private CharSequence formatContent(CharSequence secondTitle) {
+        if (secondTitle == null) {
+            return null;
+        }
+
+        // Keep really styled text (e.g. a colored LIVE badge); plain Spanned strings are fine to rebuild
+        if (secondTitle instanceof android.text.Spanned
+                && ((android.text.Spanned) secondTitle).getSpans(0, secondTitle.length(), android.text.style.CharacterStyle.class).length > 0) {
+            return secondTitle;
+        }
+
+        String[] parts = secondTitle.toString().split(Video.TERTIARY_TEXT_DELIM);
+
+        if (parts.length < 2) {
+            return secondTitle;
+        }
+
+        StringBuilder rest = new StringBuilder();
+        for (int i = 1; i < parts.length; i++) {
+            String part = parts[i].trim();
+            if (part.isEmpty()) {
+                continue;
+            }
+            if (rest.length() > 0) {
+                rest.append(" \u00B7 ");
+            }
+            rest.append(part);
+        }
+
+        String channel = parts[0].trim();
+
+        if (rest.length() == 0) {
+            return channel;
+        }
+
+        return mIsCardMultilineSubtitleEnabled ? channel + "\n" + rest : channel + " \u00B7 " + rest;
     }
 
     private final RequestListener<Drawable> mErrorListener = new RequestListener<Drawable>() {

@@ -1,11 +1,22 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.widgets.complexcardview;
 
 import android.content.Context;
+import android.graphics.Canvas;
+import android.graphics.Outline;
+import android.graphics.Paint;
+import android.graphics.RectF;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.AttributeSet;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewOutlineProvider;
+import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import androidx.core.content.ContextCompat;
 import androidx.leanback.widget.ImageCardView;
 
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
@@ -17,6 +28,11 @@ public class ComplexImageCardView extends ImageCardView {
     private Handler mHandler;
     private boolean mIsCardTextAutoScrollEnabled;
     private boolean mIsBadgeEnabled;
+    // NovaTV
+    private ImageView mAvatarView;
+    private Paint mFocusPaint;
+    private final RectF mFocusRect = new RectF();
+    private float mFocusRadius;
 
     public ComplexImageCardView(Context context) {
         super(context);
@@ -39,6 +55,97 @@ public class ComplexImageCardView extends ImageCardView {
     private void init() {
         mComplexImageView = findViewById(R.id.main_image_wrapper);
         mHandler = new Handler(Looper.getMainLooper());
+        initNovaStyle();
+    }
+
+    /**
+     * NovaTV: 14dp rounded card, white focus ring (instead of the white info box).
+     */
+    private void initNovaStyle() {
+        int radius = getResources().getDimensionPixelSize(R.dimen.nova_radius_card);
+
+        if (Build.VERSION.SDK_INT >= 21) {
+            setOutlineProvider(new ViewOutlineProvider() {
+                @Override
+                public void getOutline(View view, Outline outline) {
+                    outline.setRoundRect(0, 0, view.getWidth(), view.getHeight(), radius);
+                }
+            });
+            setClipToOutline(true);
+        }
+
+        // Focus ring is drawn in dispatchDraw(): BaseCardView filters selected/focused drawable states
+        // and the Leanback dimmer replaces the card foreground, so a foreground selector can't be used.
+        mFocusRadius = radius;
+        mFocusPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        mFocusPaint.setStyle(Paint.Style.STROKE);
+        mFocusPaint.setStrokeWidth(getResources().getDimension(R.dimen.nova_focus_outline_width));
+        mFocusPaint.setColor(ContextCompat.getColor(getContext(), R.color.nova_focus_outline));
+        setWillNotDraw(false);
+    }
+
+    @Override
+    protected void dispatchDraw(Canvas canvas) {
+        super.dispatchDraw(canvas);
+
+        if (isSelected() && mFocusPaint != null) {
+            float inset = mFocusPaint.getStrokeWidth() / 2;
+            mFocusRect.set(inset, inset, getWidth() - inset, getHeight() - inset);
+            canvas.drawRoundRect(mFocusRect, mFocusRadius - inset, mFocusRadius - inset, mFocusPaint);
+        }
+    }
+
+    /**
+     * NovaTV: round channel avatar to the left of title/content.
+     * The view is created lazily, so cards that don't use it (e.g. shorts) are untouched.
+     */
+    public ImageView enableAvatar() {
+        if (mAvatarView != null) {
+            return mAvatarView;
+        }
+
+        View infoField = findViewById(R.id.info_field);
+        TextView titleView = findViewById(R.id.title_text);
+        TextView contentView = findViewById(R.id.content_text);
+
+        if (!(infoField instanceof RelativeLayout) || titleView == null) {
+            return null;
+        }
+
+        int size = getResources().getDimensionPixelSize(R.dimen.nova_card_avatar_size);
+        mAvatarView = new ImageView(getContext());
+        mAvatarView.setId(View.generateViewId());
+        mAvatarView.setScaleType(ScaleType.CENTER_CROP);
+        mAvatarView.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO);
+
+        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(size, size);
+        lp.addRule(RelativeLayout.ALIGN_PARENT_START);
+        lp.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+        lp.setMarginEnd(getResources().getDimensionPixelSize(R.dimen.nova_space_m));
+        lp.topMargin = getResources().getDimensionPixelSize(R.dimen.nova_space_xs);
+        ((RelativeLayout) infoField).addView(mAvatarView, lp);
+
+        addEndOf(titleView, mAvatarView.getId());
+        addEndOf(contentView, mAvatarView.getId());
+
+        return mAvatarView;
+    }
+
+    public ImageView getAvatarView() {
+        return mAvatarView;
+    }
+
+    private static void addEndOf(View view, int anchorId) {
+        if (view == null || !(view.getLayoutParams() instanceof RelativeLayout.LayoutParams)) {
+            return;
+        }
+
+        RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) view.getLayoutParams();
+        lp.removeRule(RelativeLayout.ALIGN_PARENT_START); // would win over END_OF (same as Leanback's icon-left case)
+        lp.removeRule(RelativeLayout.ALIGN_PARENT_LEFT);
+        lp.addRule(RelativeLayout.END_OF, anchorId);
+        lp.width = ViewGroup.LayoutParams.MATCH_PARENT;
+        view.setLayoutParams(lp);
     }
 
     private void enableTitleAnimation(boolean enable) {
@@ -46,7 +153,12 @@ public class ComplexImageCardView extends ImageCardView {
     }
 
     private void enableContentAnimation(boolean enable) {
-        enableTextAnimation(findViewById(R.id.content_text), enable);
+        TextView content = findViewById(R.id.content_text);
+        // NovaTV: "channel\nviews · date" can't scroll on one line (marquee forces single line)
+        if (enable && content != null && content.getText() != null && content.getText().toString().contains("\n")) {
+            return;
+        }
+        enableTextAnimation(content, enable);
     }
 
     private void enableTextAnimation(TextView view, boolean enable) {
@@ -93,6 +205,7 @@ public class ComplexImageCardView extends ImageCardView {
     @Override
     public void setSelected(boolean selected) {
         super.setSelected(selected);
+        invalidate(); // NovaTV: focus ring
 
         if (mIsCardTextAutoScrollEnabled) {
             enableTitleAnimation(selected);

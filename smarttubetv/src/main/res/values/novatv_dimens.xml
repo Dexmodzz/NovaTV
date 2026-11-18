@@ -24,6 +24,11 @@
     <dimen name="nova_pill_height">40dp</dimen>
     <dimen name="nova_pill_padding_h">18dp</dimen>
 
+    <!-- Video cards -->
+    <dimen name="nova_card_avatar_size">32dp</dimen>
+    <!-- Focused card zoom 1.05 (Leanback "small" zoom, used by all rows/grids; default 110%) -->
+    <item name="lb_focus_zoom_factor_small" type="fraction">105%</item>
+
     <!-- Progress -->
     <dimen name="nova_progress_height">4dp</dimen>
 

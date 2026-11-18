@@ -11,4 +11,9 @@ public class ShortsCardPresenter extends VideoCardPresenter {
     protected Pair<Integer, Integer> getCardDimensPx(Context context) {
         return GridFragmentHelper.getCardDimensPx(context, R.dimen.shorts_card_width, R.dimen.shorts_card_height, MainUIData.instance(context).getVideoGridScale());
     }
+
+    @Override
+    protected boolean isAvatarEnabled() {
+        return false; // NovaTV: narrow vertical cards, no channel avatar
+    }
 }

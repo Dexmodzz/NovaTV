@@ -42,7 +42,7 @@
         <item name="brandAccentColor">@color/nova_accent</item>
         <item name="shelfBackground">@color/nova_bg</item>
         <item name="cardDefaultBackground">@color/nova_surface</item>
-        <item name="cardSelectedBackground">@color/nova_text_primary</item>
+        <item name="cardSelectedBackground">@color/nova_surface</item>
         <item name="cardProgressStyle">@style/NovaProgress.Orange</item>
         <item name="appLogo">@mipmap/novatv_logo</item>
         <item name="headersVerticalGridStyle">@style/NovaRailGridStyle</item>
@@ -58,7 +58,7 @@
         <item name="android:windowBackground">@android:color/black</item>
         <item name="shelfBackground">@color/nova_bg</item>
         <item name="cardDefaultBackground">@color/nova_surface</item>
-        <item name="cardSelectedBackground">@color/nova_text_primary</item>
+        <item name="cardSelectedBackground">@color/nova_surface</item>
         <item name="cardProgressStyle">@style/NovaProgress.Orange</item>
         <item name="novaAccent">@color/nova_accent</item>
         <item name="playbackProgressPrimaryColor">@color/nova_accent</item>
