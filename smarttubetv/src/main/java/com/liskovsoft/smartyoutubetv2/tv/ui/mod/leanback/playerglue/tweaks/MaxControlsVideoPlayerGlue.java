@@ -53,8 +53,10 @@ public abstract class MaxControlsVideoPlayerGlue<T extends PlayerAdapter>
                         fixThumbOverlapping(viewHolder);
 
                         PlaybackBaseControlGlue<?> glue = (PlaybackBaseControlGlue<?>) obj;
-                        // NovaTV: the title is shown in the player top header (empty text = hidden by leanback)
+                        // NovaTV: own title block (title, avatar, channel, subscribers) above the info line;
+                        // the leanback title stays empty (= hidden by leanback)
                         viewHolder.getTitle().setText(null);
+                        com.liskovsoft.smartyoutubetv2.tv.ui.playback.other.NovaPlayerTitle.bind(viewHolder, glue.getTitle(), mVideo);
                         viewHolder.getSubtitle().setText(glue.getSubtitle());
                         // NovaTV: centered info line (views, date, likes) and chapter name
                         if (viewHolder.view.getLayoutParams() != null) {
@@ -144,6 +146,11 @@ public abstract class MaxControlsVideoPlayerGlue<T extends PlayerAdapter>
     @Override
     public void setVideo(Video video) {
         mVideo = video;
+
+        // NovaTV: refresh channel/subscribers of the title block
+        if (mDescriptionViewHolder != null) {
+            com.liskovsoft.smartyoutubetv2.tv.ui.playback.other.NovaPlayerTitle.bind(mDescriptionViewHolder.get(), getTitle(), video);
+        }
     }
 
     @Override

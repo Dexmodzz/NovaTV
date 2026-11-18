@@ -13,7 +13,6 @@
  */
 package com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.tweaks;
 
-import android.animation.LayoutTransition;
 import android.content.Context;
 import android.graphics.Rect;
 import android.util.AttributeSet;
@@ -55,19 +54,12 @@ class ControlBar extends LinearLayout {
 
     /**
      * NovaTV: the focused button widens to show its name. Keep a minimum gap so it pushes
-     * its neighbours instead of overlapping them, and animate the change.
+     * its neighbours instead of overlapping them.<br/>
+     * No LayoutTransition here: while animating, a button can briefly get a zero size and Android
+     * then drops its focus (it lands on the seek bar and the next presses seek the video).
      */
     private void initNovaStyle() {
         mMinChildGap = getResources().getDimensionPixelSize(com.liskovsoft.smartyoutubetv2.tv.R.dimen.nova_player_button_min_gap);
-
-        LayoutTransition transition = new LayoutTransition();
-        transition.disableTransitionType(LayoutTransition.APPEARING);
-        transition.disableTransitionType(LayoutTransition.DISAPPEARING);
-        transition.disableTransitionType(LayoutTransition.CHANGE_APPEARING);
-        transition.disableTransitionType(LayoutTransition.CHANGE_DISAPPEARING);
-        transition.enableTransitionType(LayoutTransition.CHANGING);
-        transition.setDuration(LayoutTransition.CHANGING, 160);
-        setLayoutTransition(transition);
     }
 
     void setDefaultFocusToMiddle(boolean defaultFocusToMiddle) {
@@ -125,6 +117,47 @@ class ControlBar extends LinearLayout {
         } else {
             super.addFocusables(views, direction, focusableMode);
         }
+    }
+
+    /**
+     * NovaTV: left/right move one button at a time and stop at the first/last button of the row.<br/>
+     * The default (geometric) search may pick the seek bar below, especially while a focused button
+     * is widening to show its name; then the next presses seek the video.
+     */
+    @Override
+    public View focusSearch(View focused, int direction) {
+        if ((direction == View.FOCUS_LEFT || direction == View.FOCUS_RIGHT) && focused != null) {
+            int index = indexOfChildContaining(focused);
+
+            if (index >= 0) {
+                boolean isRtl = getLayoutDirection() == View.LAYOUT_DIRECTION_RTL;
+                boolean forward = (direction == View.FOCUS_RIGHT) != isRtl;
+
+                for (int next = forward ? index + 1 : index - 1; next >= 0 && next < getChildCount(); next += forward ? 1 : -1) {
+                    View child = getChildAt(next);
+                    if (child.getVisibility() != View.VISIBLE) {
+                        continue;
+                    }
+                    ArrayList<View> focusables = new ArrayList<>();
+                    child.addFocusables(focusables, direction);
+                    if (!focusables.isEmpty()) {
+                        return focusables.get(0);
+                    }
+                }
+
+                return focused; // edge of the row
+            }
+        }
+
+        return super.focusSearch(focused, direction);
+    }
+
+    private int indexOfChildContaining(View view) {
+        while (view != null && view.getParent() != this) {
+            view = view.getParent() instanceof View ? (View) view.getParent() : null;
+        }
+
+        return view != null ? indexOfChild(view) : -1;
     }
 
     public void setOnChildFocusedListener(OnChildFocusedListener listener) {

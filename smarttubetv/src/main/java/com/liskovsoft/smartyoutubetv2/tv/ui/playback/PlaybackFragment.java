@@ -559,7 +559,6 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
 
         if (mNovaHeader != null) {
             mNovaHeader.setClockEnabled(getPlayerData().isClockEnabled());
-            mNovaHeader.bind(getVideo());
             mNovaHeader.show(isControlsShown(), false);
         }
     }
@@ -911,10 +910,6 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
             mPlayerGlue.setTitle(video.getTitleFull() != null ? video.getTitleFull() : "...");
             mPlayerGlue.setSubtitle(video.getSecondTitleFull() != null ? createSubtitle(video) : "...");
             mPlayerGlue.setVideo(video);
-        }
-
-        if (mNovaHeader != null) {
-            mNovaHeader.bind(video);
         }
     }
 

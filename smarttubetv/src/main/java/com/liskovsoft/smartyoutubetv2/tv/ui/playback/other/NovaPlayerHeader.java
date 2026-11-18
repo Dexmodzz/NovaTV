@@ -1,36 +1,24 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.playback.other;
 
-import android.text.TextUtils;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 
-import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.ui.widgets.time.DateTimeView;
-import com.liskovsoft.smartyoutubetv2.tv.util.NovaAvatars;
 
 /**
- * NovaTV: player top header (channel avatar, title, "channel · subscribers", clock).<br/>
- * Pure view: it's fed by PlaybackFragment with the data the player already has
- * and fades together with the controls.
+ * NovaTV: player top header (clock in the corner). Fades together with the controls.<br/>
+ * Title and channel are in {@link NovaPlayerTitle}.
  */
 public final class NovaPlayerHeader {
     private static final int FADE_MS = 200;
     private final View mRoot;
-    private final ImageView mAvatar;
-    private final TextView mTitle;
-    private final TextView mSubtitle;
     private final View mClock;
     private boolean mIsShown;
 
     private NovaPlayerHeader(View root) {
         mRoot = root;
-        mAvatar = root.findViewById(R.id.nova_player_header_avatar);
-        mTitle = root.findViewById(R.id.nova_player_header_title);
-        mSubtitle = root.findViewById(R.id.nova_player_header_subtitle);
         mClock = root.findViewById(R.id.nova_player_header_clock);
 
         DateTimeView time = root.findViewById(R.id.nova_player_header_time);
@@ -46,25 +34,6 @@ public final class NovaPlayerHeader {
     public static NovaPlayerHeader create(@Nullable View fragmentRoot) {
         View root = fragmentRoot != null ? fragmentRoot.findViewById(R.id.nova_player_header) : null;
         return root != null ? new NovaPlayerHeader(root) : null;
-    }
-
-    public void bind(@Nullable Video video) {
-        if (video == null) {
-            return;
-        }
-
-        CharSequence title = video.getTitleFull() != null ? video.getTitleFull() : video.getTitle();
-        mTitle.setText(title);
-
-        String author = video.getAuthor();
-        CharSequence subtitle = author;
-        if (!TextUtils.isEmpty(video.subscriberCount)) {
-            subtitle = TextUtils.isEmpty(author) ? video.subscriberCount : author + "  ·  " + video.subscriberCount;
-        }
-        mSubtitle.setText(subtitle);
-        mSubtitle.setVisibility(TextUtils.isEmpty(subtitle) ? View.GONE : View.VISIBLE);
-
-        NovaAvatars.bind(mAvatar, video);
     }
 
     /**
