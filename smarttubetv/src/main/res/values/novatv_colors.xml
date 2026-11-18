@@ -68,6 +68,14 @@
     <color name="lb_preference_item_category_text_color">@color/nova_accent</color>
     <color name="lb_tv_white">@color/nova_text_primary</color>
 
+    <!-- Search screen (SearchBar / SpeechOrbView) -->
+    <color name="lb_search_bar_text">@color/nova_text_primary</color>
+    <color name="lb_search_bar_hint">@color/nova_text_secondary</color>
+    <color name="lb_search_bar_text_speech_mode">@color/nova_text_primary</color>
+    <color name="lb_search_bar_hint_speech_mode">@color/nova_text_secondary</color>
+    <color name="lb_search_plate_hint_text_color">@color/nova_text_secondary</color>
+    <color name="lb_speech_orb_recording">@color/nova_accent</color>
+
     <!-- leanback-preference (settings panel) -->
     <color name="lb_preference_decor_list_background">@color/nova_surface</color>
     <color name="lb_preference_item_primary_text_color_default">@color/nova_text_primary</color>

@@ -42,6 +42,10 @@
     <dimen name="nova_search_mic_size">36dp</dimen>
     <dimen name="nova_pip_title_max_width">260dp</dimen>
 
+    <!-- Search screen: the dark field is always fully opaque (Leanback fades it to 20%/70%) -->
+    <integer name="lb_search_bar_text_mode_background_alpha">255</integer>
+    <integer name="lb_search_bar_speech_mode_background_alpha">255</integer>
+
     <!-- Category chips -->
     <dimen name="nova_chip_height">36dp</dimen>
     <dimen name="nova_chip_padding_h">18dp</dimen>

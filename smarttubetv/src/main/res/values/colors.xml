@@ -60,8 +60,8 @@
     <color name="foreground_material_light_mod">@android:color/black</color>
 
     <!-- Default Orb buttons colors: search, accounts, search settings etc -->
-    <color name="orb_color">@color/grey</color>
-    <color name="orb_bright_color">@color/grey</color>
+    <color name="orb_color">@color/nova_surface_2</color> <!-- NovaTV: was @color/grey -->
+    <color name="orb_bright_color">@color/nova_border</color> <!-- NovaTV: was @color/grey -->
     <color name="orb_icon_color">@color/white</color>
 
     <!-- Search page mic button color -->

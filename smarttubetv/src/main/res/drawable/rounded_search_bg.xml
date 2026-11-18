@@ -1,7 +1,10 @@
+<!-- NovaTV: dark pill search field (was a light grey #EEEEEE pill) -->
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
-    <solid android:color="#EEEEEE"/>
+    <solid android:color="@color/nova_surface_2"/>
 
-    <corners android:radius="30dp"/>
+    <stroke android:width="@dimen/nova_border_width" android:color="@color/nova_border"/>
+
+    <corners android:radius="@dimen/nova_radius_pill"/>
 
     <padding
         android:left="6dp"
