@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- NovaTV: white focus ring drawn over a focused card -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+    <solid android:color="@android:color/transparent"/>
+    <stroke android:width="@dimen/nova_focus_outline_width" android:color="@color/nova_focus_outline"/>
+    <corners android:radius="@dimen/nova_radius_card"/>
+</shape>

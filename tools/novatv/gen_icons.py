@@ -132,6 +132,12 @@ def main(outdir):
     ix = (bw - total) / 2
     tcolor, _ = text_shapes(ix + isz + gap, (bh - th) / 2, th)
     png(f"{outdir}/app_banner.png", bw, bh, render(bw, bh, DARK, [icon_shapes(ix, (bh - isz) / 2, isz), tcolor]))
+    # Header logo 320x180: same artwork, transparent background, filling the width
+    isz, th, gap = 76, 34, 16
+    tcolor, tw = text_shapes(0, 0, th)
+    ix = (bw - (isz + gap + tw)) / 2
+    tcolor, _ = text_shapes(ix + isz + gap, (bh - th) / 2, th)
+    png(f"{outdir}/novatv_logo.png", bw, bh, render(bw, bh, None, [icon_shapes(ix, (bh - isz) / 2, isz), tcolor]))
 
 
 if __name__ == "__main__":

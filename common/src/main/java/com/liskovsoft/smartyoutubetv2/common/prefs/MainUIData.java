@@ -373,53 +373,26 @@ public class MainUIData extends DataChangeBase implements ProfileChangeListener 
     }
 
     private void initColorSchemes() {
+        // NovaTV: every legacy scheme keeps its name and position (the saved index stays valid),
+        // but all of them are remapped onto the NovaTV palette: dark or OLED (pure black).
+        String dark = "App.Theme.Nova.Dark";
+        String oled = "App.Theme.Nova.Oled";
+        addNovaColorScheme(R.string.color_scheme_teal, dark);
+        addNovaColorScheme(R.string.color_scheme_dark_grey, dark);
+        addNovaColorScheme(R.string.color_scheme_red, dark);
+        addNovaColorScheme(R.string.color_scheme_dark_grey_oled, oled);
+        addNovaColorScheme(R.string.color_scheme_teal_oled, oled);
+        addNovaColorScheme(R.string.color_scheme_dark_grey_monochrome, oled);
+        addNovaColorScheme(R.string.color_scheme_dark_blue, dark);
+        addNovaColorScheme(R.string.color_scheme_dark_blue_oled, oled);
+    }
+
+    private void addNovaColorScheme(int nameResId, String themePrefix) {
         mColorSchemes.add(new ColorScheme(
-                R.string.color_scheme_teal,
-                null,
-                null,
-                null,
-                mContext));
-        mColorSchemes.add(new ColorScheme(
-                R.string.color_scheme_dark_grey,
-                "App.Theme.DarkGrey.Player",
-                "App.Theme.DarkGrey.Browse",
-                "App.Theme.DarkGrey.Preferences",
-                mContext));
-        mColorSchemes.add(new ColorScheme(
-                R.string.color_scheme_red,
-                "App.Theme.Red.Player",
-                "App.Theme.Red.Browse",
-                "App.Theme.Red.Preferences",
-                mContext));
-        mColorSchemes.add(new ColorScheme(
-                R.string.color_scheme_dark_grey_oled,
-                "App.Theme.DarkGrey.OLED.Player",
-                "App.Theme.DarkGrey.OLED.Browse",
-                "App.Theme.DarkGrey.Preferences",
-                mContext));
-        mColorSchemes.add(new ColorScheme(
-                R.string.color_scheme_teal_oled,
-                "App.Theme.Leanback.OLED.Player",
-                "App.Theme.Leanback.OLED.Browse",
-                null,
-                mContext));
-        mColorSchemes.add(new ColorScheme(
-                R.string.color_scheme_dark_grey_monochrome,
-                "App.Theme.DarkGrey2.OLED.Player",
-                "App.Theme.DarkGrey2.OLED.Browse",
-                "App.Theme.DarkGrey.Preferences",
-                mContext));
-        mColorSchemes.add(new ColorScheme(
-                R.string.color_scheme_dark_blue,
-                "App.Theme.Leanback.Blue.Player",
-                "App.Theme.Leanback.Blue.Browse",
-                "App.Theme.Leanback.Blue.Preferences",
-                mContext));
-        mColorSchemes.add(new ColorScheme(
-                R.string.color_scheme_dark_blue_oled,
-                "App.Theme.Leanback.Blue.OLED.Player",
-                "App.Theme.Leanback.Blue.OLED.Browse",
-                "App.Theme.Leanback.Blue.Preferences",
+                nameResId,
+                themePrefix + ".Player",
+                themePrefix + ".Browse",
+                themePrefix + ".Preferences",
                 mContext));
     }
 

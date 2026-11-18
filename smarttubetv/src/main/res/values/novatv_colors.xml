@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    NovaTV design tokens.
+    Kept in a separate file so upstream changes to colors.xml merge without conflicts.
+-->
+<resources>
+    <!-- Surfaces -->
+    <color name="nova_bg">#0F0F10</color>
+    <color name="nova_bg_oled">#000000</color>
+    <color name="nova_surface">#1C1C1F</color>
+    <color name="nova_surface_2">#26262A</color>
+    <color name="nova_border">#303035</color>
+
+    <!-- Text -->
+    <color name="nova_text_primary">#F1F1F1</color>
+    <color name="nova_text_secondary">#AAAAAA</color>
+    <color name="nova_text_on_light">#0F0F10</color>
+
+    <!-- Accents (default: orange) -->
+    <color name="nova_accent_orange">#FF8A3D</color>
+    <color name="nova_accent_blue">#3EA6FF</color>
+    <color name="nova_accent_violet">#7C6CFF</color>
+    <color name="nova_accent_green">#2FD49A</color>
+    <color name="nova_accent">@color/nova_accent_orange</color>
+
+    <!-- Misc -->
+    <color name="nova_focus_outline">#FFFFFF</color>
+    <color name="nova_track">#33FFFFFF</color>
+    <color name="nova_scrim">#CC0F0F10</color>
+    <color name="nova_sponsor_segment">#2FD49A</color>
+
+    <!-- ============================================================ -->
+    <!-- Leanback library overrides (app resources win over the lib)  -->
+    <!-- ============================================================ -->
+    <color name="lb_action_text_color">@color/nova_text_primary</color>
+    <color name="lb_background_protection">#99000000</color>
+    <color name="lb_basic_card_bg_color">@color/nova_surface</color>
+    <color name="lb_basic_card_content_text_color">@color/nova_text_secondary</color>
+    <color name="lb_basic_card_info_bg_color">@color/nova_surface</color>
+    <color name="lb_basic_card_title_text_color">@color/nova_text_primary</color>
+    <color name="lb_browse_header_color">@color/nova_text_primary</color>
+    <color name="lb_browse_header_description_color">@color/nova_text_secondary</color>
+    <color name="lb_browse_title_color">@color/nova_text_primary</color>
+    <color name="lb_control_button_text">@color/nova_text_primary</color>
+    <color name="lb_default_brand_color">@color/nova_bg</color>
+    <color name="lb_default_brand_color_dark">@color/nova_surface</color>
+    <color name="lb_details_description_body_color">@color/nova_text_secondary</color>
+    <color name="lb_details_description_color">@color/nova_text_primary</color>
+    <color name="lb_details_overview_bg_color">@color/nova_surface</color>
+    <color name="lb_error_background_color_opaque">@color/nova_surface</color>
+    <color name="lb_error_message">@color/nova_text_secondary</color>
+    <color name="lb_grey">@color/nova_text_secondary</color>
+    <color name="lb_guidedactions_background">@color/nova_surface</color>
+    <color name="lb_guidedactions_background_dark">@color/nova_bg</color>
+    <color name="lb_guidedactions_item_unselected_text_color">@color/nova_text_primary</color>
+    <color name="lb_list_item_unselected_text_color">@color/nova_text_primary</color>
+    <color name="lb_media_background_color">@color/nova_surface</color>
+    <color name="lb_page_indicator_arrow_background">@color/nova_text_primary</color>
+    <color name="lb_page_indicator_dot">@color/nova_border</color>
+    <color name="lb_playback_controls_background_dark">@color/nova_scrim</color>
+    <color name="lb_playback_controls_time_text_color">@color/nova_text_secondary</color>
+    <color name="lb_playback_icon_highlight_no_theme">@color/nova_accent</color>
+    <color name="lb_playback_media_row_highlight_color">#1AFFFFFF</color>
+    <color name="lb_playback_now_playing_bar_color">@color/nova_text_primary</color>
+    <color name="lb_playback_progress_color_no_theme">@color/nova_accent</color>
+    <color name="lb_playback_progress_secondary_color_no_theme">@color/nova_text_secondary</color>
+    <color name="lb_playback_secondary_progress_color">@color/nova_track</color>
+    <color name="lb_preference_item_category_text_color">@color/nova_accent</color>
+    <color name="lb_tv_white">@color/nova_text_primary</color>
+
+    <!-- leanback-preference (settings panel) -->
+    <color name="lb_preference_decor_list_background">@color/nova_surface</color>
+    <color name="lb_preference_item_primary_text_color_default">@color/nova_text_primary</color>
+    <color name="lb_preference_item_primary_text_color_disabled">#4DF1F1F1</color>
+    <color name="lb_preference_item_secondary_text_color_default">@color/nova_text_secondary</color>
+    <color name="lb_preference_item_secondary_text_color_disabled">#4DAAAAAA</color>
+</resources>

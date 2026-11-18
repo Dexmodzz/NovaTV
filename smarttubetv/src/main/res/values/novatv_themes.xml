@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    NovaTV themes. All legacy SmartTube color schemes (MainUIData.initColorSchemes) point here:
+    dark variants -> App.Theme.Nova.Dark.*, OLED variants -> App.Theme.Nova.Oled.*.
+    They extend the upstream App.Theme.Leanback.* themes, so window/fullscreen tweaks stay intact.
+-->
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Current accent color resource, readable from code via Helpers.getThemeAttr() -->
+    <attr name="novaAccent" format="reference"/>
+
+    <!-- Card watch-progress styles, one per accent -->
+    <style name="NovaProgress.Orange" parent="@android:style/Widget.ProgressBar.Horizontal">
+        <item name="android:progressDrawable">@drawable/novatv_progress_orange</item>
+    </style>
+    <style name="NovaProgress.Blue" parent="@android:style/Widget.ProgressBar.Horizontal">
+        <item name="android:progressDrawable">@drawable/novatv_progress_blue</item>
+    </style>
+    <style name="NovaProgress.Violet" parent="@android:style/Widget.ProgressBar.Horizontal">
+        <item name="android:progressDrawable">@drawable/novatv_progress_violet</item>
+    </style>
+    <style name="NovaProgress.Green" parent="@android:style/Widget.ProgressBar.Horizontal">
+        <item name="android:progressDrawable">@drawable/novatv_progress_green</item>
+    </style>
+
+    <!-- ===================== Dark (default) ===================== -->
+    <style name="App.Theme.Nova.Dark.Browse" parent="App.Theme.Leanback.Browse">
+        <item name="android:windowBackground">@color/nova_bg</item>
+        <item name="brandColor">@color/nova_bg</item>
+        <item name="brandAccentColor">@color/nova_accent</item>
+        <item name="shelfBackground">@color/nova_bg</item>
+        <item name="cardDefaultBackground">@color/nova_surface</item>
+        <item name="cardSelectedBackground">@color/nova_text_primary</item>
+        <item name="cardProgressStyle">@style/NovaProgress.Orange</item>
+        <item name="appLogo">@mipmap/novatv_logo</item>
+        <item name="novaAccent">@color/nova_accent</item>
+        <item name="android:colorAccent" tools:targetApi="21">@color/nova_accent</item>
+        <item name="android:colorPrimary" tools:targetApi="21">@color/nova_surface</item>
+        <item name="android:textColorPrimary">@color/nova_text_primary</item>
+        <item name="android:textColorSecondary">@color/nova_text_secondary</item>
+    </style>
+    <style name="App.Theme.Nova.Dark.Player" parent="App.Theme.Leanback.Player">
+        <!-- Video area stays pure black -->
+        <item name="android:windowBackground">@android:color/black</item>
+        <item name="shelfBackground">@color/nova_bg</item>
+        <item name="cardDefaultBackground">@color/nova_surface</item>
+        <item name="cardSelectedBackground">@color/nova_text_primary</item>
+        <item name="cardProgressStyle">@style/NovaProgress.Orange</item>
+        <item name="novaAccent">@color/nova_accent</item>
+        <item name="playbackProgressPrimaryColor">@color/nova_accent</item>
+        <item name="playbackProgressSecondaryColor">@color/nova_text_secondary</item>
+        <item name="playbackControlsIconHighlightColor">@color/nova_accent</item>
+        <item name="android:colorAccent" tools:targetApi="21">@color/nova_accent</item>
+    </style>
+    <style name="App.Theme.Nova.Dark.Preferences" parent="App.Theme.Leanback.Preferences">
+        <item name="novaAccent">@color/nova_accent</item>
+        <item name="android:colorAccent" tools:targetApi="21">@color/nova_accent</item>
+        <item name="android:colorPrimary" tools:targetApi="21">@color/nova_surface</item>
+    </style>
+
+    <!-- ===================== OLED (pure black) ===================== -->
+    <style name="App.Theme.Nova.Oled.Browse" parent="App.Theme.Nova.Dark.Browse">
+        <item name="android:windowBackground">@color/nova_bg_oled</item>
+        <item name="brandColor">@color/nova_bg_oled</item>
+        <item name="shelfBackground">@color/nova_bg_oled</item>
+    </style>
+    <style name="App.Theme.Nova.Oled.Player" parent="App.Theme.Nova.Dark.Player">
+        <item name="shelfBackground">@color/nova_bg_oled</item>
+    </style>
+    <style name="App.Theme.Nova.Oled.Preferences" parent="App.Theme.Nova.Dark.Preferences"/>
+</resources>

@@ -69,6 +69,7 @@ public class MotherActivity extends FragmentActivity {
         //if (VERSION.SDK_INT != 26) {
         //    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         //}
+        NovaFonts.install(this); // NovaTV: must run before any view is inflated
         super.onCreate(savedInstanceState);
 
         Log.d(TAG, "Starting %s...", this.getClass().getSimpleName());
