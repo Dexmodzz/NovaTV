@@ -18,4 +18,7 @@
     <string name="novatv_clock_show">Mostra ora e data</string>
     <string name="novatv_animations">Animazioni</string>
     <string name="novatv_focus_animations">Animazioni di focus (zoom delle schede)</string>
+    <string name="novatv_player_title_position">Titolo del video nel player</string>
+    <string name="novatv_player_title_top">In alto</string>
+    <string name="novatv_player_title_above_info">Sopra le informazioni (vicino alla barra)</string>
 </resources>

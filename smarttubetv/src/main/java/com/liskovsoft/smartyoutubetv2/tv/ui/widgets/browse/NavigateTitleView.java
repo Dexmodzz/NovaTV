@@ -383,9 +383,11 @@ public class NavigateTitleView extends TitleView implements OnDataChange, Accoun
             mLanguageView.setVisibility(mSearchVisibility);
         }
 
-        if (mExitPip != null && (PlaybackPresenter.instance(getContext()).isRunningInBackground() || mSearchVisibility != View.VISIBLE)) {
-            mExitPip.setVisibility(mSearchVisibility);
-            mPipTitle.setVisibility(mSearchVisibility);
+        // NovaTV: GONE (not INVISIBLE) without a background video, so it never reserves space next to the search pill
+        if (mExitPip != null) {
+            int pipVisibility = PlaybackPresenter.instance(getContext()).isRunningInBackground() ? mSearchVisibility : View.GONE;
+            mExitPip.setVisibility(pipVisibility);
+            mPipTitle.setVisibility(pipVisibility);
         }
 
         if (mIsGlobalClockEnabled) {

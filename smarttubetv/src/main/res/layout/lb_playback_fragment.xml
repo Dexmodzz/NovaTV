@@ -113,8 +113,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
-    <!-- NovaTV: clock in the top right corner, shown together with the controls
-         (title and channel are in the title block above the info line) -->
+    <!-- NovaTV: top header, shown together with the controls: centered title + avatar, channel · subscribers
+         (when the "player title position" setting is "top", see NovaPlayerTitle) and the clock in the corner -->
     <FrameLayout
         android:id="@+id/nova_player_header"
         android:layout_width="match_parent"
@@ -126,6 +126,61 @@
         android:alpha="0"
         android:visibility="gone"
         android:focusable="false">
+
+        <LinearLayout
+            android:id="@+id/nova_player_header_info"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/nova_player_header_side_space"
+            android:layout_marginEnd="@dimen/nova_player_header_side_space"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/nova_player_header_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:maxLines="2"
+                android:ellipsize="end"
+                android:lineSpacingExtra="2dp"
+                android:includeFontPadding="false"
+                android:textColor="@color/nova_text_primary"
+                android:textSize="@dimen/nova_player_header_title_size"
+                android:textStyle="bold"
+                android:shadowColor="#99000000"
+                android:shadowRadius="4" />
+
+            <LinearLayout
+                android:id="@+id/nova_player_header_channel_row"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/nova_space_s"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/nova_player_header_avatar"
+                    android:layout_width="@dimen/nova_player_header_avatar_size"
+                    android:layout_height="@dimen/nova_player_header_avatar_size"
+                    android:layout_marginEnd="@dimen/nova_space_s"
+                    android:scaleType="centerCrop"
+                    android:importantForAccessibility="no" />
+
+                <TextView
+                    android:id="@+id/nova_player_header_subtitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:ellipsize="end"
+                    android:includeFontPadding="false"
+                    android:textColor="@color/nova_text_secondary"
+                    android:textSize="@dimen/nova_player_header_subtitle_size"
+                    android:shadowColor="#99000000"
+                    android:shadowRadius="4" />
+            </LinearLayout>
+        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/nova_player_header_clock"

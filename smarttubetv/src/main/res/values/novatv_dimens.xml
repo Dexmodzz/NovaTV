@@ -91,6 +91,8 @@
     <dimen name="nova_player_header_padding_h">56dp</dimen>
     <dimen name="nova_player_header_padding_top">28dp</dimen>
     <dimen name="nova_player_header_avatar_size">28dp</dimen>
+    <!-- Room kept free on both sides of the centered top title (the clock is in the right corner) -->
+    <dimen name="nova_player_header_side_space">120dp</dimen>
     <dimen name="nova_player_time_min_width">56dp</dimen>
     <!-- Centered rows: no negative start offset -->
     <dimen name="lb_playback_transport_controlbar_margin_start">0dp</dimen>

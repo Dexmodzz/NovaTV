@@ -66,6 +66,7 @@ public class NovaTVSettingsPresenter extends BasePresenter<Void> {
         }
         appendPreview(settingsPresenter);
         appendPreviewDelay(settingsPresenter);
+        appendPlayerTitlePosition(settingsPresenter);
         appendClock(settingsPresenter);
         appendAnimations(settingsPresenter);
 
@@ -153,6 +154,24 @@ public class NovaTVSettingsPresenter extends BasePresenter<Void> {
         }
 
         settingsPresenter.appendRadioCategory(getContext().getString(R.string.novatv_preview_delay), options);
+    }
+
+    /**
+     * Title + channel (avatar, name, subscribers) in the player: top header or above the info line.
+     * Applied the next time the player shows the video info, no restart needed.
+     */
+    private void appendPlayerTitlePosition(AppDialogPresenter settingsPresenter) {
+        List<OptionItem> options = new ArrayList<>();
+
+        for (int[] pair : new int[][] {
+                {R.string.novatv_player_title_top, NovaTVData.PLAYER_TITLE_TOP},
+                {R.string.novatv_player_title_above_info, NovaTVData.PLAYER_TITLE_ABOVE_INFO}}) {
+            options.add(UiOptionItem.from(getContext().getString(pair[0]),
+                    option -> mNovaTVData.setPlayerTitlePosition(pair[1]),
+                    mNovaTVData.getPlayerTitlePosition() == pair[1]));
+        }
+
+        settingsPresenter.appendRadioCategory(getContext().getString(R.string.novatv_player_title_position), options);
     }
 
     private void appendClock(AppDialogPresenter settingsPresenter) {

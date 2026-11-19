@@ -19,4 +19,7 @@
     <string name="novatv_clock_show">Show clock and date</string>
     <string name="novatv_animations">Animations</string>
     <string name="novatv_focus_animations">Focus animations (card zoom)</string>
+    <string name="novatv_player_title_position">Video title in the player</string>
+    <string name="novatv_player_title_top">Top</string>
+    <string name="novatv_player_title_above_info">Above the video info (near the bar)</string>
 </resources>

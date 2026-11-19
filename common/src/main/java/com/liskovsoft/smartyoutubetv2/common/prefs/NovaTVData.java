@@ -14,6 +14,7 @@ public final class NovaTVData {
     private static final String KEY_ACCENT = "accent";
     private static final String KEY_PREVIEW_DELAY_MS = "preview_delay_ms";
     private static final String KEY_FOCUS_ANIMATIONS = "focus_animations";
+    private static final String KEY_PLAYER_TITLE_POSITION = "player_title_position";
 
     public static final int ACCENT_ORANGE = 0;
     public static final int ACCENT_BLUE = 1;
@@ -23,6 +24,11 @@ public final class NovaTVData {
     private static final String[] ACCENT_STYLES = {"NovaAccent.Orange", "NovaAccent.Blue", "NovaAccent.Violet", "NovaAccent.Green"};
 
     public static final int PREVIEW_DELAY_DEFAULT_MS = 2_000;
+
+    /** Player: title + channel (avatar, name, subscribers) in the top header */
+    public static final int PLAYER_TITLE_TOP = 0;
+    /** Player: title + channel right above the views/date/likes line, near the seek bar */
+    public static final int PLAYER_TITLE_ABOVE_INFO = 1;
 
     private static NovaTVData sInstance;
     private final SharedPreferences mPrefs;
@@ -62,6 +68,15 @@ public final class NovaTVData {
 
     public void setFocusAnimationsEnabled(boolean enabled) {
         mPrefs.edit().putBoolean(KEY_FOCUS_ANIMATIONS, enabled).apply();
+    }
+
+    public int getPlayerTitlePosition() {
+        int position = mPrefs.getInt(KEY_PLAYER_TITLE_POSITION, PLAYER_TITLE_TOP);
+        return position == PLAYER_TITLE_ABOVE_INFO ? PLAYER_TITLE_ABOVE_INFO : PLAYER_TITLE_TOP;
+    }
+
+    public void setPlayerTitlePosition(int position) {
+        mPrefs.edit().putInt(KEY_PLAYER_TITLE_POSITION, position).apply();
     }
 
     /**
