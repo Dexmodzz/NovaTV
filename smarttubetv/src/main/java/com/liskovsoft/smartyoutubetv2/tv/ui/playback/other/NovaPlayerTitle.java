@@ -16,10 +16,11 @@ import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.util.NovaAvatars;
 
 /**
- * NovaTV: video title + "avatar · channel · subscribers" in the player.<br/>
+ * NovaTV: video title, info line (views · date · likes) and "avatar · channel · subscribers" in the player.<br/>
  * Where it goes depends on the NovaTV setting "player title position":
  * <ul>
- *     <li>top (default): the centered top header (nova_player_header_info in lb_playback_fragment.xml)</li>
+ *     <li>top (default): the centered top header (nova_player_header_info in lb_playback_fragment.xml);
+ *     the info line moves there too, between title and channel</li>
  *     <li>above info: a block inserted at the top of the player description,
  *     right above the views/date/likes line</li>
  * </ul>
@@ -30,7 +31,7 @@ public final class NovaPlayerTitle {
     }
 
     public static void bind(@Nullable AbstractDetailsDescriptionPresenter.ViewHolder vh,
-                            @Nullable CharSequence title, @Nullable Video video) {
+                            @Nullable CharSequence title, @Nullable CharSequence subtitle, @Nullable Video video) {
         if (vh == null || !(vh.view instanceof ViewGroup)) {
             return;
         }
@@ -47,6 +48,12 @@ public final class NovaPlayerTitle {
                 block.setVisibility(View.GONE);
             }
 
+            // The info line is shown in the header: keep the description one empty (= hidden by leanback)
+            vh.getSubtitle().setText(null);
+            TextView stats = header.findViewById(R.id.nova_player_header_stats);
+            stats.setText(subtitle);
+            stats.setVisibility(TextUtils.isEmpty(subtitle) ? View.GONE : View.VISIBLE);
+
             header.setVisibility(View.VISIBLE);
             bindViews(header.findViewById(R.id.nova_player_header_title),
                     header.findViewById(R.id.nova_player_header_channel_row),
@@ -55,6 +62,8 @@ public final class NovaPlayerTitle {
                     title, video);
             return;
         }
+
+        vh.getSubtitle().setText(subtitle);
 
         if (header != null) {
             header.setVisibility(View.GONE);

@@ -152,6 +152,22 @@
                 android:shadowColor="#99000000"
                 android:shadowRadius="4" />
 
+            <!-- NovaTV: info line (views · date · likes) between title and channel -->
+            <TextView
+                android:id="@+id/nova_player_header_stats"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/nova_space_s"
+                android:gravity="center"
+                android:singleLine="true"
+                android:ellipsize="end"
+                android:includeFontPadding="false"
+                android:textColor="@color/nova_text_secondary"
+                android:textSize="@dimen/nova_player_header_subtitle_size"
+                android:shadowColor="#99000000"
+                android:shadowRadius="4"
+                android:visibility="gone" />
+
             <LinearLayout
                 android:id="@+id/nova_player_header_channel_row"
                 android:layout_width="wrap_content"

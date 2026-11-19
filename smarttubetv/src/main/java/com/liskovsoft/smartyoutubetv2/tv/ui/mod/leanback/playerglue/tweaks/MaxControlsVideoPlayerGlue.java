@@ -56,8 +56,7 @@ public abstract class MaxControlsVideoPlayerGlue<T extends PlayerAdapter>
                         // NovaTV: own title block (title, avatar, channel, subscribers) above the info line;
                         // the leanback title stays empty (= hidden by leanback)
                         viewHolder.getTitle().setText(null);
-                        com.liskovsoft.smartyoutubetv2.tv.ui.playback.other.NovaPlayerTitle.bind(viewHolder, glue.getTitle(), mVideo);
-                        viewHolder.getSubtitle().setText(glue.getSubtitle());
+                        com.liskovsoft.smartyoutubetv2.tv.ui.playback.other.NovaPlayerTitle.bind(viewHolder, glue.getTitle(), glue.getSubtitle(), mVideo);
                         // NovaTV: centered info line (views, date, likes) and chapter name
                         if (viewHolder.view.getLayoutParams() != null) {
                             viewHolder.view.getLayoutParams().width = android.view.ViewGroup.LayoutParams.MATCH_PARENT;
@@ -149,7 +148,7 @@ public abstract class MaxControlsVideoPlayerGlue<T extends PlayerAdapter>
 
         // NovaTV: refresh channel/subscribers of the title block
         if (mDescriptionViewHolder != null) {
-            com.liskovsoft.smartyoutubetv2.tv.ui.playback.other.NovaPlayerTitle.bind(mDescriptionViewHolder.get(), getTitle(), video);
+            com.liskovsoft.smartyoutubetv2.tv.ui.playback.other.NovaPlayerTitle.bind(mDescriptionViewHolder.get(), getTitle(), getSubtitle(), video);
         }
     }
 

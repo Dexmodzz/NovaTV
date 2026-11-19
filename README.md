@@ -65,7 +65,7 @@ adb install -r smarttubetv/build/outputs/apk/ststable/release/NovaTV_stable_*_ar
 | **1 – Design tokens** | Palette (background `#0F0F10`, surfaces `#1C1C1F`/`#26262A`, text `#F1F1F1`/`#AAAAAA`, orange/blue/violet/green accents), radii, spacing, type scale; `App.Theme.Nova.Dark/Oled` themes; Inter font on every screen; the 8 original color schemes keep name and position (the saved index stays valid) but map to Nova Dark or Nova OLED. |
 | **2 – Header and side menu** | Header: logo, full-width search bar (with mic), clock + date, avatar. 112dp side menu with icon + label. Search screen with the same bar. The category *chips* were later removed on request: every section is back in the side menu. |
 | **3 – Video cards and Home** | 14dp rounded cards on a dark surface, white ring + 1.05 zoom on focus, real channel avatar next to the title, "channel" and "views · date" on separate lines, accent-colored progress bar. Interruptible navigation (right then down no longer gets stuck while a row scrolls). Automatic restart after a scale change. |
-| **4 – Player** | Round buttons (label only on focus), white Play/Pause with accent ring, thicker bar with times on both sides, centered layout, gradients; top header with title, avatar, channel · subscribers and clock; "SponsorBlock: N segments" chip; buttons stop at the row edges instead of jumping to the bar. |
+| **4 – Player** | Round buttons (label only on focus), white Play/Pause with accent ring, thicker bar with times on both sides, centered layout, gradients; top header with title, info line (views · date · likes), avatar, channel · subscribers and clock; "SponsorBlock: N segments" chip; buttons stop at the row edges instead of jumping to the bar. |
 | **5 – Settings** | New **NovaTV** tile in the settings grid: Dark/OLED theme, accent color, cards per row (3–6), card preview (off/muted/audio) and its delay, clock and 24h format, focus animations, player title position (top / above the video info). Settings tiles get a focus ring. |
 | **After** | Readable logo (Inter SemiBold), launcher banner = header logo, full-width search bar on any screen size, search results right below the bar (which hides only when the results cover it), every NovaTV text translated. |
 
@@ -98,7 +98,7 @@ git grep -n "NovaTV" -- ':!README.md'
 |---|---|
 | `tv/ui/browse/NovaSections.java` | Split of sections between menu and chips. Chips are disabled (`CHIPS_ENABLED = false`): every section is in the side menu. |
 | `tv/ui/playback/other/NovaPlayerHeader.java` | Player top header (title/channel and clock), with an interruptible fade together with the controls. |
-| `tv/ui/playback/other/NovaPlayerTitle.java` | Fills title + avatar + "channel · subscribers" in the top header or in the block above the video info, depending on the setting. |
+| `tv/ui/playback/other/NovaPlayerTitle.java` | Fills title + avatar + "channel · subscribers" in the top header (together with the views · date · likes line) or in the block above the video info, depending on the setting. |
 | `tv/util/NovaAvatars.java` | Real channel avatars on cards and in the player: cached per channel, at most 2 requests at a time, only for visible cards. |
 | `tv/util/NovaInitialDrawable.java` | Colored circle with the channel initial, shown until the avatar is loaded. |
 
@@ -172,7 +172,7 @@ git grep -n "NovaTV" -- ':!README.md'
 
 | File | Change |
 |---|---|
-| `res/layout/lb_playback_fragment.xml` | Top header (title, avatar, channel · subscribers, clock). |
+| `res/layout/lb_playback_fragment.xml` | Top header (title, views · date · likes, avatar, channel · subscribers, clock). |
 | `res/layout/lb_playback_transport_controls_row.xml` | Centered layout, times on both sides of the bar, remaining time top right, SponsorBlock chip. |
 | `res/drawable/player_background_controls.xml`, `player_background_suggestions.xml` | Gradients. |
 | `tv/ui/playback/PlaybackFragment.java` | Shows/hides the top header together with the controls; shorter info line (channel and subscribers are in the title). |
