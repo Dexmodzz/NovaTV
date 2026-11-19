@@ -56,6 +56,10 @@
     <item name="nova_search_screen_settings_scale" format="float" type="dimen">0.846</item>
     <!-- Bar centred where the home header items are (Leanback default 27dp) -->
     <dimen name="lb_search_bar_padding_top">14dp</dimen>
+    <!-- Search results: first row right below the search bar (14dp + 52dp bar + 8dp gap); the selected row
+         (videos under the suggestions row) is aligned lower (Leanback default 147dp) -->
+    <dimen name="nova_search_results_top">74dp</dimen>
+    <dimen name="lb_search_browse_rows_align_top">152dp</dimen>
     <!-- Voice orb fits inside the pill, also when zoomed on focus (Leanback default 52dp) -->
     <dimen name="lb_search_bar_speech_orb_size">36dp</dimen>
     <dimen name="nova_pip_title_max_width">260dp</dimen>

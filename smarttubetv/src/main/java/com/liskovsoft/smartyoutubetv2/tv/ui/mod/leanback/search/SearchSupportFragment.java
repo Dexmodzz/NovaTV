@@ -21,6 +21,7 @@ import android.view.WindowManager;
 import android.view.inputmethod.CompletionInfo;
 import android.widget.FrameLayout;
 import androidx.fragment.app.Fragment;
+import androidx.annotation.NonNull;
 import androidx.leanback.R;
 import androidx.leanback.app.BrowseSupportFragment;
 import androidx.leanback.app.RowsSupportFragment;
@@ -475,7 +476,23 @@ public class SearchSupportFragment extends Fragment {
         list.setItemAlignmentOffsetPercent(VerticalGridView.ITEM_ALIGN_OFFSET_PERCENT_DISABLED);
         list.setWindowAlignmentOffset(mContainerListAlignTop);
         list.setWindowAlignmentOffsetPercent(VerticalGridView.WINDOW_ALIGN_OFFSET_PERCENT_DISABLED);
-        list.setWindowAlignment(VerticalGridView.WINDOW_ALIGN_NO_EDGE);
+        // NovaTV: the results start right below the search bar (top padding) and the first row sticks to it
+        // (low edge): without suggestions the videos are flush with the bar. Rows scrolled up are drawn
+        // over the bar area (no clipping) and the bar hides only when they actually cover it.
+        list.setPadding(list.getPaddingLeft(),
+                getResources().getDimensionPixelSize(com.liskovsoft.smartyoutubetv2.tv.R.dimen.nova_search_results_top),
+                list.getPaddingRight(), list.getPaddingBottom());
+        list.setClipToPadding(false);
+        list.setWindowAlignment(VerticalGridView.WINDOW_ALIGN_LOW_EDGE);
+        if (!mIsNovaScrollListenerAdded) {
+            mIsNovaScrollListenerAdded = true;
+            list.addOnScrollListener(new androidx.recyclerview.widget.RecyclerView.OnScrollListener() {
+                @Override
+                public void onScrolled(@NonNull androidx.recyclerview.widget.RecyclerView recyclerView, int dx, int dy) {
+                    updateSearchBarVisibility();
+                }
+            });
+        }
         // VerticalGridView should not be focusable (see b/26894680 for details).
         list.setFocusable(false);
         list.setFocusableInTouchMode(false);
@@ -871,14 +888,60 @@ public class SearchSupportFragment extends Fragment {
     void updateSearchBarVisibility() {
         int position = mRowsSupportFragment != null ? mRowsSupportFragment.getSelectedPosition() : -1;
         try {
+            // NovaTV: hidden only while the results really cover it (INVISIBLE keeps its bounds for the check)
             mSearchBar.setVisibility(position <=0 || mResultAdapter == null
-                    || mResultAdapter.size() == 0 ? View.VISIBLE : View.GONE);
+                    || mResultAdapter.size() == 0 || !novaIsSearchBarCovered() ? View.VISIBLE : View.INVISIBLE);
         } catch (NullPointerException e) {
             // Fatal Exception: java.lang.NullPointerException
             // Attempt to invoke interface method 'void android.view.autofill.IAutoFillManager.addClient(android.view.autofill
             // .IAutoFillManagerClient, android.content.ComponentName, int, com.android.internal.os.IResultReceiver)' on a null object reference
             e.printStackTrace();
         }
+    }
+
+    private boolean mIsNovaScrollListenerAdded;
+
+    /**
+     * NovaTV: true when a row header or a row item overlaps the search bar.
+     */
+    private boolean novaIsSearchBarCovered() {
+        VerticalGridView list = mRowsSupportFragment != null ? mRowsSupportFragment.getVerticalGridView() : null;
+
+        if (list == null || mSearchBar == null || mSearchBar.getHeight() == 0) {
+            return false;
+        }
+
+        int[] pos = new int[2];
+        mSearchBar.getLocationInWindow(pos);
+        int barTop = pos[1];
+        int barBottom = barTop + mSearchBar.getHeight();
+
+        for (int i = 0; i < list.getChildCount(); i++) {
+            View row = list.getChildAt(i);
+            if (novaOverlaps(row.findViewById(R.id.lb_row_container_header_dock), barTop, barBottom, pos)) {
+                return true;
+            }
+            View content = row.findViewById(R.id.row_content);
+            if (content instanceof ViewGroup) {
+                ViewGroup items = (ViewGroup) content;
+                for (int j = 0; j < items.getChildCount(); j++) {
+                    if (novaOverlaps(items.getChildAt(j), barTop, barBottom, pos)) {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
+
+    private static boolean novaOverlaps(View view, int top, int bottom, int[] pos) {
+        if (view == null || view.getVisibility() != View.VISIBLE || view.getHeight() == 0) {
+            return false;
+        }
+
+        view.getLocationInWindow(pos);
+        return pos[1] < bottom && pos[1] + view.getHeight() > top;
     }
 
     void updateSearchBarNextFocusId() {
