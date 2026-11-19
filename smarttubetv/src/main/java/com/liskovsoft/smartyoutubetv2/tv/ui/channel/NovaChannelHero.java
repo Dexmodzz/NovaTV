@@ -13,8 +13,6 @@ import androidx.core.content.ContextCompat;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
-import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
-import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.rx.RxHelper;
@@ -26,17 +24,31 @@ import com.liskovsoft.smartyoutubetv2.tv.util.NovaInitialDrawable;
 import com.liskovsoft.smartyoutubetv2.tv.util.ViewUtil;
 import com.liskovsoft.youtubeapi.service.YouTubeServiceManager;
 
+import java.util.List;
+
 import io.reactivex.disposables.Disposable;
 
 /**
  * NovaTV: fills the channel page header (layout novatv_channel_hero.xml):
- * banner, avatar, name, @handle · subscribers · videos and the subscribe/unsubscribe button.
+ * banner, avatar, name, @handle · subscribers · videos and the subscribe/unsubscribe button.<br/>
+ * The button gets the focus when the channel opens. Its state comes from the signed-in account:
+ * the metadata of one of the channel's videos says whether the user is subscribed
+ * (same source as the player's subscribe button).
  */
 public final class NovaChannelHero {
     private static final String TAG = NovaChannelHero.class.getSimpleName();
     private static Disposable sLoadAction;
-    private static Disposable sSubscriptionsAction;
+    private static Disposable sStateAction;
     private static Disposable sToggleAction;
+    /** Resolved UC... id of the channel shown (null until known) */
+    @Nullable
+    private static String sChannelId;
+    @Nullable
+    private static Video sChannel;
+    /** One video of the channel shown: its metadata says whether the user is subscribed */
+    @Nullable
+    private static String sSampleVideoId;
+    private static boolean sStateChecked;
 
     private NovaChannelHero() {
     }
@@ -54,11 +66,15 @@ public final class NovaChannelHero {
         }
 
         if (channelIdOrHandle.equals(hero.getTag())) {
+            checkState(root);
             return; // already bound (the header row is rebound on every clear())
         }
 
         hero.setTag(channelIdOrHandle);
         hero.setVisibility(View.VISIBLE);
+        sChannel = channel;
+        sChannelId = channelIdOrHandle.startsWith("UC") ? channelIdOrHandle :
+                channel != null && channel.channelId != null && channel.channelId.startsWith("UC") ? channel.channelId : null;
 
         ImageView banner = hero.findViewById(R.id.nova_channel_banner);
         ImageView avatar = hero.findViewById(R.id.nova_channel_avatar);
@@ -78,24 +94,90 @@ public final class NovaChannelHero {
             NovaAvatars.unbind(avatar);
             avatar.setImageDrawable(new NovaInitialDrawable(null));
         }
-        subscribe.setVisibility(View.GONE);
 
-        RxHelper.disposeActions(sLoadAction, sSubscriptionsAction, sToggleAction);
+        RxHelper.disposeActions(sLoadAction, sToggleAction);
+        initSubscribeButton(subscribe, channel != null && (channel.isSubscribed || channel.belongsToSubscriptions()));
+        checkState(root);
 
         NovaChannelInfo cached = NovaChannelInfo.getCached(channelIdOrHandle);
         if (cached != null) {
-            apply(hero, channelIdOrHandle, cached, channel);
+            apply(hero, channelIdOrHandle, cached);
             return;
         }
 
         sLoadAction = RxHelper.execute(NovaChannelInfo.load(channelIdOrHandle),
-                info -> apply(hero, channelIdOrHandle, info, channel),
+                info -> apply(hero, channelIdOrHandle, info),
                 error -> Log.e(TAG, "Channel header: %s", error.getMessage()));
     }
 
-    private static void apply(View hero, String key, NovaChannelInfo info, @Nullable Video channel) {
+    /**
+     * A new channel is being loaded (the fragment cleared its rows).
+     */
+    public static void reset() {
+        RxHelper.disposeActions(sStateAction);
+        sSampleVideoId = null;
+        sStateChecked = false;
+    }
+
+    /**
+     * The channel videos arrived: remember one video, used to read the subscription state.
+     * @return true when a video with an id was found
+     */
+    public static boolean onChannelContent(View root, @Nullable List<Video> videos) {
+        if (videos == null) {
+            return false;
+        }
+
+        for (Video video : videos) {
+            if (video != null && !TextUtils.isEmpty(video.videoId)) {
+                sSampleVideoId = video.videoId;
+                checkState(root);
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Runs once both the header is bound and a channel video is known (they arrive in any order):
+     * focuses the Subscribe button and reads the real subscription state of the signed-in account.
+     */
+    private static void checkState(View root) {
+        View hero = root.findViewById(R.id.nova_channel_hero);
+        TextView button = root.findViewById(R.id.nova_channel_subscribe);
+        if (sStateChecked || sSampleVideoId == null || hero == null || button == null || hero.getTag() == null) {
+            return;
+        }
+
+        sStateChecked = true;
+
+        // After the rows are laid out (the list selects the first video row on load)
+        button.post(button::requestFocus);
+
+        Object key = hero.getTag();
+        RxHelper.disposeActions(sStateAction);
+        sStateAction = RxHelper.execute(
+                YouTubeServiceManager.instance().getMediaItemService().getMetadataObserve(sSampleVideoId),
+                metadata -> {
+                    if (!key.equals(hero.getTag())) {
+                        return;
+                    }
+                    if (sChannelId == null && metadata.getChannelId() != null) {
+                        sChannelId = metadata.getChannelId();
+                    }
+                    setSubscribed(button, metadata.isSubscribed());
+                },
+                error -> Log.d(TAG, "Subscription state: %s", error.getMessage()));
+    }
+
+    private static void apply(View hero, String key, NovaChannelInfo info) {
         if (!key.equals(hero.getTag()) || isDestroyed(hero.getContext())) {
             return; // another channel was opened meanwhile
+        }
+
+        if (info.channelId != null) {
+            sChannelId = info.channelId;
         }
 
         TextView name = hero.findViewById(R.id.nova_channel_name);
@@ -134,57 +216,31 @@ public final class NovaChannelHero {
                     .circleCrop()
                     .into(avatar);
         }
-
-        initSubscribeButton(hero, key, info.channelId, channel);
     }
 
-    private static void initSubscribeButton(View hero, String key, String channelId, @Nullable Video channel) {
-        TextView button = hero.findViewById(R.id.nova_channel_subscribe);
-        boolean subscribed = channel != null && (channel.isSubscribed || channel.belongsToSubscriptions());
+    private static void initSubscribeButton(TextView button, boolean subscribed) {
         setSubscribed(button, subscribed);
         button.setVisibility(View.VISIBLE);
 
         button.setOnClickListener(v -> {
+            String channelId = sChannelId;
+            if (channelId == null) {
+                MessageHelpers.showMessage(v.getContext(), R.string.wait_data_loading);
+                return;
+            }
+
             boolean newState = !Boolean.TRUE.equals(button.getTag());
             RxHelper.disposeActions(sToggleAction);
             sToggleAction = RxHelper.execute(newState ?
                     YouTubeServiceManager.instance().getMediaItemService().subscribeObserve(channelId) :
                     YouTubeServiceManager.instance().getMediaItemService().unsubscribeObserve(channelId));
-            if (channel != null) {
-                channel.isSubscribed = newState;
+            if (sChannel != null) {
+                sChannel.isSubscribed = newState;
             }
             setSubscribed(button, newState);
             MessageHelpers.showMessage(v.getContext(),
                     newState ? R.string.subscribed_to_channel : R.string.unsubscribed_from_channel);
         });
-
-        if (subscribed) {
-            return;
-        }
-
-        // The channel item doesn't always know: look it up in the subscriptions list
-        sSubscriptionsAction = RxHelper.execute(
-                YouTubeServiceManager.instance().getContentService().getSubscribedChannelsObserve(),
-                group -> {
-                    if (key.equals(hero.getTag()) && contains(group, channelId)) {
-                        setSubscribed(button, true);
-                    }
-                },
-                error -> Log.d(TAG, "Subscriptions lookup: %s", error.getMessage()));
-    }
-
-    private static boolean contains(@Nullable MediaGroup group, String channelId) {
-        if (group == null || group.getMediaItems() == null) {
-            return false;
-        }
-
-        for (MediaItem item : group.getMediaItems()) {
-            if (channelId.equals(item.getChannelId())) {
-                return true;
-            }
-        }
-
-        return false;
     }
 
     private static void setSubscribed(TextView button, boolean subscribed) {

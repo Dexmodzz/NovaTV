@@ -67,7 +67,7 @@ adb install -r smarttubetv/build/outputs/apk/ststable/release/NovaTV_stable_*_ar
 | **3 – Video cards and Home** | 14dp rounded cards on a dark surface, white ring + 1.05 zoom on focus, real channel avatar next to the title, "channel" and "views · date" on separate lines, accent-colored progress bar. Interruptible navigation (right then down no longer gets stuck while a row scrolls). Automatic restart after a scale change. |
 | **4 – Player** | Round buttons (label only on focus), white Play/Pause with accent ring, thicker bar with times on both sides, centered layout, gradients; top header with title, info line (views · date · likes), avatar, channel · subscribers and clock; "SponsorBlock: N segments" chip; buttons stop at the row edges instead of jumping to the bar. |
 | **5 – Settings** | New **NovaTV** tile in the settings grid: Dark/OLED theme, accent color, cards per row (3–6), card preview (off/muted/audio) and its delay, clock and 24h format, focus animations, player title position (top / above the video info). Settings tiles get a focus ring. |
-| **After** | Readable logo (Inter SemiBold), launcher banner = header logo, full-width search bar on any screen size, search results right below the bar (which hides only when the results cover it), every NovaTV text translated. Channel page header like the web channel page: banner, profile picture over the banner edge, name, @handle · subscribers · videos and a Subscribe / Unsubscribe button. |
+| **After** | Readable logo (Inter SemiBold), launcher banner = header logo, full-width search bar on any screen size, search results right below the bar (which hides only when the results cover it), every NovaTV text translated. Channel page like the web channel page: search bar on top, then banner, profile picture over the banner edge, name, @handle · subscribers · videos and a Subscribe / Unsubscribe button that shows the state of your account and gets the focus when the channel opens. |
 
 ---
 
@@ -115,7 +115,7 @@ git grep -n "NovaTV" -- ':!README.md'
 | `res/layout/lb_control_button_secondary.xml` | Pill-shaped player button with a label (overrides the Leanback one). |
 | `res/layout/novatv_player_title_block.xml` | Title/channel block above the video info line. |
 | `common/.../utils/NovaChannelInfo.java` | Channel header data (banner, avatar, name, @handle, subscribers, video count). The core library doesn't expose the banner, so it reads the public channel page data (anonymous request, device language), cached per channel. |
-| `tv/ui/channel/NovaChannelHero.java` | Fills the channel header and handles the Subscribe / Unsubscribe button (same subscribe calls as the video menu; state from the channel item or the subscriptions list). |
+| `tv/ui/channel/NovaChannelHero.java` | Fills the channel header and handles the Subscribe / Unsubscribe button: same subscribe calls as the video menu; the state comes from the signed-in account (metadata of one channel video, like the player's subscribe button); the button gets the focus when the channel opens. |
 | `res/layout/novatv_channel_hero.xml`, `res/drawable/novatv_channel_banner_bg.xml`, `novatv_channel_avatar_ring.xml` | Channel header layout: banner, avatar over its bottom edge, texts, button. |
 | `res/mipmap-nodpi/novatv_logo.png` | Header logo, also used as banner and `android:logo`. |
 | `assets/fonts/inter_*.ttf` + `INTER_LICENSE.txt` | Inter font (OFL). |
@@ -189,9 +189,9 @@ git grep -n "NovaTV" -- ':!README.md'
 
 | File | Change |
 |---|---|
-| `res/layout/channel_header.xml` | Includes `novatv_channel_hero` above the channel search bar. |
+| `res/layout/channel_header.xml` | Channel search bar on top, `novatv_channel_hero` below it. |
 | `tv/presenter/ChannelHeaderPresenter.java` | Binds `NovaChannelHero`; the search bar is hidden (not the whole row) when the channel search bar setting is off. |
-| `tv/ui/channel/ChannelFragment.java` | The header row is always added (it carries the channel header). |
+| `tv/ui/channel/ChannelFragment.java` | The header row is always added (it carries the channel header); passes the first channel videos to `NovaChannelHero` (subscription state, focus). |
 
 **Leanback library included in the repo**
 

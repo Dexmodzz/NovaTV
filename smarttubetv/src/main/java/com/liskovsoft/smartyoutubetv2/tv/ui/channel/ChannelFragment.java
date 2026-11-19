@@ -15,6 +15,7 @@ import com.liskovsoft.smartyoutubetv2.tv.presenter.ChannelHeaderPresenter.Channe
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.video.MultipleRowsFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.misc.ProgressBarManager;
 import com.liskovsoft.googlecommon.common.helpers.YouTubeHelper;
+import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 
 public class ChannelFragment extends MultipleRowsFragment implements ChannelView {
     private static final String TAG = ChannelFragment.class.getSimpleName();
@@ -22,6 +23,7 @@ public class ChannelFragment extends MultipleRowsFragment implements ChannelView
     private ProgressBarManager mProgressBarManager;
     private boolean mIsFragmentCreated;
     private CrashRestorer mCrashRestorer;
+    private boolean mIsNovaHeaderReady;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -134,6 +136,23 @@ public class ChannelFragment extends MultipleRowsFragment implements ChannelView
         }
 
         mIsFragmentCreated = false;
+    }
+
+    @Override
+    public void clear() {
+        NovaChannelHero.reset();
+        super.clear();
+        mIsNovaHeaderReady = false;
+    }
+
+    @Override
+    public void update(VideoGroup group) {
+        super.update(group);
+
+        // NovaTV: one channel video is needed to read the subscription state (then the Subscribe button gets the focus)
+        if (!mIsNovaHeaderReady && group != null && getView() != null) {
+            mIsNovaHeaderReady = NovaChannelHero.onChannelContent(getView(), group.getVideos());
+        }
     }
 
     @Override
