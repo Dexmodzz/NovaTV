@@ -48,7 +48,7 @@
 
     <!-- Decrease Browse fragment content top padding. -->
     <!-- Old value: 167dp -->
-    <dimen name="lb_browse_rows_margin_top">160dp</dimen> <!-- NovaTV: was 130dp, room for header + chips -->
+    <dimen name="lb_browse_rows_margin_top">130dp</dimen>
 
     <!-- Increase this value to hide left strip from Browse fragment (when headers collapsed) -->
     <!-- Old value: 238dp -->

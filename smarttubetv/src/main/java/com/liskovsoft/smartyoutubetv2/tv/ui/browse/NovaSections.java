@@ -8,6 +8,12 @@ import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
  * as chips under the header instead of in the rail.
  */
 public final class NovaSections {
+    /**
+     * Chips row under the header. Disabled at the user's request: every section is back in the side rail
+     * and no chips row is shown on any screen.
+     */
+    private static final boolean CHIPS_ENABLED = false;
+
     private static final int[] CHIP_SECTIONS = {
             MediaGroup.TYPE_MUSIC,
             MediaGroup.TYPE_LIVE,
@@ -25,6 +31,10 @@ public final class NovaSections {
      * Section shown as a chip and hidden from the side rail.
      */
     public static boolean isChipSection(long sectionId) {
+        if (!CHIPS_ENABLED) {
+            return false;
+        }
+
         for (int id : CHIP_SECTIONS) {
             if (id == sectionId) {
                 return true;
@@ -45,6 +55,6 @@ public final class NovaSections {
      * Chips row is visible while one of these sections is open.
      */
     public static boolean showsChips(long sectionId) {
-        return isAllChip(sectionId) || isChipSection(sectionId);
+        return CHIPS_ENABLED && isAllChip(sectionId) || isChipSection(sectionId);
     }
 }
