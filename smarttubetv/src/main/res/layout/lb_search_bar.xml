@@ -25,12 +25,12 @@
     <!-- NovaTV logo, as in the home header -->
     <ImageView
         android:id="@+id/nova_search_screen_logo"
-        android:layout_width="wrap_content"
+        android:layout_width="@dimen/nova_header_logo_width"
         android:layout_height="@dimen/nova_header_logo_height"
         android:layout_alignParentStart="true"
         android:layout_centerVertical="true"
         android:layout_marginStart="@dimen/nova_search_screen_logo_margin"
-        android:adjustViewBounds="true"
+        android:scaleType="fitStart"
         android:importantForAccessibility="no"
         android:src="@mipmap/novatv_logo"/>
 
@@ -57,7 +57,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_marginEnd="@dimen/search_bar_right_items_margin"
+        android:layout_marginEnd="@dimen/nova_search_screen_end_margin"
         android:layout_alignParentEnd="true"
         android:focusable="true"
         android:focusableInTouchMode="false"
@@ -69,13 +69,11 @@
     <!-- The pill. SearchBar reads its background (mBarBackground). -->
     <RelativeLayout
             android:id="@+id/lb_search_bar_items"
-            android:layout_width="match_parent"
+            android:layout_width="@dimen/nova_search_pill_width"
             android:layout_height="@dimen/nova_search_screen_pill_height"
             android:layout_toEndOf="@+id/nova_search_screen_logo"
-            android:layout_toStartOf="@+id/search_settings_orb"
-            android:layout_marginStart="@dimen/nova_space_l"
+            android:layout_marginStart="@dimen/nova_search_screen_pill_margin"
             android:layout_centerVertical="true"
-            android:layout_marginEnd="@dimen/nova_space_xl"
             android:layout_marginTop="@dimen/lb_search_bar_inner_margin_top"
             android:layout_marginBottom="@dimen/lb_search_bar_inner_margin_bottom"
             android:addStatesFromChildren="true"
