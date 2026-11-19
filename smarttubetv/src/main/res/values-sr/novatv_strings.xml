@@ -7,4 +7,6 @@
         <item quantity="one">SponsorBlock: %d сегмент</item>
         <item quantity="other">SponsorBlock: %d сегмената</item>
     </plurals>
+    <string name="novatv_channel_subscribe">Пријави се</string>
+    <string name="novatv_channel_unsubscribe">Откажи пријаву</string>
 </resources>

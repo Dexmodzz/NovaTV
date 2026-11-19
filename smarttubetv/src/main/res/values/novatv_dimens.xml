@@ -106,4 +106,23 @@
     <dimen name="lb_playback_transport_progressbar_bar_height">6dp</dimen>
     <dimen name="lb_playback_transport_progressbar_active_bar_height">10dp</dimen>
     <dimen name="lb_playback_transport_progressbar_active_radius">10dp</dimen>
+
+    <!-- Channel page header (NovaChannelHero): banner, avatar over its bottom edge -->
+    <dimen name="nova_channel_banner_height">150dp</dimen>
+    <dimen name="nova_channel_avatar_size">104dp</dimen>
+    <dimen name="nova_channel_avatar_ring">4dp</dimen>
+    <!-- banner height - avatar size / 2 -->
+    <dimen name="nova_channel_avatar_top">98dp</dimen>
+    <dimen name="nova_channel_avatar_start">28dp</dimen>
+    <!-- text starts right below the banner: avatar size / 2 + 10dp -->
+    <dimen name="nova_channel_text_top">62dp</dimen>
+    <!-- same left edge as the search bar pill, right edge = settings button -->
+    <dimen name="nova_channel_hero_padding_start">17dp</dimen>
+    <dimen name="nova_channel_hero_padding_end">56dp</dimen>
+    <dimen name="nova_channel_hero_padding_top">20dp</dimen>
+    <dimen name="nova_channel_name_size">26sp</dimen>
+    <dimen name="nova_channel_meta_size">15sp</dimen>
+    <dimen name="nova_channel_button_height">38dp</dimen>
+    <dimen name="nova_channel_button_padding">22dp</dimen>
+    <dimen name="nova_channel_button_text_size">15sp</dimen>
 </resources>

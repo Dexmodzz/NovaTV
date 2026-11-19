@@ -7,4 +7,6 @@
         <item quantity="one">SponsorBlock: %d სეგმენტი</item>
         <item quantity="other">SponsorBlock: %d სეგმენტი</item>
     </plurals>
+    <string name="novatv_channel_subscribe">გამოწერა</string>
+    <string name="novatv_channel_unsubscribe">გამოწერის გაუქმება</string>
 </resources>

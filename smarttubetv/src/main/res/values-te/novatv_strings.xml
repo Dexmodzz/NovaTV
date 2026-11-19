@@ -7,4 +7,6 @@
         <item quantity="one">SponsorBlock: %d సెగ్మెంట్</item>
         <item quantity="other">SponsorBlock: %d సెగ్మెంట్‌లు</item>
     </plurals>
+    <string name="novatv_channel_subscribe">సబ్‌స్క్రయిబ్ చేయండి</string>
+    <string name="novatv_channel_unsubscribe">అన్‌సబ్‌స్క్రయిబ్ చేయండి</string>
 </resources>

@@ -59,6 +59,10 @@ public class ChannelHeaderPresenter extends RowPresenter {
         boolean onSearchSubmit(String query);
         void onSearchSettingsClicked();
         String getChannelTitle();
+        // NovaTV: channel page header
+        String getChannelId();
+        com.liskovsoft.smartyoutubetv2.common.app.models.data.Video getChannel();
+        boolean isSearchBarEnabled();
     }
 
     public static class ChannelHeaderCallback extends Row implements ChannelHeaderProvider {
@@ -80,6 +84,21 @@ public class ChannelHeaderPresenter extends RowPresenter {
         @Override
         public String getChannelTitle() {
             return null;
+        }
+
+        @Override
+        public String getChannelId() {
+            return null;
+        }
+
+        @Override
+        public com.liskovsoft.smartyoutubetv2.common.app.models.data.Video getChannel() {
+            return null;
+        }
+
+        @Override
+        public boolean isSearchBarEnabled() {
+            return true;
         }
     }
 
@@ -160,6 +179,9 @@ public class ChannelHeaderPresenter extends RowPresenter {
         ChannelHeaderProvider provider = (ChannelHeaderProvider) item;
         SearchBar searchBar = vh.view.findViewById(R.id.lb_search_bar);
         Context context = searchBar.getContext();
+        // NovaTV: channel header (banner, avatar, subscribers, subscribe button); search bar only if enabled
+        com.liskovsoft.smartyoutubetv2.tv.ui.channel.NovaChannelHero.bind(vh.view, provider.getChannelId(), provider.getChannel());
+        searchBar.setVisibility(provider.isSearchBarEnabled() ? View.VISIBLE : View.GONE);
         SearchOrbView searchOrbView = searchBar.findViewById(R.id.lb_search_bar_search_orb);
         SpeechOrbView speechOrbView = searchBar.findViewById(R.id.lb_search_bar_speech_orb);
         SearchEditText searchTextEditor = searchBar.findViewById(R.id.lb_search_text_editor);

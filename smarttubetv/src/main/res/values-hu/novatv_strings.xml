@@ -7,4 +7,6 @@
         <item quantity="one">SponsorBlock: %d szegmens</item>
         <item quantity="other">SponsorBlock: %d szegmens</item>
     </plurals>
+    <string name="novatv_channel_subscribe">Feliratkozás</string>
+    <string name="novatv_channel_unsubscribe">Leiratkozás</string>
 </resources>

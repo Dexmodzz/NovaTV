@@ -7,4 +7,6 @@
         <item quantity="one">SponsorBlock: %d salto</item>
         <item quantity="other">SponsorBlock: %d salti</item>
     </plurals>
+    <string name="novatv_channel_subscribe">Segui</string>
+    <string name="novatv_channel_unsubscribe">Smetti di seguire</string>
 </resources>

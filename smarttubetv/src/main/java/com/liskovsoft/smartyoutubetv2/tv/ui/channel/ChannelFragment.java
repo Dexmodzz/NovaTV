@@ -37,8 +37,25 @@ public class ChannelFragment extends MultipleRowsFragment implements ChannelView
         mChannelPresenter.setView(this);
 
         mProgressBarManager = new ProgressBarManager();
-        if (MainUIData.instance(getContext()).isChannelSearchBarEnabled()) {
+        // NovaTV: the header row is always there (channel banner/avatar/subscribe), the search bar only if enabled
+        boolean searchBarEnabled = MainUIData.instance(getContext()).isChannelSearchBarEnabled();
+        {
             addHeader(new ChannelHeaderCallback() {
+                @Override
+                public String getChannelId() {
+                    return mChannelPresenter.getChannelId();
+                }
+
+                @Override
+                public com.liskovsoft.smartyoutubetv2.common.app.models.data.Video getChannel() {
+                    return mChannelPresenter.getChannel();
+                }
+
+                @Override
+                public boolean isSearchBarEnabled() {
+                    return searchBarEnabled;
+                }
+
                 @Override
                 public void onSearchSettingsClicked() {
                     mChannelPresenter.onSearchSettingsClicked();

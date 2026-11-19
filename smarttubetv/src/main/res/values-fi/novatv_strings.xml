@@ -7,4 +7,6 @@
         <item quantity="one">SponsorBlock: %d segmentti</item>
         <item quantity="other">SponsorBlock: %d segmenttiä</item>
     </plurals>
+    <string name="novatv_channel_subscribe">Tilaa</string>
+    <string name="novatv_channel_unsubscribe">Peru tilaus</string>
 </resources>

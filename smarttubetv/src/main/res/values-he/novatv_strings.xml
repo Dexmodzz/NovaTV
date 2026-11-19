@@ -7,4 +7,6 @@
         <item quantity="one">SponsorBlock: מקטע %d</item>
         <item quantity="other">SponsorBlock: %d מקטעים</item>
     </plurals>
+    <string name="novatv_channel_subscribe">הרשמה</string>
+    <string name="novatv_channel_unsubscribe">ביטול הרשמה</string>
 </resources>

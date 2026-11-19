@@ -7,4 +7,6 @@
         <item quantity="one">SponsorBlock：%d 个片段</item>
         <item quantity="other">SponsorBlock：%d 个片段</item>
     </plurals>
+    <string name="novatv_channel_subscribe">订阅</string>
+    <string name="novatv_channel_unsubscribe">取消订阅</string>
 </resources>

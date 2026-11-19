@@ -67,7 +67,7 @@ adb install -r smarttubetv/build/outputs/apk/ststable/release/NovaTV_stable_*_ar
 | **3 – Video cards and Home** | 14dp rounded cards on a dark surface, white ring + 1.05 zoom on focus, real channel avatar next to the title, "channel" and "views · date" on separate lines, accent-colored progress bar. Interruptible navigation (right then down no longer gets stuck while a row scrolls). Automatic restart after a scale change. |
 | **4 – Player** | Round buttons (label only on focus), white Play/Pause with accent ring, thicker bar with times on both sides, centered layout, gradients; top header with title, info line (views · date · likes), avatar, channel · subscribers and clock; "SponsorBlock: N segments" chip; buttons stop at the row edges instead of jumping to the bar. |
 | **5 – Settings** | New **NovaTV** tile in the settings grid: Dark/OLED theme, accent color, cards per row (3–6), card preview (off/muted/audio) and its delay, clock and 24h format, focus animations, player title position (top / above the video info). Settings tiles get a focus ring. |
-| **After** | Readable logo (Inter SemiBold), launcher banner = header logo, full-width search bar on any screen size, search results right below the bar (which hides only when the results cover it), every NovaTV text translated. |
+| **After** | Readable logo (Inter SemiBold), launcher banner = header logo, full-width search bar on any screen size, search results right below the bar (which hides only when the results cover it), every NovaTV text translated. Channel page header like the web channel page: banner, profile picture over the banner edge, name, @handle · subscribers · videos and a Subscribe / Unsubscribe button. |
 
 ---
 
@@ -114,6 +114,9 @@ git grep -n "NovaTV" -- ':!README.md'
 | `res/color/novatv_*.xml` | Pill and chip text colors by state. |
 | `res/layout/lb_control_button_secondary.xml` | Pill-shaped player button with a label (overrides the Leanback one). |
 | `res/layout/novatv_player_title_block.xml` | Title/channel block above the video info line. |
+| `common/.../utils/NovaChannelInfo.java` | Channel header data (banner, avatar, name, @handle, subscribers, video count). The core library doesn't expose the banner, so it reads the public channel page data (anonymous request, device language), cached per channel. |
+| `tv/ui/channel/NovaChannelHero.java` | Fills the channel header and handles the Subscribe / Unsubscribe button (same subscribe calls as the video menu; state from the channel item or the subscriptions list). |
+| `res/layout/novatv_channel_hero.xml`, `res/drawable/novatv_channel_banner_bg.xml`, `novatv_channel_avatar_ring.xml` | Channel header layout: banner, avatar over its bottom edge, texts, button. |
 | `res/mipmap-nodpi/novatv_logo.png` | Header logo, also used as banner and `android:logo`. |
 | `assets/fonts/inter_*.ttf` + `INTER_LICENSE.txt` | Inter font (OFL). |
 
@@ -181,6 +184,14 @@ git grep -n "NovaTV" -- ':!README.md'
 | `.../tweaks/ControlBar.java` | Minimum gap between buttons, left/right move one button at a time and stop at the edges, removed the `LayoutTransition` that made buttons lose focus. |
 | `.../tooltips/ControlButtonPresenterSelector.java` | Button label visible only on focus, bigger white Play/Pause. |
 | `tv/ui/mod/leanback/misc/SeekBar.java` | Bar colors (track and buffer). |
+
+**Channel page**
+
+| File | Change |
+|---|---|
+| `res/layout/channel_header.xml` | Includes `novatv_channel_hero` above the channel search bar. |
+| `tv/presenter/ChannelHeaderPresenter.java` | Binds `NovaChannelHero`; the search bar is hidden (not the whole row) when the channel search bar setting is off. |
+| `tv/ui/channel/ChannelFragment.java` | The header row is always added (it carries the channel header). |
 
 **Leanback library included in the repo**
 
@@ -269,7 +280,7 @@ Files where a conflict is possible, and how to solve it:
 |---|---|
 | `res/layout/lb_title_view.xml`, `lb_search_bar.xml`, `lb_playback_fragment.xml`, `lb_playback_transport_controls_row.xml` | They are rewritten. Keep the NovaTV version (`git checkout --ours <file>`) and add by hand any **new ids** introduced upstream (the Java code looks them up by id). |
 | `res/layout-ldrtl/lb_title_view.xml` | If upstream changes it you get a "modified/deleted" conflict: keep it deleted (`git rm <file>`). |
-| `NavigateTitleView.java`, `BrowseFragment.java`, `PlaybackFragment.java`, `ControlBar.java`, `SearchSupportFragment.java` | Keep upstream's changes and put the `NovaTV` blocks back. |
+| `NavigateTitleView.java`, `BrowseFragment.java`, `PlaybackFragment.java`, `ControlBar.java`, `SearchSupportFragment.java`, `ChannelHeaderPresenter.java`, `ChannelFragment.java` | Keep upstream's changes and put the `NovaTV` blocks back. |
 | `MainUIData.java` (color schemes) | If upstream adds a scheme, add it at the end pointing to `App.Theme.Nova.Dark` or `.Oled`, without changing the order of the others (the saved index must stay valid). |
 | `build.gradle` | Keep upstream's news (version, dependencies) and the NovaTV changes: `app.novatv*` applicationId, `NovaTV` APK name, Firebase condition, fallback signing (`signingConfigs.debug`). |
 | `README.md`, `PRIVACY.md`, `LICENSE` | Keep the NovaTV version: `git checkout --ours <file>` (the LICENSE already keeps the original copyright notice). |

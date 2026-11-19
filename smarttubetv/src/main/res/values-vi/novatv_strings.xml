@@ -7,4 +7,6 @@
         <item quantity="one">SponsorBlock: %d đoạn</item>
         <item quantity="other">SponsorBlock: %d đoạn</item>
     </plurals>
+    <string name="novatv_channel_subscribe">Đăng ký</string>
+    <string name="novatv_channel_unsubscribe">Hủy đăng ký</string>
 </resources>

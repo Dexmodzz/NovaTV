@@ -7,4 +7,6 @@
         <item quantity="one">SponsorBlock: %d segment</item>
         <item quantity="other">SponsorBlock: %d segmenti</item>
     </plurals>
+    <string name="novatv_channel_subscribe">Telli</string>
+    <string name="novatv_channel_unsubscribe">Tühista tellimus</string>
 </resources>

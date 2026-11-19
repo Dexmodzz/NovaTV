@@ -7,4 +7,6 @@
         <item quantity="one">SponsorBlock: %d segment</item>
         <item quantity="other">SponsorBlock: %d segmentů</item>
     </plurals>
+    <string name="novatv_channel_subscribe">Odebírat</string>
+    <string name="novatv_channel_unsubscribe">Zrušit odběr</string>
 </resources>

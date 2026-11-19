@@ -7,4 +7,6 @@
         <item quantity="one">SponsorBlock: %d 個のセグメント</item>
         <item quantity="other">SponsorBlock: %d 個のセグメント</item>
     </plurals>
+    <string name="novatv_channel_subscribe">チャンネル登録</string>
+    <string name="novatv_channel_unsubscribe">登録解除</string>
 </resources>

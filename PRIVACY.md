@@ -21,6 +21,9 @@ This Privacy Policy applies to every build of **NovaTV** (Package IDs: `app.nova
   stored by, the developer.
 * **Data Flow:** Videos, channel information (including the channel avatars shown on cards and in the player) and
   account information are fetched directly from YouTube/Google servers to your device.
+* **Channel Page Header:** To show a channel's banner, picture and subscriber count, the app requests the public
+  channel page data from YouTube. This request is anonymous: it contains only the channel ID and the device
+  language, no account token.
 
 ## 3. Community-Driven Services
 To provide some features, the application communicates with the following community-driven services:

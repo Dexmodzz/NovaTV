@@ -7,4 +7,6 @@
         <item quantity="one">SponsorBlock: %d ช่วง</item>
         <item quantity="other">SponsorBlock: %d ช่วง</item>
     </plurals>
+    <string name="novatv_channel_subscribe">ติดตาม</string>
+    <string name="novatv_channel_unsubscribe">เลิกติดตาม</string>
 </resources>

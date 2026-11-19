@@ -7,4 +7,6 @@
         <item quantity="one">SponsorBlock: %d τμήμα</item>
         <item quantity="other">SponsorBlock: %d τμήματα</item>
     </plurals>
+    <string name="novatv_channel_subscribe">Εγγραφή</string>
+    <string name="novatv_channel_unsubscribe">Κατάργηση εγγραφής</string>
 </resources>

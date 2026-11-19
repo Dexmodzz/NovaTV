@@ -256,6 +256,56 @@ T = {
                '播放器中的影片標題', '頂部', '影片資訊上方（靠近進度列）',
                '全部', '語音搜尋', 'SponsorBlock：%d 個片段', 'SponsorBlock：%d 個片段'],
 }
+# Channel page header button: [subscribe, unsubscribe] (app module)
+CH = {
+    'en': ['Subscribe', 'Unsubscribe'],
+    'it': ['Segui', 'Smetti di seguire'],
+    'ar': ['اشتراك', 'إلغاء الاشتراك'],
+    'az': ['Abunə ol', 'Abunəlikdən çıx'],
+    'bg': ['Абонирай се', 'Отпиши се'],
+    'ca': ["Subscriu-t'hi", 'Cancel·la la subscripció'],
+    'cs': ['Odebírat', 'Zrušit odběr'],
+    'da': ['Abonner', 'Opsig abonnement'],
+    'de': ['Abonnieren', 'Abo beenden'],
+    'el': ['Εγγραφή', 'Κατάργηση εγγραφής'],
+    'es': ['Suscribirse', 'Anular suscripción'],
+    'et': ['Telli', 'Tühista tellimus'],
+    'fa-rIR': ['اشتراک', 'لغو اشتراک'],
+    'fi': ['Tilaa', 'Peru tilaus'],
+    'fr': ["S'abonner", 'Se désabonner'],
+    'gl-rES': ['Subscribirse', 'Cancelar subscrición'],
+    'he': ['הרשמה', 'ביטול הרשמה'],
+    'hi': ['सदस्यता लें', 'सदस्यता छोड़ें'],
+    'hr': ['Pretplati se', 'Otkaži pretplatu'],
+    'hu': ['Feliratkozás', 'Leiratkozás'],
+    'hy': ['Բաժանորդագրվել', 'Չեղարկել բաժանորդագրությունը'],
+    'in': ['Langganan', 'Berhenti langganan'],
+    'ja': ['チャンネル登録', '登録解除'],
+    'ka-rGE': ['გამოწერა', 'გამოწერის გაუქმება'],
+    'ko': ['구독', '구독 취소'],
+    'lt': ['Prenumeruoti', 'Atsisakyti prenumeratos'],
+    'lv': ['Abonēt', 'Anulēt abonementu'],
+    'ms': ['Langgan', 'Nyahlanggan'],
+    'nb': ['Abonner', 'Avslutt abonnement'],
+    'nl': ['Abonneren', 'Abonnement opzeggen'],
+    'pl': ['Subskrybuj', 'Anuluj subskrypcję'],
+    'pt-rBR': ['Inscrever-se', 'Cancelar inscrição'],
+    'pt-rPT': ['Subscrever', 'Anular subscrição'],
+    'ro': ['Abonează-te', 'Dezabonează-te'],
+    'ru': ['Подписаться', 'Отписаться'],
+    'sk': ['Odoberať', 'Zrušiť odber'],
+    'sl': ['Naroči se', 'Prekliči naročnino'],
+    'sq': ['Abonohu', 'Anulo abonimin'],
+    'sr': ['Пријави се', 'Откажи пријаву'],
+    'sv': ['Prenumerera', 'Avsluta prenumeration'],
+    'te': ['సబ్‌స్క్రయిబ్ చేయండి', 'అన్‌సబ్‌స్క్రయిబ్ చేయండి'],
+    'th': ['ติดตาม', 'เลิกติดตาม'],
+    'tr': ['Abone ol', 'Abonelikten çık'],
+    'uk': ['Підписатися', 'Відписатися'],
+    'vi': ['Đăng ký', 'Hủy đăng ký'],
+    'zh': ['订阅', '取消订阅'],
+    'zh-rTW': ['訂閱', '取消訂閱'],
+}
 # Same language, legacy/alternative locale codes used by SmartTube
 ALIASES = {'iw': 'he', 'mo': 'ro'}
 
@@ -275,6 +325,7 @@ def write(path, body):
 
 def main():
     n = len(COMMON_KEYS) + len(APP_KEYS)
+    assert set(CH) == set(T), set(CH) ^ set(T)
     for lang, values in list(T.items()) + [(a, T[b]) for a, b in ALIASES.items()]:
         assert len(values) == n, (lang, len(values))
         suffix = '' if lang == 'en' else '-' + lang
@@ -295,6 +346,9 @@ def main():
                '        <item quantity="one">%s</item>\n'
                '        <item quantity="other">%s</item>\n'
                '    </plurals>\n' % (esc(sb_one), esc(sb_other)))
+        subscribe, unsubscribe = CH[ALIASES.get(lang, lang)]
+        app += ('    <string name="novatv_channel_subscribe">%s</string>\n' % esc(subscribe) +
+                '    <string name="novatv_channel_unsubscribe">%s</string>\n' % esc(unsubscribe))
         write(os.path.join(APP, 'values' + suffix, 'novatv_strings.xml'), app)
 
     print('languages:', len(T) + len(ALIASES))

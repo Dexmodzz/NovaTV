@@ -7,4 +7,6 @@
         <item quantity="one">SponsorBlock: %d seqment</item>
         <item quantity="other">SponsorBlock: %d seqment</item>
     </plurals>
+    <string name="novatv_channel_subscribe">Abunə ol</string>
+    <string name="novatv_channel_unsubscribe">Abunəlikdən çıx</string>
 </resources>

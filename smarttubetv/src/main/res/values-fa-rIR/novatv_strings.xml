@@ -7,4 +7,6 @@
         <item quantity="one">SponsorBlock: %d بخش</item>
         <item quantity="other">SponsorBlock: %d بخش</item>
     </plurals>
+    <string name="novatv_channel_subscribe">اشتراک</string>
+    <string name="novatv_channel_unsubscribe">لغو اشتراک</string>
 </resources>
