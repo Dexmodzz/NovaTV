@@ -519,7 +519,7 @@ public class NavigateTitleView extends TitleView implements OnDataChange, Accoun
 
     private void applyPipParameters() {
         if (mExitPip != null) {
-            int newVisibility = PlaybackPresenter.instance(getContext()).isRunningInBackground() ? mSearchVisibility : View.INVISIBLE;
+            int newVisibility = PlaybackPresenter.instance(getContext()).isRunningInBackground() ? mSearchVisibility : View.GONE; // NovaTV: GONE, so the search pill can use its space
             mExitPip.setVisibility(newVisibility);
             mPipTitle.setVisibility(newVisibility);
 

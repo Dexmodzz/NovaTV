@@ -65,15 +65,12 @@
                 android:layout_gravity="center_vertical"
                 android:visibility="gone" />
 
-            <Space
-                android:layout_width="0dp"
-                android:layout_height="1dp"
-                android:layout_weight="1"/>
-
-            <!-- Search pill -->
+            <!-- Search pill: fills the whole row between the logo and the right items, on any screen size -->
             <LinearLayout
                 android:id="@+id/nova_search_pill"
-                android:layout_width="@dimen/nova_search_pill_width"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_marginStart="@dimen/nova_search_screen_pill_margin"
                 android:layout_height="@dimen/nova_search_pill_height"
                 android:addStatesFromChildren="true"
                 android:background="@drawable/novatv_search_pill_bg"
@@ -123,10 +120,11 @@
                     android:src="@drawable/lb_ic_search_mic_out"/>
             </LinearLayout>
 
+            <!-- Takes the free space only when the search pill is hidden (search button disabled) -->
             <Space
                 android:layout_width="0dp"
                 android:layout_height="1dp"
-                android:layout_weight="1"/>
+                android:layout_weight="0.0001"/>
 
             <!-- Return to the background video -->
             <androidx.leanback.widget.SearchOrbView

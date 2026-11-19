@@ -42,7 +42,6 @@
     <dimen name="nova_header_logo_height">30dp</dimen>
     <dimen name="nova_header_icon_size">24dp</dimen>
     <dimen name="nova_header_clock_size">22sp</dimen>
-    <dimen name="nova_search_pill_width">480dp</dimen>
     <dimen name="nova_search_pill_height">44dp</dimen>
     <dimen name="nova_search_mic_size">36dp</dimen>
     <!-- Search screen bar = home header: same logo, pill and right button positions (measured on the home header) -->
@@ -52,6 +51,8 @@
     <dimen name="nova_search_screen_pill_margin">17dp</dimen>
     <!-- Settings button next to the pill: 17dp visible gap minus the 4dp lost by scaling 52dp to 44dp -->
     <dimen name="nova_search_screen_settings_margin">13dp</dimen>
+    <!-- Visible right edge 56dp from the screen edge, like the home avatar (52dp + 4dp lost by scaling) -->
+    <dimen name="nova_search_screen_settings_end_margin">52dp</dimen>
     <item name="nova_search_screen_settings_scale" format="float" type="dimen">0.846</item>
     <!-- Bar centred where the home header items are (Leanback default 27dp) -->
     <dimen name="lb_search_bar_padding_top">14dp</dimen>

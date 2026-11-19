@@ -52,15 +52,15 @@
         app:searchOrbIconColor="@color/orb_icon_color" />
 
     <!-- NOTE: You need to create different icon sizes to overcome icon oversize bug -->
-    <!-- NovaTV: right next to the pill and as tall as it (orb 52dp scaled to 44dp; the global orb size
+    <!-- NovaTV: right next to the pill (which fills the row), where the home avatar is, and as tall as the pill (orb 52dp scaled to 44dp; the global orb size
          is left alone, so the home avatar keeps its size) -->
     <androidx.leanback.widget.SearchOrbView
         android:id="@+id/search_settings_orb"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_toEndOf="@+id/lb_search_bar_items"
-        android:layout_marginStart="@dimen/nova_search_screen_settings_margin"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="@dimen/nova_search_screen_settings_end_margin"
         android:scaleX="@dimen/nova_search_screen_settings_scale"
         android:scaleY="@dimen/nova_search_screen_settings_scale"
         android:focusable="true"
@@ -73,10 +73,12 @@
     <!-- The pill. SearchBar reads its background (mBarBackground). -->
     <RelativeLayout
             android:id="@+id/lb_search_bar_items"
-            android:layout_width="@dimen/nova_search_pill_width"
+            android:layout_width="match_parent"
             android:layout_height="@dimen/nova_search_screen_pill_height"
             android:layout_toEndOf="@+id/nova_search_screen_logo"
+            android:layout_toStartOf="@+id/search_settings_orb"
             android:layout_marginStart="@dimen/nova_search_screen_pill_margin"
+            android:layout_marginEnd="@dimen/nova_search_screen_settings_margin"
             android:layout_centerVertical="true"
             android:layout_marginTop="@dimen/lb_search_bar_inner_margin_top"
             android:layout_marginBottom="@dimen/lb_search_bar_inner_margin_bottom"
