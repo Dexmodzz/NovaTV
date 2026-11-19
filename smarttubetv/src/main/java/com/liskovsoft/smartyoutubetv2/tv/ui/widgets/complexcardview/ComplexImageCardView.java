@@ -33,6 +33,8 @@ public class ComplexImageCardView extends ImageCardView {
     private Paint mFocusPaint;
     private final RectF mFocusRect = new RectF();
     private float mFocusRadius;
+    private boolean mIsChannelStyle;
+    private final android.graphics.Rect mImageRect = new android.graphics.Rect();
 
     public ComplexImageCardView(Context context) {
         super(context);
@@ -68,7 +70,11 @@ public class ComplexImageCardView extends ImageCardView {
             setOutlineProvider(new ViewOutlineProvider() {
                 @Override
                 public void getOutline(View view, Outline outline) {
-                    outline.setRoundRect(0, 0, view.getWidth(), view.getHeight(), radius);
+                    if (mIsChannelStyle) {
+                        outline.setEmpty(); // no card shape (and no shadow) around a channel
+                    } else {
+                        outline.setRoundRect(0, 0, view.getWidth(), view.getHeight(), radius);
+                    }
                 }
             });
             setClipToOutline(true);
@@ -88,7 +94,17 @@ public class ComplexImageCardView extends ImageCardView {
     protected void dispatchDraw(Canvas canvas) {
         super.dispatchDraw(canvas);
 
-        if (isSelected() && mFocusPaint != null) {
+        if (isSelected() && mFocusPaint != null && mIsChannelStyle) {
+            // Ring around the round channel picture (centered in the image area)
+            View image = getMainImageView();
+            if (image != null && image.getWidth() > 0) {
+                image.getDrawingRect(mImageRect);
+                offsetDescendantRectToMyCoords(image, mImageRect);
+                float radius = Math.min(mImageRect.width(), mImageRect.height()) / 2f;
+                canvas.drawCircle(mImageRect.exactCenterX(), mImageRect.exactCenterY(),
+                        radius - mFocusPaint.getStrokeWidth() / 2, mFocusPaint); // inside the card bounds
+            }
+        } else if (isSelected() && mFocusPaint != null) {
             float inset = mFocusPaint.getStrokeWidth() / 2;
             mFocusRect.set(inset, inset, getWidth() - inset, getHeight() - inset);
             canvas.drawRoundRect(mFocusRect, mFocusRadius - inset, mFocusRadius - inset, mFocusPaint);
@@ -133,6 +149,44 @@ public class ComplexImageCardView extends ImageCardView {
 
     public ImageView getAvatarView() {
         return mAvatarView;
+    }
+
+    /**
+     * NovaTV: channel card = round picture (loaded circle-cropped by the presenter) with name and
+     * subscribers centered below, no card background. Cards are recycled: call it on every bind.
+     */
+    public void setChannelStyle(boolean channel) {
+        if (channel == mIsChannelStyle) {
+            return;
+        }
+
+        mIsChannelStyle = channel;
+
+        if (Build.VERSION.SDK_INT >= 21) {
+            setClipToOutline(!channel); // the focus ring is drawn just outside the picture
+            invalidateOutline();
+        }
+
+        int gravity = channel ? android.view.Gravity.CENTER_HORIZONTAL : android.view.Gravity.START;
+        int alignment = channel ? View.TEXT_ALIGNMENT_CENTER : View.TEXT_ALIGNMENT_VIEW_START;
+        for (int id : new int[] {R.id.title_text, R.id.content_text}) {
+            TextView text = findViewById(id);
+            if (text != null) {
+                text.setGravity(gravity);
+                text.setTextAlignment(alignment);
+            }
+        }
+
+        if (mAvatarView != null) {
+            mAvatarView.setVisibility(channel ? View.GONE : View.VISIBLE);
+        }
+
+        setMainImageScaleType(channel ? ScaleType.FIT_CENTER : ScaleType.CENTER_CROP);
+        invalidate();
+    }
+
+    public boolean isChannelStyle() {
+        return mIsChannelStyle;
     }
 
     private static void addEndOf(View view, int anchorId) {

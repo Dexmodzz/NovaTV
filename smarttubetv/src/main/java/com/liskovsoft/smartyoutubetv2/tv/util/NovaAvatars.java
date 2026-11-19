@@ -43,9 +43,9 @@ public final class NovaAvatars {
     private static final int MAX_QUEUE = 24;
     private static final String NO_AVATAR = "";
     private static final LruCache<String, String> sCache = new LruCache<>(2000);
-    private static final String PREFS_NAME = "novatv_avatars_v2";
+    private static final String PREFS_NAME = "novatv_avatars_v3";
     /** Test builds only, may hold playlist covers: emptied */
-    private static final String OLD_PREFS_NAME = "novatv_avatars";
+    private static final String[] OLD_PREFS_NAMES = {"novatv_avatars", "novatv_avatars_v2"};
     private static final int MAX_STORED = 3000;
     @Nullable
     private static SharedPreferences sPrefs;
@@ -111,10 +111,18 @@ public final class NovaAvatars {
         rememberChannelCard(video);
     }
 
+    /**
+     * A channel item, not a playlist shown as a channel (search results have no item type,
+     * those playlists carry a "VL..." id in place of the "UC..." channel id).
+     */
+    public static boolean isRealChannel(@Nullable Video video) {
+        return video != null && video.isChannel() && !video.isPlaylistAsChannel()
+                && video.channelId.startsWith("UC");
+    }
+
     private static void rememberChannelCard(@Nullable Video video) {
         // Real channel items only: a playlist shown as a channel carries the playlist cover
-        if (video != null && video.isChannel() && video.itemType == MediaItem.TYPE_CHANNEL
-                && !TextUtils.isEmpty(video.cardImageUrl)) {
+        if (isRealChannel(video) && !TextUtils.isEmpty(video.cardImageUrl)) {
             SharedPreferences.Editor editor = edit();
             put(video.channelId, video.getAuthor() != null ? video.getAuthor() : video.getTitle(), video.cardImageUrl, editor);
             apply(editor);
@@ -176,7 +184,9 @@ public final class NovaAvatars {
             return;
         }
 
-        context.getApplicationContext().getSharedPreferences(OLD_PREFS_NAME, Context.MODE_PRIVATE).edit().clear().apply();
+        for (String name : OLD_PREFS_NAMES) {
+            context.getApplicationContext().getSharedPreferences(name, Context.MODE_PRIVATE).edit().clear().apply();
+        }
         sPrefs = context.getApplicationContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         Map<String, ?> stored = sPrefs.getAll();
 

@@ -102,7 +102,9 @@ public class VideoCardPresenter extends LongClickPresenter {
     }
 
     private void updateCardBackgroundColor(ComplexImageCardView view, boolean selected) {
-        int backgroundColor = selected ? mSelectedBackgroundColor : mDefaultBackgroundColor;
+        // NovaTV: channel cards have no background (round picture + centered text)
+        int backgroundColor = view.isChannelStyle() ? android.graphics.Color.TRANSPARENT :
+                selected ? mSelectedBackgroundColor : mDefaultBackgroundColor;
         int textColor = selected ? mSelectedTextColor : mDefaultTextColor;
 
         // Both background colors should be set because the view's
@@ -134,8 +136,14 @@ public class VideoCardPresenter extends LongClickPresenter {
         ComplexImageCardView cardView = (ComplexImageCardView) viewHolder.view;
         Context context = cardView.getContext();
 
+        // NovaTV: channels = round picture, name and subscribers centered below
+        boolean isChannel = isChannelCard(video);
+        cardView.setChannelStyle(isChannel);
+        cardView.setBackgroundColor(isChannel ? android.graphics.Color.TRANSPARENT : mDefaultBackgroundColor);
+        updateCardBackgroundColor(cardView, cardView.isSelected());
+
         cardView.setTitleText(video.getTitle());
-        cardView.setContentText(formatContent(video.getSecondTitle()));
+        cardView.setContentText(isChannel ? formatChannelContent(video.getSecondTitle()) : formatContent(video.getSecondTitle()));
         if (cardView.getAvatarView() != null) {
             NovaAvatars.bind(cardView.getAvatarView(), video);
         } else {
@@ -161,6 +169,19 @@ public class VideoCardPresenter extends LongClickPresenter {
 
         if (context instanceof Activity && ((Activity) context).isDestroyed()) {
             // Glide.with(context): IllegalArgumentException: You cannot start a load for a destroyed activity
+            return;
+        }
+
+        if (isChannel) {
+            // The channel picture, circle-cropped, centered in the image area (FIT_CENTER)
+            Glide.with(context)
+                    .load(video.cardImageUrl)
+                    .apply(ViewUtil.glideOptions())
+                    .override(mHeight, mHeight)
+                    .circleCrop()
+                    .listener(mErrorListener)
+                    .error(R.drawable.card_placeholder)
+                    .into(cardView.getMainImageView());
             return;
         }
 
@@ -254,6 +275,36 @@ public class VideoCardPresenter extends LongClickPresenter {
      */
     protected boolean isAvatarEnabled() {
         return isTitleEnabled() && isContentEnabled();
+    }
+
+    /**
+     * NovaTV: a real channel item (not a playlist shown as a channel; search channels have no item type)
+     */
+    private static boolean isChannelCard(Video video) {
+        return NovaAvatars.isRealChannel(video);
+    }
+
+    /**
+     * NovaTV: channel card text under the name: subscribers (the @handle is left out).
+     */
+    private static CharSequence formatChannelContent(CharSequence secondTitle) {
+        if (secondTitle == null) {
+            return null;
+        }
+
+        StringBuilder result = new StringBuilder();
+        for (String part : secondTitle.toString().split(Video.TERTIARY_TEXT_DELIM)) {
+            String text = part.trim();
+            if (text.isEmpty() || text.startsWith("@")) {
+                continue;
+            }
+            if (result.length() > 0) {
+                result.append(" \u00B7 ");
+            }
+            result.append(text);
+        }
+
+        return result.length() > 0 ? result : secondTitle;
     }
 
     /**
