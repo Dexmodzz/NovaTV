@@ -1,0 +1,304 @@
+#!/usr/bin/env python3
+"""NovaTV: writes the translated novatv_strings.xml for every language SmartTube supports.
+English (values/) is the source and fallback. Usage: python3 tools/novatv/gen_strings.py
+Edit the tables below and run again; values-it is included here too."""
+import os
+
+ROOT = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..'))
+COMMON = os.path.join(ROOT, 'common', 'src', 'main', 'res')
+APP = os.path.join(ROOT, 'smarttubetv', 'src', 'main', 'res')
+
+# Settings screen (common module)
+COMMON_KEYS = [
+    'novatv_theme', 'novatv_theme_dark', 'novatv_theme_oled', 'novatv_accent',
+    'novatv_accent_orange', 'novatv_accent_blue', 'novatv_accent_violet', 'novatv_accent_green',
+    'novatv_cards_per_row', 'novatv_preview', 'novatv_preview_off', 'novatv_preview_delay',
+    'novatv_clock', 'novatv_clock_show', 'novatv_focus_animations',
+    'novatv_player_title_position', 'novatv_player_title_top', 'novatv_player_title_above_info',
+]
+# UI (app module): chip "All", voice search, SponsorBlock chip (one / other)
+APP_KEYS = ['novatv_chip_all', 'novatv_voice_search', 'sb_one', 'sb_other']
+
+T = {
+    'en': ['Theme', 'Dark', 'OLED (pure black)', 'Accent color', 'Orange', 'Blue', 'Violet', 'Green',
+           'Cards per row', 'Preview on the selected card', 'Off', 'Preview delay',
+           'Clock', 'Show clock and date', 'Focus animations (card zoom)',
+           'Video title in the player', 'Top', 'Above the video info (near the bar)',
+           'All', 'Voice search', 'SponsorBlock: %d segment', 'SponsorBlock: %d segments'],
+    'it': ['Tema', 'Scuro', 'OLED (nero puro)', "Colore d'accento", 'Arancione', 'Blu', 'Viola', 'Verde',
+           'Schede per riga', 'Anteprima sulla scheda selezionata', 'Disattivata', 'Ritardo anteprima',
+           'Orologio', 'Mostra ora e data', 'Animazioni di focus (zoom delle schede)',
+           'Titolo del video nel player', 'In alto', 'Sopra le informazioni (vicino alla barra)',
+           'Tutti', 'Ricerca vocale', 'SponsorBlock: %d salto', 'SponsorBlock: %d salti'],
+    'ar': ['المظهر', 'داكن', 'OLED (أسود خالص)', 'لون التمييز', 'برتقالي', 'أزرق', 'بنفسجي', 'أخضر',
+           'البطاقات في كل صف', 'معاينة على البطاقة المحددة', 'إيقاف', 'تأخير المعاينة',
+           'الساعة', 'إظهار الساعة والتاريخ', 'حركات التركيز (تكبير البطاقة)',
+           'عنوان الفيديو في المشغل', 'في الأعلى', 'فوق معلومات الفيديو (قرب الشريط)',
+           'الكل', 'البحث الصوتي', 'SponsorBlock: مقطع %d', 'SponsorBlock: %d مقاطع'],
+    'az': ['Mövzu', 'Tünd', 'OLED (tam qara)', 'Vurğu rəngi', 'Narıncı', 'Mavi', 'Bənövşəyi', 'Yaşıl',
+           'Sırada kart sayı', 'Seçilmiş kartda önizləmə', 'Söndürülüb', 'Önizləmə gecikməsi',
+           'Saat', 'Saatı və tarixi göstər', 'Fokus animasiyaları (kartın böyüdülməsi)',
+           'Pleyerdə video başlığı', 'Yuxarıda', 'Video məlumatının üstündə (zolağın yanında)',
+           'Hamısı', 'Səsli axtarış', 'SponsorBlock: %d seqment', 'SponsorBlock: %d seqment'],
+    'bg': ['Тема', 'Тъмна', 'OLED (чисто черно)', 'Акцентен цвят', 'Оранжев', 'Син', 'Виолетов', 'Зелен',
+           'Карти на ред', 'Преглед на избраната карта', 'Изключено', 'Забавяне на прегледа',
+           'Часовник', 'Показване на час и дата', 'Анимации при фокус (увеличаване на картата)',
+           'Заглавие на видеото в плейъра', 'Горе', 'Над информацията за видеото (до лентата)',
+           'Всички', 'Гласово търсене', 'SponsorBlock: %d сегмент', 'SponsorBlock: %d сегмента'],
+    'ca': ['Tema', 'Fosc', 'OLED (negre pur)', "Color d'accent", 'Taronja', 'Blau', 'Violeta', 'Verd',
+           'Targetes per fila', 'Previsualització a la targeta seleccionada', 'Desactivada', 'Retard de la previsualització',
+           'Rellotge', "Mostra l'hora i la data", "Animacions d'enfocament (zoom de la targeta)",
+           'Títol del vídeo al reproductor', 'A dalt', 'Sobre la informació del vídeo (prop de la barra)',
+           'Tot', 'Cerca per veu', 'SponsorBlock: %d segment', 'SponsorBlock: %d segments'],
+    'cs': ['Motiv', 'Tmavý', 'OLED (čistě černá)', 'Barva zvýraznění', 'Oranžová', 'Modrá', 'Fialová', 'Zelená',
+           'Karet na řádek', 'Náhled na vybrané kartě', 'Vypnuto', 'Zpoždění náhledu',
+           'Hodiny', 'Zobrazit čas a datum', 'Animace fokusu (zvětšení karty)',
+           'Název videa v přehrávači', 'Nahoře', 'Nad informacemi o videu (u lišty)',
+           'Vše', 'Hlasové vyhledávání', 'SponsorBlock: %d segment', 'SponsorBlock: %d segmentů'],
+    'da': ['Tema', 'Mørk', 'OLED (helt sort)', 'Accentfarve', 'Orange', 'Blå', 'Violet', 'Grøn',
+           'Kort pr. række', 'Forhåndsvisning på det valgte kort', 'Fra', 'Forsinkelse af forhåndsvisning',
+           'Ur', 'Vis klokkeslæt og dato', 'Fokusanimationer (kortzoom)',
+           'Videotitel i afspilleren', 'Øverst', 'Over videoinfo (ved bjælken)',
+           'Alle', 'Stemmesøgning', 'SponsorBlock: %d segment', 'SponsorBlock: %d segmenter'],
+    'de': ['Design', 'Dunkel', 'OLED (reines Schwarz)', 'Akzentfarbe', 'Orange', 'Blau', 'Violett', 'Grün',
+           'Karten pro Zeile', 'Vorschau auf der ausgewählten Karte', 'Aus', 'Vorschauverzögerung',
+           'Uhr', 'Uhrzeit und Datum anzeigen', 'Fokusanimationen (Kartenzoom)',
+           'Videotitel im Player', 'Oben', 'Über den Videoinfos (an der Leiste)',
+           'Alle', 'Sprachsuche', 'SponsorBlock: %d Segment', 'SponsorBlock: %d Segmente'],
+    'el': ['Θέμα', 'Σκούρο', 'OLED (απόλυτο μαύρο)', 'Χρώμα έμφασης', 'Πορτοκαλί', 'Μπλε', 'Βιολετί', 'Πράσινο',
+           'Κάρτες ανά σειρά', 'Προεπισκόπηση στην επιλεγμένη κάρτα', 'Ανενεργή', 'Καθυστέρηση προεπισκόπησης',
+           'Ρολόι', 'Εμφάνιση ώρας και ημερομηνίας', 'Κινήσεις εστίασης (μεγέθυνση κάρτας)',
+           'Τίτλος βίντεο στο πρόγραμμα αναπαραγωγής', 'Επάνω', 'Πάνω από τις πληροφορίες (κοντά στη γραμμή)',
+           'Όλα', 'Φωνητική αναζήτηση', 'SponsorBlock: %d τμήμα', 'SponsorBlock: %d τμήματα'],
+    'es': ['Tema', 'Oscuro', 'OLED (negro puro)', 'Color de acento', 'Naranja', 'Azul', 'Violeta', 'Verde',
+           'Tarjetas por fila', 'Vista previa en la tarjeta seleccionada', 'Desactivada', 'Retraso de la vista previa',
+           'Reloj', 'Mostrar hora y fecha', 'Animaciones de enfoque (zoom de la tarjeta)',
+           'Título del vídeo en el reproductor', 'Arriba', 'Sobre la información del vídeo (cerca de la barra)',
+           'Todo', 'Búsqueda por voz', 'SponsorBlock: %d segmento', 'SponsorBlock: %d segmentos'],
+    'et': ['Teema', 'Tume', 'OLED (puhas must)', 'Rõhuvärv', 'Oranž', 'Sinine', 'Violetne', 'Roheline',
+           'Kaarte reas', 'Eelvaade valitud kaardil', 'Väljas', 'Eelvaate viivitus',
+           'Kell', 'Näita kellaaega ja kuupäeva', 'Fookuse animatsioonid (kaardi suurendus)',
+           'Video pealkiri pleieris', 'Üleval', 'Video teabe kohal (riba juures)',
+           'Kõik', 'Häälotsing', 'SponsorBlock: %d segment', 'SponsorBlock: %d segmenti'],
+    'fa-rIR': ['پوسته', 'تیره', 'OLED (مشکی خالص)', 'رنگ تأکیدی', 'نارنجی', 'آبی', 'بنفش', 'سبز',
+               'تعداد کارت در هر ردیف', 'پیش‌نمایش روی کارت انتخاب‌شده', 'خاموش', 'تأخیر پیش‌نمایش',
+               'ساعت', 'نمایش ساعت و تاریخ', 'پویانمایی فوکوس (بزرگ‌نمایی کارت)',
+               'عنوان ویدیو در پخش‌کننده', 'بالا', 'بالای اطلاعات ویدیو (نزدیک نوار)',
+               'همه', 'جستجوی صوتی', 'SponsorBlock: %d بخش', 'SponsorBlock: %d بخش'],
+    'fi': ['Teema', 'Tumma', 'OLED (täysin musta)', 'Korostusväri', 'Oranssi', 'Sininen', 'Violetti', 'Vihreä',
+           'Korttia rivillä', 'Esikatselu valitussa kortissa', 'Pois', 'Esikatselun viive',
+           'Kello', 'Näytä kellonaika ja päivämäärä', 'Kohdistusanimaatiot (kortin zoomaus)',
+           'Videon otsikko soittimessa', 'Ylhäällä', 'Videon tietojen yläpuolella (palkin lähellä)',
+           'Kaikki', 'Puhehaku', 'SponsorBlock: %d segmentti', 'SponsorBlock: %d segmenttiä'],
+    'fr': ['Thème', 'Sombre', 'OLED (noir pur)', "Couleur d'accent", 'Orange', 'Bleu', 'Violet', 'Vert',
+           'Cartes par ligne', 'Aperçu sur la carte sélectionnée', 'Désactivé', "Délai de l'aperçu",
+           'Horloge', "Afficher l'heure et la date", 'Animations de focus (zoom de la carte)',
+           'Titre de la vidéo dans le lecteur', 'En haut', 'Au-dessus des infos de la vidéo (près de la barre)',
+           'Tout', 'Recherche vocale', 'SponsorBlock : %d segment', 'SponsorBlock : %d segments'],
+    'gl-rES': ['Tema', 'Escuro', 'OLED (negro puro)', 'Cor de acento', 'Laranxa', 'Azul', 'Violeta', 'Verde',
+               'Tarxetas por fila', 'Vista previa na tarxeta seleccionada', 'Desactivada', 'Atraso da vista previa',
+               'Reloxo', 'Mostrar hora e data', 'Animacións de foco (zoom da tarxeta)',
+               'Título do vídeo no reprodutor', 'Arriba', 'Sobre a información do vídeo (preto da barra)',
+               'Todo', 'Busca por voz', 'SponsorBlock: %d segmento', 'SponsorBlock: %d segmentos'],
+    'he': ['ערכת נושא', 'כהה', 'OLED (שחור מלא)', 'צבע הדגשה', 'כתום', 'כחול', 'סגול', 'ירוק',
+           'כרטיסים בכל שורה', 'תצוגה מקדימה בכרטיס הנבחר', 'כבוי', 'השהיית תצוגה מקדימה',
+           'שעון', 'הצגת שעה ותאריך', 'הנפשות מיקוד (הגדלת כרטיס)',
+           'כותרת הסרטון בנגן', 'למעלה', 'מעל פרטי הסרטון (ליד הסרגל)',
+           'הכול', 'חיפוש קולי', 'SponsorBlock: מקטע %d', 'SponsorBlock: %d מקטעים'],
+    'hi': ['थीम', 'गहरा', 'OLED (पूरा काला)', 'एक्सेंट रंग', 'नारंगी', 'नीला', 'बैंगनी', 'हरा',
+           'प्रति पंक्ति कार्ड', 'चुने गए कार्ड पर प्रीव्यू', 'बंद', 'प्रीव्यू में देरी',
+           'घड़ी', 'समय और तारीख दिखाएं', 'फ़ोकस एनिमेशन (कार्ड ज़ूम)',
+           'प्लेयर में वीडियो का शीर्षक', 'ऊपर', 'वीडियो जानकारी के ऊपर (बार के पास)',
+           'सभी', 'आवाज़ से खोज', 'SponsorBlock: %d सेगमेंट', 'SponsorBlock: %d सेगमेंट'],
+    'hr': ['Tema', 'Tamna', 'OLED (potpuno crna)', 'Boja naglaska', 'Narančasta', 'Plava', 'Ljubičasta', 'Zelena',
+           'Kartica po retku', 'Pregled na odabranoj kartici', 'Isključeno', 'Odgoda pregleda',
+           'Sat', 'Prikaži vrijeme i datum', 'Animacije fokusa (uvećanje kartice)',
+           'Naslov videozapisa u playeru', 'Gore', 'Iznad podataka o videozapisu (uz traku)',
+           'Sve', 'Glasovno pretraživanje', 'SponsorBlock: %d segment', 'SponsorBlock: %d segmenata'],
+    'hu': ['Téma', 'Sötét', 'OLED (tiszta fekete)', 'Kiemelőszín', 'Narancs', 'Kék', 'Ibolya', 'Zöld',
+           'Kártyák soronként', 'Előnézet a kiválasztott kártyán', 'Ki', 'Előnézet késleltetése',
+           'Óra', 'Idő és dátum megjelenítése', 'Fókuszanimációk (kártyanagyítás)',
+           'Videó címe a lejátszóban', 'Felül', 'A videó adatai fölött (a sáv mellett)',
+           'Összes', 'Hangalapú keresés', 'SponsorBlock: %d szegmens', 'SponsorBlock: %d szegmens'],
+    'hy': ['Թեմա', 'Մուգ', 'OLED (մաքուր սև)', 'Շեշտադրման գույն', 'Նարնջագույն', 'Կապույտ', 'Մանուշակագույն', 'Կանաչ',
+           'Քարտեր մեկ տողում', 'Նախադիտում ընտրված քարտի վրա', 'Անջատված', 'Նախադիտման ուշացում',
+           'Ժամացույց', 'Ցույց տալ ժամը և ամսաթիվը', 'Ֆոկուսի անիմացիաներ (քարտի մեծացում)',
+           'Տեսանյութի վերնագիրը նվագարկիչում', 'Վերևում', 'Տեսանյութի տվյալների վերևում (գծի մոտ)',
+           'Բոլորը', 'Ձայնային որոնում', 'SponsorBlock: %d հատված', 'SponsorBlock: %d հատված'],
+    'in': ['Tema', 'Gelap', 'OLED (hitam pekat)', 'Warna aksen', 'Oranye', 'Biru', 'Ungu', 'Hijau',
+           'Kartu per baris', 'Pratinjau pada kartu yang dipilih', 'Nonaktif', 'Jeda pratinjau',
+           'Jam', 'Tampilkan jam dan tanggal', 'Animasi fokus (zoom kartu)',
+           'Judul video di pemutar', 'Di atas', 'Di atas info video (dekat bilah)',
+           'Semua', 'Penelusuran suara', 'SponsorBlock: %d segmen', 'SponsorBlock: %d segmen'],
+    'ja': ['テーマ', 'ダーク', 'OLED（純粋な黒）', 'アクセントカラー', 'オレンジ', 'ブルー', 'バイオレット', 'グリーン',
+           '1 行のカード数', '選択したカードでプレビュー', 'オフ', 'プレビューの遅延',
+           '時計', '時刻と日付を表示', 'フォーカスアニメーション（カードの拡大）',
+           'プレーヤーの動画タイトル', '上部', '動画情報の上（バーの近く）',
+           'すべて', '音声検索', 'SponsorBlock: %d 個のセグメント', 'SponsorBlock: %d 個のセグメント'],
+    'ka-rGE': ['თემა', 'მუქი', 'OLED (სუფთა შავი)', 'აქცენტის ფერი', 'ნარინჯისფერი', 'ლურჯი', 'იისფერი', 'მწვანე',
+               'ბარათები რიგში', 'გადახედვა არჩეულ ბარათზე', 'გამორთული', 'გადახედვის დაყოვნება',
+               'საათი', 'დროისა და თარიღის ჩვენება', 'ფოკუსის ანიმაციები (ბარათის გადიდება)',
+               'ვიდეოს სათაური ფლეერში', 'ზემოთ', 'ვიდეოს ინფორმაციის ზემოთ (ზოლთან)',
+               'ყველა', 'ხმოვანი ძიება', 'SponsorBlock: %d სეგმენტი', 'SponsorBlock: %d სეგმენტი'],
+    'ko': ['테마', '어둡게', 'OLED(완전한 검정)', '강조 색상', '주황', '파랑', '보라', '초록',
+           '한 줄당 카드 수', '선택한 카드에서 미리보기', '사용 안함', '미리보기 지연',
+           '시계', '시간 및 날짜 표시', '포커스 애니메이션(카드 확대)',
+           '플레이어의 동영상 제목', '위쪽', '동영상 정보 위(바 근처)',
+           '전체', '음성 검색', 'SponsorBlock: 구간 %d개', 'SponsorBlock: 구간 %d개'],
+    'lt': ['Tema', 'Tamsi', 'OLED (visiškai juoda)', 'Akcento spalva', 'Oranžinė', 'Mėlyna', 'Violetinė', 'Žalia',
+           'Kortelių eilutėje', 'Peržiūra pasirinktoje kortelėje', 'Išjungta', 'Peržiūros delsa',
+           'Laikrodis', 'Rodyti laiką ir datą', 'Fokusavimo animacijos (kortelės didinimas)',
+           'Vaizdo įrašo pavadinimas grotuve', 'Viršuje', 'Virš vaizdo įrašo informacijos (prie juostos)',
+           'Visi', 'Paieška balsu', 'SponsorBlock: %d segmentas', 'SponsorBlock: %d segmentų'],
+    'lv': ['Motīvs', 'Tumšs', 'OLED (tīri melns)', 'Akcenta krāsa', 'Oranža', 'Zila', 'Violeta', 'Zaļa',
+           'Kartītes rindā', 'Priekšskatījums atlasītajā kartītē', 'Izslēgts', 'Priekšskatījuma aizkave',
+           'Pulkstenis', 'Rādīt laiku un datumu', 'Fokusa animācijas (kartītes tuvināšana)',
+           'Video nosaukums atskaņotājā', 'Augšā', 'Virs video informācijas (pie joslas)',
+           'Visi', 'Meklēšana ar balsi', 'SponsorBlock: %d segments', 'SponsorBlock: %d segmenti'],
+    'ms': ['Tema', 'Gelap', 'OLED (hitam tulen)', 'Warna aksen', 'Oren', 'Biru', 'Ungu', 'Hijau',
+           'Kad setiap baris', 'Pratonton pada kad yang dipilih', 'Mati', 'Kelewatan pratonton',
+           'Jam', 'Tunjukkan masa dan tarikh', 'Animasi fokus (zum kad)',
+           'Tajuk video dalam pemain', 'Di atas', 'Di atas maklumat video (berhampiran bar)',
+           'Semua', 'Carian suara', 'SponsorBlock: %d segmen', 'SponsorBlock: %d segmen'],
+    'nb': ['Tema', 'Mørk', 'OLED (helt svart)', 'Aksentfarge', 'Oransje', 'Blå', 'Fiolett', 'Grønn',
+           'Kort per rad', 'Forhåndsvisning på valgt kort', 'Av', 'Forsinkelse for forhåndsvisning',
+           'Klokke', 'Vis klokkeslett og dato', 'Fokusanimasjoner (kortzoom)',
+           'Videotittel i avspilleren', 'Øverst', 'Over videoinfo (ved linjen)',
+           'Alle', 'Talesøk', 'SponsorBlock: %d segment', 'SponsorBlock: %d segmenter'],
+    'nl': ['Thema', 'Donker', 'OLED (puur zwart)', 'Accentkleur', 'Oranje', 'Blauw', 'Violet', 'Groen',
+           'Kaarten per rij', 'Voorbeeld op de geselecteerde kaart', 'Uit', 'Vertraging van voorbeeld',
+           'Klok', 'Tijd en datum tonen', 'Focusanimaties (kaartzoom)',
+           'Videotitel in de speler', 'Bovenaan', 'Boven de video-info (bij de balk)',
+           'Alles', 'Gesproken zoekopdracht', 'SponsorBlock: %d segment', 'SponsorBlock: %d segmenten'],
+    'pl': ['Motyw', 'Ciemny', 'OLED (czysta czerń)', 'Kolor akcentu', 'Pomarańczowy', 'Niebieski', 'Fioletowy', 'Zielony',
+           'Kart w rzędzie', 'Podgląd na wybranej karcie', 'Wyłączony', 'Opóźnienie podglądu',
+           'Zegar', 'Pokaż godzinę i datę', 'Animacje fokusu (powiększenie karty)',
+           'Tytuł filmu w odtwarzaczu', 'Na górze', 'Nad informacjami o filmie (przy pasku)',
+           'Wszystko', 'Wyszukiwanie głosowe', 'SponsorBlock: %d segment', 'SponsorBlock: %d segmentów'],
+    'pt-rBR': ['Tema', 'Escuro', 'OLED (preto puro)', 'Cor de destaque', 'Laranja', 'Azul', 'Violeta', 'Verde',
+               'Cards por linha', 'Prévia no card selecionado', 'Desativada', 'Atraso da prévia',
+               'Relógio', 'Mostrar hora e data', 'Animações de foco (zoom do card)',
+               'Título do vídeo no player', 'No topo', 'Acima das informações do vídeo (perto da barra)',
+               'Tudo', 'Pesquisa por voz', 'SponsorBlock: %d segmento', 'SponsorBlock: %d segmentos'],
+    'pt-rPT': ['Tema', 'Escuro', 'OLED (preto puro)', 'Cor de destaque', 'Laranja', 'Azul', 'Violeta', 'Verde',
+               'Cartões por linha', 'Pré-visualização no cartão selecionado', 'Desativada', 'Atraso da pré-visualização',
+               'Relógio', 'Mostrar hora e data', 'Animações de foco (zoom do cartão)',
+               'Título do vídeo no leitor', 'No topo', 'Acima das informações do vídeo (perto da barra)',
+               'Tudo', 'Pesquisa por voz', 'SponsorBlock: %d segmento', 'SponsorBlock: %d segmentos'],
+    'ro': ['Temă', 'Întunecată', 'OLED (negru pur)', 'Culoare de accent', 'Portocaliu', 'Albastru', 'Violet', 'Verde',
+           'Carduri pe rând', 'Previzualizare pe cardul selectat', 'Dezactivată', 'Întârziere previzualizare',
+           'Ceas', 'Afișează ora și data', 'Animații de focalizare (mărirea cardului)',
+           'Titlul videoclipului în player', 'Sus', 'Deasupra informațiilor video (lângă bară)',
+           'Toate', 'Căutare vocală', 'SponsorBlock: %d segment', 'SponsorBlock: %d segmente'],
+    'ru': ['Тема', 'Тёмная', 'OLED (чистый чёрный)', 'Цвет акцента', 'Оранжевый', 'Синий', 'Фиолетовый', 'Зелёный',
+           'Карточек в ряду', 'Предпросмотр на выбранной карточке', 'Выкл.', 'Задержка предпросмотра',
+           'Часы', 'Показывать время и дату', 'Анимация фокуса (увеличение карточки)',
+           'Название видео в плеере', 'Сверху', 'Над информацией о видео (у полосы)',
+           'Все', 'Голосовой поиск', 'SponsorBlock: %d сегмент', 'SponsorBlock: сегментов: %d'],
+    'sk': ['Motív', 'Tmavý', 'OLED (čisto čierna)', 'Farba zvýraznenia', 'Oranžová', 'Modrá', 'Fialová', 'Zelená',
+           'Kariet v rade', 'Náhľad na vybranej karte', 'Vypnuté', 'Oneskorenie náhľadu',
+           'Hodiny', 'Zobraziť čas a dátum', 'Animácie zamerania (zväčšenie karty)',
+           'Názov videa v prehrávači', 'Hore', 'Nad informáciami o videu (pri lište)',
+           'Všetko', 'Hlasové vyhľadávanie', 'SponsorBlock: %d segment', 'SponsorBlock: %d segmentov'],
+    'sl': ['Tema', 'Temna', 'OLED (čisto črna)', 'Barva poudarka', 'Oranžna', 'Modra', 'Vijolična', 'Zelena',
+           'Kartic v vrstici', 'Predogled na izbrani kartici', 'Izklopljeno', 'Zakasnitev predogleda',
+           'Ura', 'Prikaži uro in datum', 'Animacije fokusa (povečava kartice)',
+           'Naslov videoposnetka v predvajalniku', 'Zgoraj', 'Nad podatki o videoposnetku (ob vrstici)',
+           'Vse', 'Glasovno iskanje', 'SponsorBlock: %d segment', 'SponsorBlock: %d segmentov'],
+    'sq': ['Tema', 'E errët', 'OLED (e zezë e pastër)', 'Ngjyra e theksit', 'Portokalli', 'Blu', 'Vjollcë', 'Jeshile',
+           'Karta për rresht', 'Pamje paraprake në kartën e zgjedhur', 'Joaktive', 'Vonesa e pamjes paraprake',
+           'Ora', 'Shfaq orën dhe datën', 'Animacionet e fokusit (zmadhimi i kartës)',
+           'Titulli i videos në luajtës', 'Lart', 'Mbi informacionin e videos (pranë shiritit)',
+           'Të gjitha', 'Kërkim me zë', 'SponsorBlock: %d segment', 'SponsorBlock: %d segmente'],
+    'sr': ['Тема', 'Тамна', 'OLED (потпуно црна)', 'Боја нагласка', 'Наранџаста', 'Плава', 'Љубичаста', 'Зелена',
+           'Картица по реду', 'Преглед на изабраној картици', 'Искључено', 'Кашњење прегледа',
+           'Сат', 'Прикажи време и датум', 'Анимације фокуса (увећање картице)',
+           'Наслов видеа у плејеру', 'Горе', 'Изнад података о видеу (поред траке)',
+           'Све', 'Гласовна претрага', 'SponsorBlock: %d сегмент', 'SponsorBlock: %d сегмената'],
+    'sv': ['Tema', 'Mörkt', 'OLED (helt svart)', 'Accentfärg', 'Orange', 'Blå', 'Violett', 'Grön',
+           'Kort per rad', 'Förhandsvisning på valt kort', 'Av', 'Fördröjning för förhandsvisning',
+           'Klocka', 'Visa tid och datum', 'Fokusanimationer (kortzoom)',
+           'Videotitel i spelaren', 'Överst', 'Ovanför videoinformationen (vid fältet)',
+           'Alla', 'Röstsökning', 'SponsorBlock: %d segment', 'SponsorBlock: %d segment'],
+    'te': ['థీమ్', 'ముదురు', 'OLED (పూర్తి నలుపు)', 'యాక్సెంట్ రంగు', 'నారింజ', 'నీలం', 'ఊదా', 'ఆకుపచ్చ',
+           'ప్రతి వరుసకు కార్డ్‌లు', 'ఎంచుకున్న కార్డ్‌పై ప్రివ్యూ', 'ఆఫ్', 'ప్రివ్యూ ఆలస్యం',
+           'గడియారం', 'సమయం మరియు తేదీని చూపించు', 'ఫోకస్ యానిమేషన్‌లు (కార్డ్ జూమ్)',
+           'ప్లేయర్‌లో వీడియో శీర్షిక', 'పైన', 'వీడియో సమాచారం పైన (బార్ దగ్గర)',
+           'అన్నీ', 'వాయిస్ శోధన', 'SponsorBlock: %d సెగ్మెంట్', 'SponsorBlock: %d సెగ్మెంట్‌లు'],
+    'th': ['ธีม', 'มืด', 'OLED (ดำสนิท)', 'สีเน้น', 'ส้ม', 'น้ำเงิน', 'ม่วง', 'เขียว',
+           'การ์ดต่อแถว', 'แสดงตัวอย่างบนการ์ดที่เลือก', 'ปิด', 'ระยะหน่วงของตัวอย่าง',
+           'นาฬิกา', 'แสดงเวลาและวันที่', 'ภาพเคลื่อนไหวโฟกัส (ซูมการ์ด)',
+           'ชื่อวิดีโอในเครื่องเล่น', 'ด้านบน', 'เหนือข้อมูลวิดีโอ (ใกล้แถบ)',
+           'ทั้งหมด', 'ค้นหาด้วยเสียง', 'SponsorBlock: %d ช่วง', 'SponsorBlock: %d ช่วง'],
+    'tr': ['Tema', 'Koyu', 'OLED (saf siyah)', 'Vurgu rengi', 'Turuncu', 'Mavi', 'Mor', 'Yeşil',
+           'Satır başına kart', 'Seçili kartta önizleme', 'Kapalı', 'Önizleme gecikmesi',
+           'Saat', 'Saati ve tarihi göster', 'Odak animasyonları (kart yakınlaştırma)',
+           'Oynatıcıda video başlığı', 'Üstte', 'Video bilgilerinin üstünde (çubuğun yanında)',
+           'Tümü', 'Sesli arama', 'SponsorBlock: %d segment', 'SponsorBlock: %d segment'],
+    'uk': ['Тема', 'Темна', 'OLED (чистий чорний)', 'Колір акценту', 'Помаранчевий', 'Синій', 'Фіолетовий', 'Зелений',
+           'Карток у ряду', 'Попередній перегляд на вибраній картці', 'Вимк.', 'Затримка попереднього перегляду',
+           'Годинник', 'Показувати час і дату', 'Анімація фокуса (збільшення картки)',
+           'Назва відео в плеєрі', 'Угорі', 'Над інформацією про відео (біля смуги)',
+           'Усі', 'Голосовий пошук', 'SponsorBlock: %d сегмент', 'SponsorBlock: сегментів: %d'],
+    'vi': ['Giao diện', 'Tối', 'OLED (đen tuyền)', 'Màu nhấn', 'Cam', 'Xanh dương', 'Tím', 'Xanh lá',
+           'Số thẻ mỗi hàng', 'Xem trước trên thẻ được chọn', 'Tắt', 'Độ trễ xem trước',
+           'Đồng hồ', 'Hiển thị giờ và ngày', 'Hiệu ứng tiêu điểm (phóng to thẻ)',
+           'Tiêu đề video trong trình phát', 'Ở trên cùng', 'Phía trên thông tin video (gần thanh)',
+           'Tất cả', 'Tìm kiếm bằng giọng nói', 'SponsorBlock: %d đoạn', 'SponsorBlock: %d đoạn'],
+    'zh': ['主题', '深色', 'OLED（纯黑）', '强调色', '橙色', '蓝色', '紫色', '绿色',
+           '每行卡片数', '在所选卡片上预览', '关闭', '预览延迟',
+           '时钟', '显示时间和日期', '焦点动画（卡片放大）',
+           '播放器中的视频标题', '顶部', '视频信息上方（靠近进度条）',
+           '全部', '语音搜索', 'SponsorBlock：%d 个片段', 'SponsorBlock：%d 个片段'],
+    'zh-rTW': ['主題', '深色', 'OLED（純黑）', '強調色', '橘色', '藍色', '紫色', '綠色',
+               '每列卡片數', '在所選卡片上預覽', '關閉', '預覽延遲',
+               '時鐘', '顯示時間和日期', '焦點動畫（卡片放大）',
+               '播放器中的影片標題', '頂部', '影片資訊上方（靠近進度列）',
+               '全部', '語音搜尋', 'SponsorBlock：%d 個片段', 'SponsorBlock：%d 個片段'],
+}
+# Same language, legacy/alternative locale codes used by SmartTube
+ALIASES = {'iw': 'he', 'mo': 'ro'}
+
+
+def esc(text):
+    return (text.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
+            .replace("'", "\\'").replace('"', '\\"'))
+
+
+def write(path, body):
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    with open(path, 'w', encoding='utf-8') as f:
+        f.write('<?xml version="1.0" encoding="utf-8"?>\n'
+                '<!-- NovaTV: generated by tools/novatv/gen_strings.py, edit the tables there -->\n'
+                '<resources>\n' + body + '</resources>\n')
+
+
+def main():
+    n = len(COMMON_KEYS) + len(APP_KEYS)
+    for lang, values in list(T.items()) + [(a, T[b]) for a, b in ALIASES.items()]:
+        assert len(values) == n, (lang, len(values))
+        suffix = '' if lang == 'en' else '-' + lang
+
+        common = ''
+        if lang == 'en':
+            common += '    <string name="novatv_settings">NovaTV</string>\n'
+        for key, value in zip(COMMON_KEYS, values):
+            common += '    <string name="%s">%s</string>\n' % (key, esc(value))
+        if lang == 'en':
+            common += '    <string name="novatv_seconds">%s s</string>\n'
+        write(os.path.join(COMMON, 'values' + suffix, 'novatv_strings.xml'), common)
+
+        chip_all, voice, sb_one, sb_other = values[len(COMMON_KEYS):]
+        app = ('    <string name="novatv_chip_all">%s</string>\n' % esc(chip_all) +
+               '    <string name="novatv_voice_search">%s</string>\n' % esc(voice) +
+               '    <plurals name="novatv_sponsorblock_segments">\n'
+               '        <item quantity="one">%s</item>\n'
+               '        <item quantity="other">%s</item>\n'
+               '    </plurals>\n' % (esc(sb_one), esc(sb_other)))
+        write(os.path.join(APP, 'values' + suffix, 'novatv_strings.xml'), app)
+
+    print('languages:', len(T) + len(ALIASES))
+
+
+if __name__ == '__main__':
+    main()

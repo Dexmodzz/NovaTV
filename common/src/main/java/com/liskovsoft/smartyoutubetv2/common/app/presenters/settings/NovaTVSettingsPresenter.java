@@ -17,6 +17,7 @@ import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData.ColorScheme;
 import com.liskovsoft.smartyoutubetv2.common.prefs.NovaTVData;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -147,7 +148,7 @@ public class NovaTVSettingsPresenter extends BasePresenter<Void> {
         List<OptionItem> options = new ArrayList<>();
 
         for (int delayMs : PREVIEW_DELAYS_MS) {
-            String seconds = delayMs % 1_000 == 0 ? String.valueOf(delayMs / 1_000) : String.valueOf(delayMs / 1_000f).replace('.', ',');
+            String seconds = NumberFormat.getNumberInstance().format(delayMs / 1_000f); // device locale: "0.5" or "0,5"
             options.add(UiOptionItem.from(getContext().getString(R.string.novatv_seconds, seconds),
                     option -> mNovaTVData.setPreviewDelayMs(delayMs),
                     mNovaTVData.getPreviewDelayMs() == delayMs));
