@@ -52,13 +52,17 @@
         app:searchOrbIconColor="@color/orb_icon_color" />
 
     <!-- NOTE: You need to create different icon sizes to overcome icon oversize bug -->
+    <!-- NovaTV: right next to the pill and as tall as it (orb 52dp scaled to 44dp; the global orb size
+         is left alone, so the home avatar keeps its size) -->
     <androidx.leanback.widget.SearchOrbView
         android:id="@+id/search_settings_orb"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_marginEnd="@dimen/nova_search_screen_end_margin"
-        android:layout_alignParentEnd="true"
+        android:layout_toEndOf="@+id/lb_search_bar_items"
+        android:layout_marginStart="@dimen/nova_search_screen_settings_margin"
+        android:scaleX="@dimen/nova_search_screen_settings_scale"
+        android:scaleY="@dimen/nova_search_screen_settings_scale"
         android:focusable="true"
         android:focusableInTouchMode="false"
         app:searchOrbIcon="@drawable/search_bar_settings_orb"

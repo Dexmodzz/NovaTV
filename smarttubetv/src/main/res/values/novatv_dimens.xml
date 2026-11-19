@@ -50,7 +50,9 @@
     <dimen name="nova_search_screen_pill_height">@dimen/nova_search_pill_height</dimen>
     <dimen name="nova_search_screen_logo_margin">56dp</dimen>
     <dimen name="nova_search_screen_pill_margin">17dp</dimen>
-    <dimen name="nova_search_screen_end_margin">56dp</dimen>
+    <!-- Settings button next to the pill: 17dp visible gap minus the 4dp lost by scaling 52dp to 44dp -->
+    <dimen name="nova_search_screen_settings_margin">13dp</dimen>
+    <item name="nova_search_screen_settings_scale" format="float" type="dimen">0.846</item>
     <!-- Bar centred where the home header items are (Leanback default 27dp) -->
     <dimen name="lb_search_bar_padding_top">14dp</dimen>
     <!-- Voice orb fits inside the pill, also when zoomed on focus (Leanback default 52dp) -->
