@@ -99,7 +99,7 @@ git grep -n "NovaTV" -- ':!README.md'
 | `tv/ui/browse/NovaSections.java` | Split of sections between menu and chips. Chips are disabled (`CHIPS_ENABLED = false`): every section is in the side menu. |
 | `tv/ui/playback/other/NovaPlayerHeader.java` | Player top header (title/channel and clock), with an interruptible fade together with the controls. |
 | `tv/ui/playback/other/NovaPlayerTitle.java` | Fills title + avatar + "channel · subscribers" in the top header (together with the views · date · likes line) or in the block above the video info, depending on the setting. |
-| `tv/util/NovaAvatars.java` | Real channel avatars on cards and in the player: cached per channel, at most 2 requests at a time, only for visible cards. |
+| `tv/util/NovaAvatars.java` | Real channel avatars on cards and in the player. Sources, fastest first: the cache saved on the device (`novatv_avatars_v2`), the subscriptions list, channel cards on screen (e.g. the channel in search results, reused for its videos and playlists), then the video metadata (at most 4 requests at a time, only for visible cards). Cached by channel id and by channel name. |
 | `tv/util/NovaInitialDrawable.java` | Colored circle with the channel initial, shown until the avatar is loaded. |
 
 **`smarttubetv` module – resources**

@@ -138,6 +138,8 @@ public class VideoCardPresenter extends LongClickPresenter {
         cardView.setContentText(formatContent(video.getSecondTitle()));
         if (cardView.getAvatarView() != null) {
             NovaAvatars.bind(cardView.getAvatarView(), video);
+        } else {
+            NovaAvatars.onItemBound(video); // NovaTV: e.g. a channel card: its avatar is reused for its videos
         }
         // Count progress that very close to zero. E.g. when user closed video immediately.
         cardView.setProgress(video.percentWatched > 0 && video.percentWatched < 1 ? 1 : Math.round(video.percentWatched));
