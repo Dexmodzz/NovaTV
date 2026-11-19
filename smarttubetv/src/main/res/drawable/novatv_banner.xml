@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- NovaTV: TV launcher banner (16:9). The header logo itself (@mipmap/novatv_logo, 1087x300) centred on the
+     app background, insets keep its aspect ratio (272 x 75dp), so launchers don't stretch it. -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="@color/nova_bg"/>
+            <size android:width="320dp" android:height="180dp"/>
+        </shape>
+    </item>
+    <item android:left="24dp" android:right="24dp" android:top="52.5dp" android:bottom="52.5dp">
+        <bitmap android:src="@mipmap/novatv_logo" android:gravity="fill" android:filter="true" android:antialias="true"/>
+    </item>
+</layer-list>
