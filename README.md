@@ -272,7 +272,7 @@ Files where a conflict is possible, and how to solve it:
 | `NavigateTitleView.java`, `BrowseFragment.java`, `PlaybackFragment.java`, `ControlBar.java`, `SearchSupportFragment.java` | Keep upstream's changes and put the `NovaTV` blocks back. |
 | `MainUIData.java` (color schemes) | If upstream adds a scheme, add it at the end pointing to `App.Theme.Nova.Dark` or `.Oled`, without changing the order of the others (the saved index must stay valid). |
 | `build.gradle` | Keep upstream's news (version, dependencies) and the NovaTV changes: `app.novatv*` applicationId, `NovaTV` APK name, Firebase condition, fallback signing (`signingConfigs.debug`). |
-| `README.md` | Keep the NovaTV version: `git checkout --ours README.md`. |
+| `README.md`, `PRIVACY.md`, `LICENSE` | Keep the NovaTV version: `git checkout --ours <file>` (the LICENSE already keeps the original copyright notice). |
 | `.png` icons/banners, `strings.xml` (`app_name`) | Keep the NovaTV version: `git checkout --ours <file>`. |
 | `leanback-1.0.0/.../GridLayoutManager.java` | Look for `MOD: NovaTV` (two spots in `onInterceptFocusSearch`) and reapply the change. |
 | New upstream locale (`values-xx`) | Add the language to `tools/novatv/gen_strings.py` and run it, otherwise NovaTV texts show in English there. |
