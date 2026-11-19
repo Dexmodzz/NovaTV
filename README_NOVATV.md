@@ -1,271 +1,295 @@
 # NovaTV
 
-NovaTV è un fork di [SmartTube](https://github.com/yuliskov/SmartTube) con una nuova interfaccia scura e moderna
-per Android TV. **Cambia solo la grafica**: API, riproduzione, blocco pubblicità e SponsorBlock sono quelli di
-SmartTube, e i sottomoduli `MediaServiceCore` e `SharedModules` **non sono stati toccati**.
+NovaTV is a fork of [SmartTube](https://github.com/yuliskov/SmartTube) with a new, modern dark interface for
+Android TV. **Only the look changes**: APIs, playback, ad blocking and SponsorBlock are SmartTube's, and the
+`MediaServiceCore` and `SharedModules` submodules are **untouched**.
 
-- Pacchetto: `app.novatv` (beta `app.novatv.beta`, fdroid `app.novatv.fdroid`): si installa accanto a SmartTube.
-- Tutte le impostazioni di SmartTube e i loro valori salvati restano validi.
-- Nessun logo, nome, icona o font di YouTube/Google: il font è Inter (licenza SIL OFL, `assets/fonts/INTER_LICENSE.txt`).
-- Tutto il lavoro è sul branch `novatv`; `master` segue upstream.
-
----
-
-## Indice
-
-1. [Compilare e installare](#1-compilare-e-installare)
-2. [Cosa è cambiato, fase per fase](#2-cosa-è-cambiato-fase-per-fase)
-3. [File per file](#3-file-per-file)
-4. [Riallineare il fork con upstream](#4-riallineare-il-fork-con-upstream)
+- Package: `app.novatv` (beta `app.novatv.beta`, fdroid `app.novatv.fdroid`), so it installs side by side with SmartTube.
+- Every SmartTube setting and its saved value stays valid.
+- No YouTube/Google logo, name, icon or font: the font is Inter (SIL OFL, `assets/fonts/INTER_LICENSE.txt`).
+- The UI follows the device language (or the one chosen in Settings → Language/Country), like SmartTube:
+  the NovaTV texts are translated into every language SmartTube supports.
+- All the work is on the `novatv` branch; `master` tracks upstream.
 
 ---
 
-## 1. Compilare e installare
+## Contents
 
-**JDK:** OpenJDK **11–14** (AGP 7.4.2 richiede almeno 11; con JDK più nuovi l'app può crashare).
+1. [Build and install](#1-build-and-install)
+2. [What changed, phase by phase](#2-what-changed-phase-by-phase)
+3. [File by file](#3-file-by-file)
+4. [Translations](#4-translations)
+5. [Realigning the fork with upstream](#5-realigning-the-fork-with-upstream)
+
+---
+
+## 1. Build and install
+
+**JDK:** OpenJDK **11–14** (AGP 7.4.2 needs at least 11; with newer JDKs the app may crash).
 
 ```bash
-git clone --recursive <url-del-fork> && cd SmartTube && git checkout novatv
-# se il clone era già fatto senza --recursive:
+git clone --recursive <fork-url> && cd SmartTube && git checkout novatv
+# if it was cloned without --recursive:
 git submodule update --init --recursive
 
-JAVA_HOME=/percorso/jdk-11 ./gradlew assembleStstableDebug     # build di controllo
-JAVA_HOME=/percorso/jdk-11 ./gradlew assembleStstableRelease   # APK da installare
+JAVA_HOME=/path/to/jdk-11 ./gradlew assembleStstableDebug     # check build
+JAVA_HOME=/path/to/jdk-11 ./gradlew assembleStstableRelease   # APK to install
 ```
 
-APK: `smarttubetv/build/outputs/apk/ststable/release/NovaTV_stable_<versione>_<abi>.apk`
-(per Android TV a 64 bit `arm64-v8a`, altrimenti `armeabi-v7a` o `universal`).
+APK: `smarttubetv/build/outputs/apk/ststable/release/NovaTV_stable_<version>_<abi>.apk`
+(`arm64-v8a` for 64-bit Android TV devices, otherwise `armeabi-v7a` or `universal`).
 
 ```bash
-adb connect <ip-tv>:5555
+adb connect <tv-ip>:5555
 adb install -r smarttubetv/build/outputs/apk/ststable/release/NovaTV_stable_*_arm64-v8a.apk
 ```
 
-> **Installa sempre la build release.** La build debug attiva in `SharedModules` (OkHttpCommons, `BuildConfig.DEBUG`)
-> il profiler di rete e il logger HTTP completo: ogni pezzo di video passa dal log, l'avvio di un video
-> sale a 6–11 s, la memoria si riempie e può comparire "errore sorgente". La release parte in circa 0,6 s.
+> **Always install the release build.** The debug build turns on the network profiler and the full HTTP body
+> logger in `SharedModules` (OkHttpCommons, `BuildConfig.DEBUG`): every chunk of video goes through the log,
+> starting a video takes 6–11 s, memory fills up and a "source error" may appear. The release starts in about 0.6 s.
 >
-> **Firma:** se esiste `keystore.properties` la release usa quella chiave; altrimenti viene firmata con la chiave
-> debug standard di Android. Così la release si compila sempre e si installa sopra una debug senza perdere i dati.
-> Per pubblicare l'app usa una tua chiave (`keystore.properties`), e ricorda che cambiare chiave obbliga a
-> disinstallare.
+> **Signing:** if `keystore.properties` exists, the release uses that key; otherwise it is signed with the
+> standard Android debug key. This way the release always builds and installs over a debug build without
+> losing app data. To publish the app use your own key (`keystore.properties`); changing key later requires
+> uninstalling the app.
 
 ---
 
-## 2. Cosa è cambiato, fase per fase
+## 2. What changed, phase by phase
 
-| Fase | Contenuto |
+| Phase | Content |
 |---|---|
-| **0 – Identità** | Pacchetto `app.novatv*`, nome "NovaTV", APK `NovaTV_*`, icona e banner nuovi, authority di ricerca vocale aggiornate, aggiornamento automatico disattivato (il fork non scarica mai l'APK di SmartTube), Firebase applicato solo se `google-services.json` contiene il pacchetto NovaTV. |
-| **1 – Design token** | Palette (sfondo `#0F0F10`, superfici `#1C1C1F`/`#26262A`, testo `#F1F1F1`/`#AAAAAA`, accenti arancio/blu/viola/verde), raggi, spaziature, scala dei testi; temi `App.Theme.Nova.Dark/Oled`; font Inter su tutte le schermate; gli 8 schemi colore di SmartTube mantengono nome e posizione (l'indice salvato resta valido) ma puntano a Nova Scuro o Nova OLED. |
-| **2 – Header e menu laterale** | Header: logo, barra di ricerca a tutta riga (con microfono), orologio + data, avatar. Menu laterale da 112dp con icona + etichetta. Schermata di ricerca con la stessa barra. Le *chip* delle categorie sono state poi tolte su richiesta: tutte le sezioni sono di nuovo nel menu laterale. |
-| **3 – Schede video e Home** | Schede arrotondate 14dp su superficie scura, anello bianco + zoom 1,05 sul focus, avatar reale del canale accanto al titolo, "canale" e "visualizzazioni · data" su righe separate, barra di avanzamento color accento. Navigazione interrompibile (destra poi giù non si blocca durante lo scorrimento). Riavvio automatico dopo il cambio di scala. |
-| **4 – Player** | Pulsanti tondi (etichetta solo sul focus), Play/Pausa bianco con anello accento, barra più spessa con tempi ai lati, layout centrato, gradienti; header in alto con titolo, avatar, canale · iscritti e orologio; chip "SponsorBlock: N salti"; i pulsanti si fermano ai bordi della riga invece di saltare sulla barra. |
-| **5 – Impostazioni** | Nuova voce **NovaTV** nella griglia delle impostazioni: tema Scuro/OLED, colore d'accento, schede per riga (3–6), anteprima sulla scheda (off/muta/audio) e ritardo, orologio e formato 24h, animazioni di focus, posizione del titolo nel player (in alto / sopra le informazioni). Riquadri impostazioni con anello di focus. |
-| **Dopo** | Logo con "a" leggibile (Inter SemiBold), banner del launcher = logo dell'header, barra di ricerca a tutta riga su ogni schermo, risultati di ricerca subito sotto la barra (che si nasconde solo quando i risultati la coprono). |
+| **0 – Identity** | `app.novatv*` package, "NovaTV" name, `NovaTV_*` APK, new icon and banner, voice search authorities updated, in-app updater disabled (the fork never downloads the SmartTube APK), Firebase applied only when `google-services.json` contains the NovaTV package. |
+| **1 – Design tokens** | Palette (background `#0F0F10`, surfaces `#1C1C1F`/`#26262A`, text `#F1F1F1`/`#AAAAAA`, orange/blue/violet/green accents), radii, spacing, type scale; `App.Theme.Nova.Dark/Oled` themes; Inter font on every screen; SmartTube's 8 color schemes keep name and position (the saved index stays valid) but map to Nova Dark or Nova OLED. |
+| **2 – Header and side menu** | Header: logo, full-width search bar (with mic), clock + date, avatar. 112dp side menu with icon + label. Search screen with the same bar. The category *chips* were later removed on request: every section is back in the side menu. |
+| **3 – Video cards and Home** | 14dp rounded cards on a dark surface, white ring + 1.05 zoom on focus, real channel avatar next to the title, "channel" and "views · date" on separate lines, accent-colored progress bar. Interruptible navigation (right then down no longer gets stuck while a row scrolls). Automatic restart after a scale change. |
+| **4 – Player** | Round buttons (label only on focus), white Play/Pause with accent ring, thicker bar with times on both sides, centered layout, gradients; top header with title, avatar, channel · subscribers and clock; "SponsorBlock: N segments" chip; buttons stop at the row edges instead of jumping to the bar. |
+| **5 – Settings** | New **NovaTV** tile in the settings grid: Dark/OLED theme, accent color, cards per row (3–6), card preview (off/muted/audio) and its delay, clock and 24h format, focus animations, player title position (top / above the video info). Settings tiles get a focus ring. |
+| **After** | Readable logo (Inter SemiBold), launcher banner = header logo, full-width search bar on any screen size, search results right below the bar (which hides only when the results cover it), every NovaTV text translated. |
 
 ---
 
-## 3. File per file
+## 3. File by file
 
-Regola generale: **il codice nuovo sta in file nuovi** (`novatv_*`, `Nova*`); nei file di upstream ci sono solo
-piccoli agganci, sempre marcati con un commento `NovaTV`. Per trovarli tutti:
+General rule: **new code lives in new files** (`novatv_*`, `Nova*`); upstream files only get small hooks,
+always marked with a `NovaTV` comment. To find them all:
 
 ```bash
 git grep -n "NovaTV" -- ':!README_NOVATV.md'
 ```
 
-### 3.1 File nuovi
+### 3.1 New files
 
-**Modulo `common`**
+**`common` module**
 
-| File | Cosa fa |
+| File | Purpose |
 |---|---|
-| `common/.../prefs/NovaTVData.java` | Preferenze aggiunte da NovaTV in un file proprio (`novatv_prefs`): accento, ritardo anteprima, animazioni di focus, posizione titolo player. Applica l'overlay del colore d'accento. |
-| `common/.../presenters/settings/NovaTVSettingsPresenter.java` | Schermata "NovaTV" nelle impostazioni. Dove esiste già un'impostazione di SmartTube (schema colore, scala griglia, anteprima, orologio, 12/24h) scrive quella stessa impostazione. |
-| `common/.../misc/NovaFonts.java` | Applica Inter ai `TextView` creati da layout (factory del `LayoutInflater`), su tutte le versioni di Android. |
-| `common/src/main/res/values*/novatv_strings.xml` | Testi della schermata NovaTV (inglese e italiano). |
-| `common/src/main/res/drawable-nodpi/settings_novatv.png` | Icona (tavolozza) della voce NovaTV; generata da `tools/novatv/gen_settings_icon.py`. |
+| `common/.../prefs/NovaTVData.java` | Preferences added by NovaTV, in their own file (`novatv_prefs`): accent, preview delay, focus animations, player title position. Applies the accent color overlay. |
+| `common/.../presenters/settings/NovaTVSettingsPresenter.java` | "NovaTV" settings screen. Where a SmartTube setting already exists (color scheme, grid scale, preview, clock, 12/24h) it writes that same setting. |
+| `common/.../misc/NovaFonts.java` | Applies Inter to the `TextView`s inflated from layouts (`LayoutInflater` factory), on every Android version. |
+| `common/src/main/res/values*/novatv_strings.xml` | Texts of the NovaTV screen, one file per language (generated, see [Translations](#4-translations)). |
+| `common/src/main/res/drawable-nodpi/settings_novatv.png` | Icon (palette) of the NovaTV tile; generated by `tools/novatv/gen_settings_icon.py`. |
 
-**Modulo `smarttubetv` – Java**
+**`smarttubetv` module – Java**
 
-| File | Cosa fa |
+| File | Purpose |
 |---|---|
-| `tv/ui/browse/NovaSections.java` | Divisione sezioni menu/chip. Chip disattivate (`CHIPS_ENABLED = false`): tutte le sezioni stanno nel menu laterale. |
-| `tv/ui/playback/other/NovaPlayerHeader.java` | Header in alto nel player (titolo/canale e orologio), con dissolvenza interrompibile insieme ai controlli. |
-| `tv/ui/playback/other/NovaPlayerTitle.java` | Riempie titolo + avatar + "canale · iscritti" nell'header in alto o nel blocco sopra le informazioni, secondo l'impostazione. |
-| `tv/util/NovaAvatars.java` | Avatar reali dei canali sulle schede e nel player: cache per canale, al massimo 2 richieste alla volta, solo per le schede visibili. |
-| `tv/util/NovaInitialDrawable.java` | Cerchio colorato con l'iniziale del canale, mostrato finché l'avatar non è caricato. |
+| `tv/ui/browse/NovaSections.java` | Split of sections between menu and chips. Chips are disabled (`CHIPS_ENABLED = false`): every section is in the side menu. |
+| `tv/ui/playback/other/NovaPlayerHeader.java` | Player top header (title/channel and clock), with an interruptible fade together with the controls. |
+| `tv/ui/playback/other/NovaPlayerTitle.java` | Fills title + avatar + "channel · subscribers" in the top header or in the block above the video info, depending on the setting. |
+| `tv/util/NovaAvatars.java` | Real channel avatars on cards and in the player: cached per channel, at most 2 requests at a time, only for visible cards. |
+| `tv/util/NovaInitialDrawable.java` | Colored circle with the channel initial, shown until the avatar is loaded. |
 
-**Modulo `smarttubetv` – risorse**
+**`smarttubetv` module – resources**
 
-| File | Cosa fa |
+| File | Purpose |
 |---|---|
-| `res/values/novatv_colors.xml` | Palette e override dei colori `lb_*` di Leanback. |
-| `res/values/novatv_dimens.xml` | Raggi, spaziature, testi, misure di header, menu, player, barra di ricerca; override di alcune dimensioni Leanback (`lb_*`). |
-| `res/values/novatv_themes.xml` | Temi `App.Theme.Nova.*`, attributi `novaAccent`/`novaChipBg`/`novaPlayBg`, overlay `NovaAccent.Orange/Blue/Violet/Green`. |
-| `res/values*/novatv_strings.xml` | Testi dell'interfaccia (es. "SponsorBlock: %d salti"). |
-| `res/drawable/novatv_*.xml` | Sfondi: scheda, anello di focus, pill, barra di ricerca, pulsanti del player, chip, menu laterale, barre di avanzamento per ogni accento, banner del launcher (`novatv_banner.xml`). |
-| `res/color/novatv_*.xml` | Colori del testo di pill e chip per stato. |
-| `res/layout/lb_control_button_secondary.xml` | Pulsante del player a forma di pill con etichetta (sovrascrive quello di Leanback). |
-| `res/layout/novatv_player_title_block.xml` | Blocco titolo/canale sopra la riga delle informazioni. |
-| `res/mipmap-nodpi/novatv_logo.png` | Logo dell'header, usato anche come banner e `android:logo`. |
-| `assets/fonts/inter_*.ttf` + `INTER_LICENSE.txt` | Font Inter (OFL). |
+| `res/values/novatv_colors.xml` | Palette and overrides of the Leanback `lb_*` colors. |
+| `res/values/novatv_dimens.xml` | Radii, spacing, text sizes, header/menu/player/search bar sizes; overrides of a few Leanback (`lb_*`) dimensions. |
+| `res/values/novatv_themes.xml` | `App.Theme.Nova.*` themes, `novaAccent`/`novaChipBg`/`novaPlayBg` attributes, `NovaAccent.Orange/Blue/Violet/Green` overlays. |
+| `res/values*/novatv_strings.xml` | UI texts (e.g. "SponsorBlock: %d segments"), one file per language (generated). |
+| `res/drawable/novatv_*.xml` | Backgrounds: card, focus ring, pill, search bar, player buttons, chips, side menu, progress bars for each accent, launcher banner (`novatv_banner.xml`). |
+| `res/color/novatv_*.xml` | Pill and chip text colors by state. |
+| `res/layout/lb_control_button_secondary.xml` | Pill-shaped player button with a label (overrides the Leanback one). |
+| `res/layout/novatv_player_title_block.xml` | Title/channel block above the video info line. |
+| `res/mipmap-nodpi/novatv_logo.png` | Header logo, also used as banner and `android:logo`. |
+| `assets/fonts/inter_*.ttf` + `INTER_LICENSE.txt` | Inter font (OFL). |
 
-**Strumenti** (`tools/novatv/`, servono solo per rigenerare le immagini)
+**Tools** (`tools/novatv/`, only needed to regenerate images and texts)
 
-| File | Cosa fa |
+| File | Purpose |
 |---|---|
-| `gen_icons.py` | Icona dell'app (quadrato arrotondato + triangolo play). |
-| `gen_logo.py` | Logo dell'header con il testo in Inter SemiBold (richiede `pycairo`). |
-| `gen_settings_icon.py` | Icona della voce NovaTV nelle impostazioni. |
+| `gen_icons.py` | App icon (rounded square + play triangle). |
+| `gen_logo.py` | Header logo with the wordmark in Inter SemiBold (needs `pycairo`). |
+| `gen_settings_icon.py` | Icon of the NovaTV settings tile. |
+| `gen_strings.py` | Translations of all the NovaTV texts; writes every `novatv_strings.xml`. |
 
-### 3.2 File di upstream modificati
+### 3.2 Modified upstream files
 
-**Build e identità**
+**Build and identity**
 
-| File | Modifica |
+| File | Change |
 |---|---|
-| `smarttubetv/build.gradle` | `applicationId` → `app.novatv*`, nome APK `NovaTV`, Firebase solo se configurato per NovaTV, release firmata con la chiave debug se manca `keystore.properties`. |
+| `smarttubetv/build.gradle` | `applicationId` → `app.novatv*`, APK name `NovaTV`, Firebase only when configured for NovaTV, release signed with the debug key when `keystore.properties` is missing. |
 | `smarttubetv/src/main/AndroidManifest.xml` | `android:banner` → `@drawable/novatv_banner`, `android:logo` → `@mipmap/novatv_logo`. |
-| `smarttubetv/src/*/res/values/strings.xml` | Nome dell'app. |
-| `leanbackassistant/src/*/res/values/strings.xml`, `.../xml/searchable.xml` | Authority della ricerca vocale con i nuovi pacchetti. |
-| `smarttubetv/src/*/res/mipmap-*/app_icon*.png`, `app_banner.png` | Icona e banner NovaTV. |
-| `common/.../dialogs/AppUpdatePresenter.java` | L'aggiornamento automatico non parte se il pacchetto non è di SmartTube. |
+| `smarttubetv/src/*/res/values/strings.xml` | App name. |
+| `leanbackassistant/src/*/res/values/strings.xml`, `.../xml/searchable.xml` | Voice search authorities with the new packages. |
+| `smarttubetv/src/*/res/mipmap-*/app_icon*.png`, `app_banner.png` | NovaTV icon and banner. |
+| `common/.../dialogs/AppUpdatePresenter.java` | The in-app updater doesn't run when the package isn't a SmartTube one. |
 
-**Temi e impostazioni**
+**Themes and settings**
 
-| File | Modifica |
+| File | Change |
 |---|---|
-| `common/.../prefs/MainUIData.java` | Gli 8 schemi colore puntano ai temi Nova (nomi e ordine invariati). |
-| `common/.../misc/MotherActivity.java` | Applica l'overlay del colore d'accento dopo il tema. |
-| `common/.../misc/AppDataSourceManager.java` | Aggiunge la voce NovaTV alla griglia delle impostazioni. |
-| `common/.../settings/MainUISettingsPresenter.java`, `UIScaleSettingsPresenter.java` | Riavvio automatico dopo il cambio di scala dell'interfaccia o della griglia (senza, la UI restava tagliata oltre 1.3x). |
-| `smarttubetv/.../ui/common/LeanbackActivity.java` | Zoom di focus da `NovaTVData` (animazioni on/off). |
-| `smarttubetv/.../util/ViewUtil.java` | `FOCUS_ZOOM_FACTOR` non più `final`, per poterlo configurare. |
-| `smarttubetv/.../presenter/SettingsCardPresenter.java` | Riquadri delle impostazioni con anello di focus. |
-| `smarttubetv/src/main/res/values/colors.xml`, `dimens.xml` | Pochi valori allineati alla palette e al menu stretto (`lb_browse_rows_margin_start`). |
+| `common/.../prefs/MainUIData.java` | The 8 color schemes map to the Nova themes (names and order unchanged). |
+| `common/.../misc/MotherActivity.java` | Applies the accent color overlay after the theme. |
+| `common/.../misc/AppDataSourceManager.java` | Adds the NovaTV tile to the settings grid. |
+| `common/.../settings/MainUISettingsPresenter.java`, `UIScaleSettingsPresenter.java` | Automatic restart after changing the UI or grid scale (without it the UI stayed cut above 1.3x). |
+| `smarttubetv/.../ui/common/LeanbackActivity.java` | Focus zoom from `NovaTVData` (animations on/off). |
+| `smarttubetv/.../util/ViewUtil.java` | `FOCUS_ZOOM_FACTOR` no longer `final`, so it can be configured. |
+| `smarttubetv/.../presenter/SettingsCardPresenter.java` | Settings tiles with a focus ring. |
+| `smarttubetv/src/main/res/values/colors.xml`, `dimens.xml` | A few values aligned with the palette and the narrow menu (`lb_browse_rows_margin_start`). |
 
-**Header, menu, Home, ricerca**
+**Header, menu, Home, search**
 
-| File | Modifica |
+| File | Change |
 |---|---|
-| `res/layout/lb_title_view.xml` | Header riscritto: logo, barra di ricerca a tutta riga con microfono, orologio/data, avatar. **Tutti gli id originali sono mantenuti.** |
-| `res/layout-ldrtl/lb_title_view.xml` | **Eliminato**: il nuovo layout si specchia da solo per le lingue da destra a sinistra. |
-| `tv/ui/widgets/browse/NavigateTitleView.java` | Barra di ricerca, microfono, navigazione con il telecomando nell'header, pulsante "torna al video" che non occupa spazio quando non serve. |
-| `tv/ui/browse/BrowseFragment.java` | Selezione delle sezioni, header nascosto quando il menu si apre sopra righe scorse. |
-| `tv/presenter/IconHeaderItemPresenter.java`, `res/layout/icon_header_item.xml` | Voci del menu laterale (icona sopra, etichetta sotto, selezione arrotondata). |
-| `tv/presenter/VideoCardPresenter.java`, `ShortsCardPresenter.java` | Schede arrotondate, avatar del canale. |
-| `tv/ui/widgets/complexcardview/ComplexImageCardView.java` | Riga avatar + canale, sottotitolo su due righe. |
-| `tv/ui/widgets/complexcardview/ComplexImageView.java` | Ritardo dell'anteprima da `NovaTVData`. |
-| `res/layout/lb_search_bar.xml`, `res/drawable/rounded_search_bg.xml` | Barra della schermata di ricerca uguale a quella della Home (id originali mantenuti). |
-| `tv/ui/mod/leanback/search/SearchSupportFragment.java` | Risultati subito sotto la barra; barra nascosta solo quando i risultati la coprono. |
-| `tv/presenter/ChannelHeaderPresenter.java` | Nella pagina canale la barra di ricerca non mostra il logo. |
+| `res/layout/lb_title_view.xml` | Header rewritten: logo, full-width search bar with mic, clock/date, avatar. **All original ids are kept.** |
+| `res/layout-ldrtl/lb_title_view.xml` | **Deleted**: the new layout mirrors itself for right-to-left languages. |
+| `tv/ui/widgets/browse/NavigateTitleView.java` | Search bar, mic, remote control navigation in the header, "back to video" button that takes no space when not needed. |
+| `tv/ui/browse/BrowseFragment.java` | Section selection, header hidden when the menu opens over scrolled rows. |
+| `tv/presenter/IconHeaderItemPresenter.java`, `res/layout/icon_header_item.xml` | Side menu items (icon above, label below, rounded selection). |
+| `tv/presenter/VideoCardPresenter.java`, `ShortsCardPresenter.java` | Rounded cards, channel avatar. |
+| `tv/ui/widgets/complexcardview/ComplexImageCardView.java` | Avatar + channel row, two-line subtitle. |
+| `tv/ui/widgets/complexcardview/ComplexImageView.java` | Preview delay from `NovaTVData`. |
+| `res/layout/lb_search_bar.xml`, `res/drawable/rounded_search_bg.xml` | Search screen bar identical to the Home one (original ids kept). |
+| `tv/ui/mod/leanback/search/SearchSupportFragment.java` | Results right below the bar; the bar hides only when the results cover it. |
+| `tv/presenter/ChannelHeaderPresenter.java` | No app logo in the channel page search bar. |
 
 **Player**
 
-| File | Modifica |
+| File | Change |
 |---|---|
-| `res/layout/lb_playback_fragment.xml` | Header in alto (titolo, avatar, canale · iscritti, orologio). |
-| `res/layout/lb_playback_transport_controls_row.xml` | Layout centrato, tempi ai lati della barra, tempo rimanente in alto a destra, chip SponsorBlock. |
-| `res/drawable/player_background_controls.xml`, `player_background_suggestions.xml` | Gradienti. |
-| `tv/ui/playback/PlaybackFragment.java` | Mostra/nasconde l'header in alto insieme ai controlli; riga informazioni più corta (canale e iscritti stanno nel titolo). |
-| `tv/ui/mod/leanback/playerglue/tweaks/MaxControlsVideoPlayerGlue.java` | Aggancio di `NovaPlayerTitle`, testi centrati. |
-| `.../tweaks/PlaybackTransportRowPresenter.java` | Chip SponsorBlock (conta i segmenti, esclusi i capitoli). |
-| `.../tweaks/ControlBar.java` | Spazio minimo tra i pulsanti, sinistra/destra un pulsante alla volta con stop ai bordi, rimossa la `LayoutTransition` che faceva perdere il focus. |
-| `.../tooltips/ControlButtonPresenterSelector.java` | Etichetta del pulsante visibile solo sul focus, Play/Pausa bianco più grande. |
-| `tv/ui/mod/leanback/misc/SeekBar.java` | Colori della barra (traccia e buffer). |
+| `res/layout/lb_playback_fragment.xml` | Top header (title, avatar, channel · subscribers, clock). |
+| `res/layout/lb_playback_transport_controls_row.xml` | Centered layout, times on both sides of the bar, remaining time top right, SponsorBlock chip. |
+| `res/drawable/player_background_controls.xml`, `player_background_suggestions.xml` | Gradients. |
+| `tv/ui/playback/PlaybackFragment.java` | Shows/hides the top header together with the controls; shorter info line (channel and subscribers are in the title). |
+| `tv/ui/mod/leanback/playerglue/tweaks/MaxControlsVideoPlayerGlue.java` | `NovaPlayerTitle` hook, centered texts. |
+| `.../tweaks/PlaybackTransportRowPresenter.java` | SponsorBlock chip (counts the segments, chapters excluded). |
+| `.../tweaks/ControlBar.java` | Minimum gap between buttons, left/right move one button at a time and stop at the edges, removed the `LayoutTransition` that made buttons lose focus. |
+| `.../tooltips/ControlButtonPresenterSelector.java` | Button label visible only on focus, bigger white Play/Pause. |
+| `tv/ui/mod/leanback/misc/SeekBar.java` | Bar colors (track and buffer). |
 
-**Libreria Leanback inclusa nel repo**
+**Leanback library included in the repo**
 
-| File | Modifica |
+| File | Change |
 |---|---|
-| `leanback-1.0.0/.../widget/GridLayoutManager.java` | Un'unica modifica (due punti marcati `MOD: NovaTV`): in `onInterceptFocusSearch` i tasti che cambiano riga non vengono più scartati mentre la riga scorre (navigazione interrompibile). |
+| `leanback-1.0.0/.../widget/GridLayoutManager.java` | One change (two spots marked `MOD: NovaTV`): in `onInterceptFocusSearch` the keys that change row are no longer dropped while the row is scrolling (interruptible navigation). |
 
-**Non toccati:** `MediaServiceCore/`, `SharedModules/` (sottomoduli: API, blocco pubblicità, SponsorBlock).
+**Untouched:** `MediaServiceCore/`, `SharedModules/` (submodules: APIs, ad blocking, SponsorBlock).
 
 ---
 
-## 4. Riallineare il fork con upstream
+## 4. Translations
 
-Il modello è semplice: `master` = copia esatta di upstream, `novatv` = master + le modifiche NovaTV.
-Si aggiorna sempre prima `master`, poi si fa il merge di `master` in `novatv`.
+The app picks its language like SmartTube: the device language, unless another one is chosen in
+Settings → Language/Country. SmartTube's own texts come from upstream; the NovaTV texts (the NovaTV settings
+screen, SponsorBlock chip, voice search label) are translated into all the languages SmartTube supports
+(47 locales, plus the `iw`/`mo` aliases of Hebrew and Romanian). English is the fallback.
 
-### 4.1 Una volta sola
+The `novatv_strings.xml` files are **generated**: edit the tables in `tools/novatv/gen_strings.py` and run
 
 ```bash
-# Se "origin" è il tuo fork su GitHub, aggiungi il repo originale come "upstream"
+python3 tools/novatv/gen_strings.py
+```
+
+To add a NovaTV text: add the key to `COMMON_KEYS` (settings, `common` module) or `APP_KEYS` (UI, `smarttubetv`
+module), add its translation to every language in the table, run the script. Number formats (e.g. "0.5 s" /
+"0,5 s") come from the device locale.
+
+---
+
+## 5. Realigning the fork with upstream
+
+The model is simple: `master` = exact copy of upstream, `novatv` = master + the NovaTV changes.
+Always update `master` first, then merge `master` into `novatv`.
+
+### 5.1 One time only
+
+```bash
+# If "origin" is your fork on GitHub, add the original repo as "upstream"
 git remote add upstream https://github.com/yuliskov/SmartTube.git
 git remote -v
 
-# Git ricorda come hai risolto un conflitto e la volta dopo lo risolve da solo
+# Git remembers how you resolved a conflict and resolves it by itself next time
 git config rerere.enabled true
 
-# Non toccare i fine riga: molti file Java di SmartTube sono CRLF
+# Don't touch line endings: many SmartTube Java files are CRLF
 git config core.autocrlf false
 ```
 
-(Se `origin` punta già a `yuliskov/SmartTube`, nei comandi qui sotto usa `origin` al posto di `upstream`.)
+(If `origin` already points to `yuliskov/SmartTube`, use `origin` instead of `upstream` below.)
 
-### 4.2 Ogni aggiornamento
+### 5.2 Every update
 
 ```bash
 git fetch upstream
 
-# 1) master = upstream (solo fast-forward: master non contiene modifiche nostre)
+# 1) master = upstream (fast-forward only: master holds none of our changes)
 git checkout master
 git merge --ff-only upstream/master
 
-# 2) porta le novità in novatv
+# 2) bring the news into novatv
 git checkout novatv
 git merge master
 
-# 3) sottomoduli alla versione indicata da upstream (non vanno modificati)
+# 3) submodules at the version upstream points to (never modify them)
 git submodule update --init --recursive
 
-# 4) controllo
-JAVA_HOME=/percorso/jdk-11 ./gradlew assembleStstableDebug assembleStstableRelease
+# 4) check
+JAVA_HOME=/path/to/jdk-11 ./gradlew assembleStstableDebug assembleStstableRelease
 ```
 
-### 4.3 Perché i conflitti sono rari e dove possono capitare
+### 5.3 Why conflicts are rare and where they can happen
 
-- La maggior parte del lavoro è in **file nuovi** (`novatv_*`, `Nova*`): upstream non li conosce, quindi non possono andare in conflitto.
-- I file di upstream modificati hanno quasi sempre **poche righe**, marcate `NovaTV`. Un conflitto lì si risolve tenendo il codice nuovo di upstream e rimettendo il blocco `NovaTV`.
-- Le risorse di Leanback sovrascritte (`lb_*.xml`) sono file dell'app con lo stesso nome di quelli della libreria: un aggiornamento della libreria non le tocca.
+- Most of the work is in **new files** (`novatv_*`, `Nova*`): upstream doesn't know them, so they can't conflict.
+- Modified upstream files almost always have **few lines**, marked `NovaTV`. A conflict there is solved by keeping upstream's new code and putting the `NovaTV` block back.
+- Overridden Leanback resources (`lb_*.xml`) are app files with the same name as the library ones: a library update doesn't touch them.
 
-File in cui un conflitto è possibile, e come risolverlo:
+Files where a conflict is possible, and how to solve it:
 
-| File | Cosa fare |
+| File | What to do |
 |---|---|
-| `res/layout/lb_title_view.xml`, `lb_search_bar.xml`, `lb_playback_fragment.xml`, `lb_playback_transport_controls_row.xml` | Sono riscritti. Tieni la versione NovaTV (`git checkout --ours <file>`) e aggiungi a mano gli eventuali **nuovi id** introdotti da upstream (il codice Java li cerca per id). |
-| `res/layout-ldrtl/lb_title_view.xml` | Se upstream lo modifica avrai un conflitto "modificato/eliminato": lascialo eliminato (`git rm <file>`). |
-| `NavigateTitleView.java`, `BrowseFragment.java`, `PlaybackFragment.java`, `ControlBar.java`, `SearchSupportFragment.java` | Tieni le modifiche di upstream e reinserisci i blocchi `NovaTV`. |
-| `MainUIData.java` (schemi colore) | Se upstream aggiunge uno schema, aggiungilo in fondo puntandolo a `App.Theme.Nova.Dark` o `.Oled`, senza cambiare l'ordine degli altri (l'indice salvato deve restare valido). |
-| `build.gradle` | Tieni le novità di upstream (versione, dipendenze) e le modifiche NovaTV: applicationId `app.novatv*`, nome APK `NovaTV`, condizione Firebase, firma di riserva (`signingConfigs.debug`). |
-| Icone/banner `.png`, `strings.xml` (`app_name`) | Tieni la versione NovaTV: `git checkout --ours <file>`. |
-| `leanback-1.0.0/.../GridLayoutManager.java` | Cerca `MOD: NovaTV` (due punti in `onInterceptFocusSearch`) e riapplica la modifica. |
+| `res/layout/lb_title_view.xml`, `lb_search_bar.xml`, `lb_playback_fragment.xml`, `lb_playback_transport_controls_row.xml` | They are rewritten. Keep the NovaTV version (`git checkout --ours <file>`) and add by hand any **new ids** introduced upstream (the Java code looks them up by id). |
+| `res/layout-ldrtl/lb_title_view.xml` | If upstream changes it you get a "modified/deleted" conflict: keep it deleted (`git rm <file>`). |
+| `NavigateTitleView.java`, `BrowseFragment.java`, `PlaybackFragment.java`, `ControlBar.java`, `SearchSupportFragment.java` | Keep upstream's changes and put the `NovaTV` blocks back. |
+| `MainUIData.java` (color schemes) | If upstream adds a scheme, add it at the end pointing to `App.Theme.Nova.Dark` or `.Oled`, without changing the order of the others (the saved index must stay valid). |
+| `build.gradle` | Keep upstream's news (version, dependencies) and the NovaTV changes: `app.novatv*` applicationId, `NovaTV` APK name, Firebase condition, fallback signing (`signingConfigs.debug`). |
+| `.png` icons/banners, `strings.xml` (`app_name`) | Keep the NovaTV version: `git checkout --ours <file>`. |
+| `leanback-1.0.0/.../GridLayoutManager.java` | Look for `MOD: NovaTV` (two spots in `onInterceptFocusSearch`) and reapply the change. |
+| New upstream locale (`values-xx`) | Add the language to `tools/novatv/gen_strings.py` and run it, otherwise NovaTV texts show in English there. |
 
-Durante un merge:
+During a merge:
 
 ```bash
-git status                          # file in conflitto
-git checkout --ours  <file>         # tieni NovaTV
-git checkout --theirs <file>        # tieni upstream
-git add <file> && git commit        # chiudi il merge
-git merge --abort                   # oppure annulla tutto e torna a prima del merge
+git status                          # conflicting files
+git checkout --ours  <file>         # keep NovaTV
+git checkout --theirs <file>        # keep upstream
+git add <file> && git commit        # finish the merge
+git merge --abort                   # or cancel everything and go back to before the merge
 ```
 
-> **File CRLF:** molti file Java (es. `MotherActivity.java`, `AppDataSourceManager.java`, `ViewUtil.java`,
-> `NavigateTitleView.java`, `MaxControlsVideoPlayerGlue.java`) usano fine riga Windows. Modificali con un editor
-> che conserva i fine riga, altrimenti il diff diventa l'intero file e ogni merge successivo va in conflitto.
-> Per controllare: `file <percorso>` deve dire "with CRLF line terminators".
+> **CRLF files:** many Java files (e.g. `MotherActivity.java`, `AppDataSourceManager.java`, `ViewUtil.java`,
+> `NavigateTitleView.java`, `MaxControlsVideoPlayerGlue.java`) use Windows line endings. Edit them with an
+> editor that keeps line endings, otherwise the diff becomes the whole file and every later merge conflicts.
+> To check: `file <path>` must say "with CRLF line terminators".
 
-### 4.4 Dopo l'aggiornamento
+### 5.4 After the update
 
-1. Compila debug e release (vedi sopra).
-2. Installa la release sulla TV e controlla velocemente:
-   - Home: header, menu laterale, schede, avatar;
-   - ricerca: barra e risultati;
-   - player: header in alto, pulsanti, SponsorBlock;
-   - Impostazioni → NovaTV.
-3. Se upstream aggiunge una nuova sezione al menu, controlla che abbia l'icona nel menu laterale (`IconHeaderItemPresenter`).
+1. Build debug and release (see above).
+2. Install the release on the TV and quickly check:
+   - Home: header, side menu, cards, avatars;
+   - search: bar and results;
+   - player: top header, buttons, SponsorBlock;
+   - Settings → NovaTV.
+3. If upstream adds a new section to the menu, check that it has its icon in the side menu (`IconHeaderItemPresenter`).
