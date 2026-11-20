@@ -109,8 +109,9 @@ public class ExoPlayerInitializer {
         // Default values
         int minBufferMs = 30_000;
         int maxBufferMs = 30_000;
-        int bufferForPlaybackMs = 2_500;
-        int bufferForPlaybackAfterRebufferMs = 5_000;
+        // NovaTV: start (and resume after a seek) as soon as 1 sec is buffered, 3 sec after a stall
+        int bufferForPlaybackMs = 1_000;
+        int bufferForPlaybackAfterRebufferMs = 3_000;
 
         switch (mPlayerData.getVideoBufferType()) {
             case PlayerData.BUFFER_HIGHEST:
@@ -130,6 +131,8 @@ public class ExoPlayerInitializer {
             case PlayerData.BUFFER_MEDIUM:
                 //minBufferMs = 30_000;
                 //maxBufferMs = 30_000;
+                // NovaTV: keep the last 15 sec, seeking back a little doesn't load again
+                baseBuilder.setBackBuffer(15_000, true);
                 break;
             case PlayerData.BUFFER_LOW:
                 minBufferMs = 5_000; // LIVE fix
