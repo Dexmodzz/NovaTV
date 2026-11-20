@@ -192,7 +192,9 @@ final class SabrMediaPeriod
     public long getAdjustedSeekPositionUs(long positionUs, SeekParameters seekParameters) {
         for (ChunkSampleStream<SabrChunkSource> sampleStream : sampleStreams) {
             if (sampleStream.primaryTrackType == C.TRACK_TYPE_VIDEO) {
-                return sampleStream.getAdjustedSeekPositionUs(positionUs, seekParameters);
+                long adjustedUs = sampleStream.getAdjustedSeekPositionUs(positionUs, seekParameters);
+                // NovaTV: the segment index isn't known in advance, the buffered segments are
+                return adjustedUs != positionUs ? adjustedUs : sampleStream.getBufferedSyncPositionUs(positionUs, seekParameters);
             }
         }
         return positionUs;

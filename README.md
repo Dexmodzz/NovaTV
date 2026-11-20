@@ -101,6 +101,8 @@ git grep -n "NovaTV" -- ':!README.md'
 | `tv/ui/playback/other/NovaPlayerTitle.java` | Fills title + avatar + "channel · subscribers" in the top header (together with the views · date · likes line) or in the block above the video info, depending on the setting. |
 | `tv/util/NovaAvatars.java` | Real channel avatars on cards and in the player. Sources, fastest first: the cache saved on the device (`novatv_avatars_v3`), the subscriptions list, channel cards on screen (e.g. the channel in search results, reused for its videos and playlists), then the video metadata (at most 4 requests at a time, only for visible cards). Cached by channel id and by channel name. |
 | `tv/util/NovaInitialDrawable.java` | Colored circle with the channel initial, shown until the avatar is loaded. |
+| `tv/util/NovaSpinnerDrawable.java` | Loading spinner: thin white arc on a faint ring, grows and shrinks while turning (pages, player, loading cards). |
+| `tv/ui/playback/other/NovaSeekDispatcher.java` | User seeks (forward/back keys, seek bar) land on the nearest keyframe (max 4 s away), so the video resumes at once instead of decoding up to the exact frame. Other seeks (segment skipping, saved position, remote) stay exact. |
 
 **`smarttubetv` module – resources**
 
@@ -167,6 +169,10 @@ git grep -n "NovaTV" -- ':!README.md'
 | `tv/presenter/VideoCardPresenter.java`, `ShortsCardPresenter.java` | Rounded cards, channel avatar; channel items (`NovaAvatars.isRealChannel`: "UC..." id, playlists excluded) get the round channel style. |
 | `tv/ui/widgets/complexcardview/ComplexImageCardView.java` | Avatar + channel row, two-line subtitle; `setChannelStyle()`: round picture, centered texts, no card background, round focus ring. |
 | `tv/ui/widgets/complexcardview/ComplexImageView.java` | Preview delay from `NovaTVData`. |
+| `tv/ui/mod/leanback/misc/ProgressBarManager.java`, `LoadingCardView.java`, `PreviewCardView.java`, `view_loading_card.xml`, `widget_preview_card.xml` | `NovaSpinnerDrawable` in place of the old spinner. |
+| `common/.../exoplayer/other/ExoPlayerInitializer.java` | Playback starts (and resumes after a seek) with 1 s buffered instead of 2.5 s, 3 s after a stall instead of 5 s; the "medium" buffer keeps the last 15 s, so seeking back a little doesn't load again. Buffer sizes chosen in the settings are unchanged. |
+| `PlaybackFragment.java` | `NovaSeekDispatcher` on the player adapter. |
+| `exoplayer-amzn-2.10.6/.../chunk/ChunkSampleStream.java`, `.../sabr/SabrMediaPeriod.java` | `getBufferedSyncPositionUs()`: SABR streams have no segment index, so a non-exact seek snaps to the start of a buffered chunk (always a keyframe). |
 | `res/layout/lb_search_bar.xml`, `res/drawable/rounded_search_bg.xml` | Search screen bar identical to the Home one (original ids kept). |
 | `tv/ui/mod/leanback/search/SearchSupportFragment.java` | Results right below the bar; the bar hides only when the results cover it. |
 | `tv/presenter/ChannelHeaderPresenter.java` | No app logo in the channel page search bar. |
@@ -285,6 +291,7 @@ Files where a conflict is possible, and how to solve it:
 | `build.gradle` | Keep upstream's news (version, dependencies) and the NovaTV changes: `app.novatv*` applicationId, `NovaTV` APK name, Firebase condition, fallback signing (`signingConfigs.debug`). |
 | `README.md`, `PRIVACY.md`, `LICENSE` | Keep the NovaTV version: `git checkout --ours <file>` (the LICENSE already keeps the original copyright notice). |
 | `.png` icons/banners, `strings.xml` (`app_name`) | Keep the NovaTV version: `git checkout --ours <file>`. |
+| `ExoPlayerInitializer.java`, `exoplayer-amzn-2.10.6/.../ChunkSampleStream.java`, `SabrMediaPeriod.java` | Keep upstream's changes and put the `NovaTV` lines back (buffer thresholds, `getBufferedSyncPositionUs`). |
 | `leanback-1.0.0/.../GridLayoutManager.java` | Look for `MOD: NovaTV` (two spots in `onInterceptFocusSearch`) and reapply the change. |
 | New upstream locale (`values-xx`) | Add the language to `tools/novatv/gen_strings.py` and run it, otherwise NovaTV texts show in English there. |
 

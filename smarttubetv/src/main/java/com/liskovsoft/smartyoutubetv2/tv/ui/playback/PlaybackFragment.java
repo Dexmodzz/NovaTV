@@ -79,6 +79,7 @@ import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.misc.ProgressBarManager
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.tweaks.PlaybackTransportRowPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.mod.SeekModePlaybackFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.mod.surface.SurfacePlaybackFragmentGlueHost;
+import com.liskovsoft.smartyoutubetv2.tv.ui.playback.other.NovaSeekDispatcher;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.other.BackboneQueueNavigator;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.other.NovaPlayerHeader;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.other.VideoPlayerGlue;
@@ -495,7 +496,8 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     }
 
     private void createPlayerGlue() {
-        PlayerAdapter playerAdapter = new LeanbackPlayerAdapter(getContext(), mPlayer, UPDATE_DELAY_MS); // NOTE: possible context memory leak
+        LeanbackPlayerAdapter playerAdapter = new LeanbackPlayerAdapter(getContext(), mPlayer, UPDATE_DELAY_MS); // NOTE: possible context memory leak
+        playerAdapter.setControlDispatcher(new NovaSeekDispatcher()); // NovaTV: user seeks resume at once
 
         OnActionClickedListener playerActionListener = new PlayerActionListener();
         mPlayerGlue = new VideoPlayerGlue(getContext(), playerAdapter, playerActionListener); // NOTE: possible context memory leak

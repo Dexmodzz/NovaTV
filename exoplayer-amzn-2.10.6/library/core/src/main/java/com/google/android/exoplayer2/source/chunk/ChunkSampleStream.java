@@ -273,6 +273,43 @@ public class ChunkSampleStream<T extends ChunkSource> implements SampleStream, S
   }
 
   /**
+   * NovaTV: snaps the seek position to the start of a buffered chunk (chunks start with a keyframe),
+   * when one is within the tolerance of the seek parameters. The player then resumes from the buffer
+   * at once, instead of decoding all the frames from the previous keyframe to the exact position.
+   *
+   * @return the adjusted position or {@code positionUs} when no buffered chunk start is close enough
+   */
+  public long getBufferedSyncPositionUs(long positionUs, SeekParameters seekParameters) {
+    if (SeekParameters.EXACT.equals(seekParameters)) {
+      return positionUs;
+    }
+
+    for (int i = 0; i < mediaChunks.size(); i++) {
+      BaseMediaChunk chunk = mediaChunks.get(i);
+      if (positionUs < chunk.startTimeUs || positionUs >= chunk.endTimeUs) {
+        continue;
+      }
+
+      long bestUs = positionUs;
+      long bestDistanceUs = Long.MAX_VALUE;
+      if (positionUs - chunk.startTimeUs <= seekParameters.toleranceBeforeUs) {
+        bestUs = chunk.startTimeUs;
+        bestDistanceUs = positionUs - chunk.startTimeUs;
+      }
+      if (i + 1 < mediaChunks.size()) {
+        long nextStartUs = mediaChunks.get(i + 1).startTimeUs;
+        long distanceUs = nextStartUs - positionUs;
+        if (distanceUs <= seekParameters.toleranceAfterUs && distanceUs < bestDistanceUs) {
+          bestUs = nextStartUs;
+        }
+      }
+      return bestUs;
+    }
+
+    return positionUs;
+  }
+
+  /**
    * Seeks to the specified position in microseconds.
    *
    * @param positionUs The seek position in microseconds.
