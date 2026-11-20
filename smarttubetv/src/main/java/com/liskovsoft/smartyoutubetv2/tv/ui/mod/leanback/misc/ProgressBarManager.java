@@ -6,12 +6,12 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 
-import androidx.core.content.ContextCompat;
 import androidx.leanback.app.BrowseFragment;
 import androidx.leanback.app.VerticalGridFragment;
 
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.smartyoutubetv2.tv.R;
+import com.liskovsoft.smartyoutubetv2.tv.util.NovaSpinnerDrawable;
 
 /**
  * Manager for showing/hiding progress bar widget. This class lets user specify an initial
@@ -62,15 +62,12 @@ public final class ProgressBarManager {
     };
 
     private static View createProgressBar(ViewGroup rootView, int position) {
-        ProgressBar progressBarView = new ProgressBar(
-                rootView.getContext(), null, android.R.attr.progressBarStyleLarge);
-        progressBarView.setIndeterminate(true);
-        progressBarView.setIndeterminateDrawable(
-                ContextCompat.getDrawable(rootView.getContext(), R.drawable.progress_large_holo));
+        // NovaTV: smaller, modern white spinner
+        ProgressBar progressBarView = new ProgressBar(rootView.getContext());
+        NovaSpinnerDrawable.apply(progressBarView);
+        int size = rootView.getResources().getDimensionPixelSize(R.dimen.nova_spinner_size);
 
-        FrameLayout.LayoutParams progressBarParams = new FrameLayout.LayoutParams(
-                FrameLayout.LayoutParams.WRAP_CONTENT,
-                FrameLayout.LayoutParams.WRAP_CONTENT);
+        FrameLayout.LayoutParams progressBarParams = new FrameLayout.LayoutParams(size, size);
         progressBarParams.gravity = position;
         rootView.addView(progressBarView, progressBarParams);
 

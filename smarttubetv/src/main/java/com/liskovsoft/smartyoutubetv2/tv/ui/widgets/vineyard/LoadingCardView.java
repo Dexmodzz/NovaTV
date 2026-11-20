@@ -7,6 +7,7 @@ import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ProgressBar;
+import com.liskovsoft.smartyoutubetv2.tv.util.NovaSpinnerDrawable;
 
 import androidx.leanback.widget.BaseCardView;
 import com.liskovsoft.smartyoutubetv2.tv.R;
@@ -43,6 +44,7 @@ public class LoadingCardView extends BaseCardView {
                         styleResId, R.styleable.lbImageCardView);
 
         mProgressBar = (ProgressBar) findViewById(R.id.progress_indicator);
+        NovaSpinnerDrawable.apply(mProgressBar); // NovaTV
         cardAttrs.recycle();
     }
 

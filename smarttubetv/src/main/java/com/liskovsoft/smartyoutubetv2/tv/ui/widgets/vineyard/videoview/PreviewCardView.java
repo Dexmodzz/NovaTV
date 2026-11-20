@@ -7,6 +7,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import com.liskovsoft.smartyoutubetv2.tv.R;
+import com.liskovsoft.smartyoutubetv2.tv.util.NovaSpinnerDrawable;
 
 public class PreviewCardView extends FrameLayout {
     FrameLayout mMainContainer;
@@ -44,6 +45,7 @@ public class PreviewCardView extends FrameLayout {
         mImageView = view.findViewById(R.id.main_image);
         mOverlayView = view.findViewById(R.id.view_overlay);
         mProgressCard = view.findViewById(R.id.progress_card);
+        NovaSpinnerDrawable.apply(mProgressCard); // NovaTV
     }
 
     public void setVideoUrl(String videoUrl) {

@@ -29,6 +29,11 @@
     <!-- Focused card zoom 1.05 (Leanback "small" zoom, used by all rows/grids; default 110%) -->
     <item name="lb_focus_zoom_factor_small" type="fraction">105%</item>
 
+    <!-- Loading spinner -->
+    <dimen name="nova_spinner_size">40dp</dimen>
+    <dimen name="nova_spinner_stroke">3.5dp</dimen>
+    <dimen name="nova_spinner_size_small">28dp</dimen>
+
     <!-- Progress -->
     <dimen name="nova_progress_height">4dp</dimen>
 
