@@ -19,8 +19,8 @@ import com.liskovsoft.smartyoutubetv2.common.R;
  */
 public final class NovaUiSounds {
     private static final long MIN_INTERVAL_MS = 55; // holding a direction key repeats fast
-    private static final float FOCUS_VOLUME = 0.55f;
-    private static final float SELECT_VOLUME = 0.6f;
+    private static final float FOCUS_VOLUME = 0.35f;
+    private static final float SELECT_VOLUME = 0.4f;
     private static SoundPool sPool;
     private static int sFocusId;
     private static int sSelectId;
