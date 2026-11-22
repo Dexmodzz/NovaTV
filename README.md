@@ -23,24 +23,47 @@ replaced by grey placeholders: only the NovaTV interface is shown. Everything yo
 cards, channel page, player, settings screen) is what NovaTV changes compared to the original app
 (see [Credits](#6-credits)).
 
-<table>
-<tr>
-<td width="50%"><img src="docs/screenshots/home_en.png" alt="Home"><br><b>Home</b>: logo, full-width search bar with mic, clock and date; rounded cards with the channel avatar, "channel" and "views · date" on separate lines, white focus ring.</td>
-<td width="50%"><img src="docs/screenshots/rail_en.png" alt="Side menu"><br><b>Side menu</b>: a floating, slightly raised panel with your profile picture on top (OK = switch account, long press = account settings) and icon + label sections.</td>
-</tr>
-<tr>
-<td><img src="docs/screenshots/search_en.png" alt="Search"><br><b>Search</b>: the same bar as Home, suggestions as chips, channels as round cards with name and subscribers below, accent-colored watch progress.</td>
-<td><img src="docs/screenshots/channel_en.png" alt="Channel page"><br><b>Channel page</b> like the web: search bar on top, banner, profile picture over its edge, name, @handle · subscribers · videos and a Subscribe / Unsubscribe button that shows the state of your account.</td>
-</tr>
-<tr>
-<td><img src="docs/screenshots/player_en.png" alt="Player"><br><b>Player</b>: title, info line (views · date · likes) and channel at the top, clock on the right, round buttons, white Play/Pause, thicker bar with times on both sides.</td>
-<td><img src="docs/screenshots/shorts_en.png" alt="Shorts"><br><b>Shorts</b>: tall cards that start below the clock and date.</td>
-</tr>
-<tr>
-<td><img src="docs/screenshots/settings_en.png" alt="NovaTV settings"><br><b>Settings</b>: the dedicated NovaTV screen (theme, accent, cards per row, preview, player title, clock, animations, navigation sounds).</td>
-<td></td>
-</tr>
-</table>
+### Home
+
+<img width="100%" src="docs/screenshots/home_en.png" alt="Home">
+
+Logo, full-width search bar with mic, clock and date; rounded cards with the channel avatar, "channel" and "views · date" on separate lines, white focus ring.
+
+### Side menu
+
+<img width="100%" src="docs/screenshots/rail_en.png" alt="Side menu">
+
+A floating, slightly raised panel with your profile picture on top (OK = switch account, long press = account settings) and icon + label sections.
+
+### Search
+
+<img width="100%" src="docs/screenshots/search_en.png" alt="Search">
+
+The same bar as Home, suggestions as chips, channels as round cards with name and subscribers below, accent-colored watch progress.
+
+### Channel page
+
+<img width="100%" src="docs/screenshots/channel_en.png" alt="Channel page">
+
+Like the web: search bar on top, banner, profile picture over its edge, name, @handle · subscribers · videos and a Subscribe / Unsubscribe button that shows the state of your account.
+
+### Player
+
+<img width="100%" src="docs/screenshots/player_en.png" alt="Player">
+
+Title, info line (views · date · likes) and channel at the top, clock on the right, round buttons, white Play/Pause, thicker bar with times on both sides.
+
+### Shorts
+
+<img width="100%" src="docs/screenshots/shorts_en.png" alt="Shorts">
+
+Tall cards that start below the clock and date.
+
+### Settings
+
+<img width="100%" src="docs/screenshots/settings_en.png" alt="NovaTV settings">
+
+The dedicated NovaTV screen (theme, accent, cards per row, preview, player title, clock, animations, navigation sounds).
 
 ---
 
@@ -59,7 +82,7 @@ cards, channel page, player, settings screen) is what NovaTV changes compared to
 
 ## 1. Build and install
 
-**JDK:** OpenJDK **11–14** (AGP 7.4.2 needs at least 11; with newer JDKs the app may crash).
+OpenJDK **11–14** (AGP 7.4.2 needs at least 11; with newer JDKs the app may crash).
 
 ```bash
 git clone --recursive https://github.com/Dexmodzz/NovaTV.git && cd NovaTV
