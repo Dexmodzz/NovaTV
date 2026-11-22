@@ -1,6 +1,6 @@
 # NovaTV
 
-[English](README.md) | **Italiano**
+[🇺🇸 English](README.md) | 🇮🇹 **Italiano**
 
 Un'interfaccia moderna e scura per guardare video su Android TV, pensata per il telecomando.
 
@@ -23,47 +23,24 @@ sono sostituiti da segnaposto grigi: si vede solo l'interfaccia di NovaTV. Tutto
 menu laterale, schede, pagina del canale, player, schermata delle impostazioni) è ciò che NovaTV cambia rispetto
 all'app originale (vedi [Crediti](#6-crediti)).
 
-### Home
-
-<img width="100%" src="docs/screenshots/home_it.png" alt="Home">
-
-Logo, barra di ricerca a tutta larghezza con microfono, orologio e data; schede arrotondate con l'avatar del canale, "canale" e "visualizzazioni · data" su righe separate, contorno bianco sulla selezione.
-
-### Menu laterale
-
-<img width="100%" src="docs/screenshots/rail_it.png" alt="Menu laterale">
-
-Un pannello flottante, leggermente in rilievo, con la tua immagine del profilo in alto (OK = cambia account, pressione lunga = impostazioni account) e sezioni con icona + etichetta.
-
-### Ricerca
-
-<img width="100%" src="docs/screenshots/search_it.png" alt="Ricerca">
-
-La stessa barra della Home, suggerimenti come chip, canali come schede rotonde con nome e iscritti sotto, avanzamento della visione nel colore d'accento.
-
-### Pagina del canale
-
-<img width="100%" src="docs/screenshots/channel_it.png" alt="Pagina del canale">
-
-Come sul web: barra di ricerca in alto, banner, immagine del profilo sul suo bordo, nome, @handle · iscritti · video e un pulsante Iscriviti / Annulla iscrizione che mostra lo stato del tuo account.
-
-### Player
-
-<img width="100%" src="docs/screenshots/player_it.png" alt="Player">
-
-Titolo, riga di informazioni (visualizzazioni · data · mi piace) e canale in alto, orologio a destra, pulsanti rotondi, Play/Pausa bianco, barra più spessa con i tempi ai due lati.
-
-### Video brevi
-
-<img width="100%" src="docs/screenshots/shorts_it.png" alt="Video brevi">
-
-Schede alte che partono sotto l'orologio e la data.
-
-### Impostazioni
-
-<img width="100%" src="docs/screenshots/settings_it.png" alt="Impostazioni NovaTV">
-
-La schermata NovaTV dedicata (tema, accento, schede per riga, anteprima, titolo nel player, orologio, animazioni, suoni di navigazione).
+<table>
+<tr>
+<td width="50%"><img src="docs/screenshots/home_it.png" alt="Home"><br><b>Home</b>: logo, barra di ricerca a tutta larghezza con microfono, orologio e data; schede arrotondate con l'avatar del canale, "canale" e "visualizzazioni · data" su righe separate, contorno bianco sulla selezione.</td>
+<td width="50%"><img src="docs/screenshots/rail_it.png" alt="Menu laterale"><br><b>Menu laterale</b>: un pannello flottante, leggermente in rilievo, con la tua immagine del profilo in alto (OK = cambia account, pressione lunga = impostazioni account) e sezioni con icona + etichetta.</td>
+</tr>
+<tr>
+<td><img src="docs/screenshots/search_it.png" alt="Ricerca"><br><b>Ricerca</b>: la stessa barra della Home, suggerimenti come chip, canali come schede rotonde con nome e iscritti sotto, avanzamento della visione nel colore d'accento.</td>
+<td><img src="docs/screenshots/channel_it.png" alt="Pagina del canale"><br><b>Pagina del canale</b> come sul web: barra di ricerca in alto, banner, immagine del profilo sul suo bordo, nome, @handle · iscritti · video e un pulsante Iscriviti / Annulla iscrizione che mostra lo stato del tuo account.</td>
+</tr>
+<tr>
+<td><img src="docs/screenshots/player_it.png" alt="Player"><br><b>Player</b>: titolo, riga di informazioni (visualizzazioni · data · mi piace) e canale in alto, orologio a destra, pulsanti rotondi, Play/Pausa bianco, barra più spessa con i tempi ai due lati.</td>
+<td><img src="docs/screenshots/shorts_it.png" alt="Video brevi"><br><b>Video brevi</b>: schede alte che partono sotto l'orologio e la data.</td>
+</tr>
+<tr>
+<td><img src="docs/screenshots/settings_it.png" alt="Impostazioni NovaTV"><br><b>Impostazioni</b>: la schermata NovaTV dedicata (tema, accento, schede per riga, anteprima, titolo nel player, orologio, animazioni, suoni di navigazione).</td>
+<td></td>
+</tr>
+</table>
 
 ---
 
@@ -82,7 +59,7 @@ La schermata NovaTV dedicata (tema, accento, schede per riga, anteprima, titolo 
 
 ## 1. Compilare e installare
 
-OpenJDK **11–14** (AGP 7.4.2 richiede almeno la 11; con JDK più recenti l'app può andare in crash).
+**JDK:** OpenJDK **11–14** (AGP 7.4.2 richiede almeno la 11; con JDK più recenti l'app può andare in crash).
 
 ```bash
 git clone --recursive https://github.com/Dexmodzz/NovaTV.git && cd NovaTV
