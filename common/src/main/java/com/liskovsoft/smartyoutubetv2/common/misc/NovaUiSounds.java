@@ -35,6 +35,7 @@ public final class NovaUiSounds {
     private static SoundPool sPool;
     private static int[] sSoundIds;
     private static long sLastPlayMs;
+    private static int sLastStreamId;
 
     private NovaUiSounds() {
     }
@@ -127,7 +128,7 @@ public final class NovaUiSounds {
         }
 
         sPool = new SoundPool.Builder()
-                .setMaxStreams(3)
+                .setMaxStreams(1) // one at a time: overlapping copies would add up and get louder
                 .setAudioAttributes(new AudioAttributes.Builder()
                         .setUsage(AudioAttributes.USAGE_ASSISTANCE_SONIFICATION)
                         .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
@@ -147,6 +148,10 @@ public final class NovaUiSounds {
         }
 
         sLastPlayMs = now;
-        sPool.play(soundId, volume, volume, 1, 0, rate);
+        // Fast scrolling: cut the previous sound, never stack them (stacked sounds get louder)
+        if (sLastStreamId != 0) {
+            sPool.stop(sLastStreamId);
+        }
+        sLastStreamId = sPool.play(soundId, volume, volume, 1, 0, rate);
     }
 }
