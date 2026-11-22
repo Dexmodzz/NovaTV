@@ -19,4 +19,8 @@
     <string name="novatv_player_title_position">عنوان ویدیو در پخش‌کننده</string>
     <string name="novatv_player_title_top">بالا</string>
     <string name="novatv_player_title_above_info">بالای اطلاعات ویدیو (نزدیک نوار)</string>
+    <string name="novatv_ui_sounds">صداهای پیمایش</string>
+    <string name="novatv_ui_sounds_off">خاموش</string>
+    <string name="novatv_ui_sounds_quiet">آرام</string>
+    <string name="novatv_ui_sounds_normal">معمولی</string>
 </resources>

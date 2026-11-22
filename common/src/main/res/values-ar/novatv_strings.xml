@@ -19,4 +19,8 @@
     <string name="novatv_player_title_position">عنوان الفيديو في المشغل</string>
     <string name="novatv_player_title_top">في الأعلى</string>
     <string name="novatv_player_title_above_info">فوق معلومات الفيديو (قرب الشريط)</string>
+    <string name="novatv_ui_sounds">أصوات التنقل</string>
+    <string name="novatv_ui_sounds_off">إيقاف</string>
+    <string name="novatv_ui_sounds_quiet">منخفضة</string>
+    <string name="novatv_ui_sounds_normal">عادية</string>
 </resources>

@@ -19,4 +19,8 @@
     <string name="novatv_player_title_position">Tytuł filmu w odtwarzaczu</string>
     <string name="novatv_player_title_top">Na górze</string>
     <string name="novatv_player_title_above_info">Nad informacjami o filmie (przy pasku)</string>
+    <string name="novatv_ui_sounds">Dźwięki nawigacji</string>
+    <string name="novatv_ui_sounds_off">Wyłączone</string>
+    <string name="novatv_ui_sounds_quiet">Ciche</string>
+    <string name="novatv_ui_sounds_normal">Normalne</string>
 </resources>

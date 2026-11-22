@@ -19,4 +19,8 @@
     <string name="novatv_player_title_position">플레이어의 동영상 제목</string>
     <string name="novatv_player_title_top">위쪽</string>
     <string name="novatv_player_title_above_info">동영상 정보 위(바 근처)</string>
+    <string name="novatv_ui_sounds">탐색 소리</string>
+    <string name="novatv_ui_sounds_off">끄기</string>
+    <string name="novatv_ui_sounds_quiet">작게</string>
+    <string name="novatv_ui_sounds_normal">보통</string>
 </resources>

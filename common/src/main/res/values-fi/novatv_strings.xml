@@ -19,4 +19,8 @@
     <string name="novatv_player_title_position">Videon otsikko soittimessa</string>
     <string name="novatv_player_title_top">Ylhäällä</string>
     <string name="novatv_player_title_above_info">Videon tietojen yläpuolella (palkin lähellä)</string>
+    <string name="novatv_ui_sounds">Navigointiäänet</string>
+    <string name="novatv_ui_sounds_off">Pois</string>
+    <string name="novatv_ui_sounds_quiet">Hiljaiset</string>
+    <string name="novatv_ui_sounds_normal">Normaalit</string>
 </resources>

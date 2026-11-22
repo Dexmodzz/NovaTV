@@ -19,4 +19,8 @@
     <string name="novatv_player_title_position">Videotittel i avspilleren</string>
     <string name="novatv_player_title_top">Øverst</string>
     <string name="novatv_player_title_above_info">Over videoinfo (ved linjen)</string>
+    <string name="novatv_ui_sounds">Navigasjonslyder</string>
+    <string name="novatv_ui_sounds_off">Av</string>
+    <string name="novatv_ui_sounds_quiet">Lave</string>
+    <string name="novatv_ui_sounds_normal">Normale</string>
 </resources>

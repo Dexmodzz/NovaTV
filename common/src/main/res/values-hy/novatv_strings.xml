@@ -19,4 +19,8 @@
     <string name="novatv_player_title_position">Տեսանյութի վերնագիրը նվագարկիչում</string>
     <string name="novatv_player_title_top">Վերևում</string>
     <string name="novatv_player_title_above_info">Տեսանյութի տվյալների վերևում (գծի մոտ)</string>
+    <string name="novatv_ui_sounds">Նավիգացիայի ձայներ</string>
+    <string name="novatv_ui_sounds_off">Անջատված</string>
+    <string name="novatv_ui_sounds_quiet">Ցածր</string>
+    <string name="novatv_ui_sounds_normal">Սովորական</string>
 </resources>

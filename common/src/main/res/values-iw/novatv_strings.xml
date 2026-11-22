@@ -19,4 +19,8 @@
     <string name="novatv_player_title_position">כותרת הסרטון בנגן</string>
     <string name="novatv_player_title_top">למעלה</string>
     <string name="novatv_player_title_above_info">מעל פרטי הסרטון (ליד הסרגל)</string>
+    <string name="novatv_ui_sounds">צלילי ניווט</string>
+    <string name="novatv_ui_sounds_off">כבוי</string>
+    <string name="novatv_ui_sounds_quiet">שקטים</string>
+    <string name="novatv_ui_sounds_normal">רגילים</string>
 </resources>

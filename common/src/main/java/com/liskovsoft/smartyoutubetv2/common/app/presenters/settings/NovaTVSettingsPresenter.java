@@ -11,6 +11,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
+import com.liskovsoft.smartyoutubetv2.common.misc.NovaUiSounds;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData.ColorScheme;
@@ -22,7 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * NovaTV: settings of the reskin (theme, accent, cards per row, preview, clock, animations).<br/>
+ * NovaTV: settings of the reskin (theme, accent, cards per row, preview, clock, animations, sounds).<br/>
  * Wherever an upstream setting already exists, this screen writes that same setting
  * (color scheme, video grid scale, card preview, clock, 12/24h), so the two screens never disagree.
  */
@@ -70,6 +71,7 @@ public class NovaTVSettingsPresenter extends BasePresenter<Void> {
         appendPlayerTitlePosition(settingsPresenter);
         appendClock(settingsPresenter);
         appendAnimations(settingsPresenter);
+        appendUiSounds(settingsPresenter);
 
         settingsPresenter.showDialog(getContext().getString(R.string.novatv_settings), mOnFinish);
     }
@@ -195,6 +197,25 @@ public class NovaTVSettingsPresenter extends BasePresenter<Void> {
             mNovaTVData.setFocusAnimationsEnabled(option.isSelected());
             mRestartApp = true;
         }, mNovaTVData.isFocusAnimationsEnabled()));
+    }
+
+    /**
+     * Navigation sounds: off / quiet / normal. Choosing a level plays it, no restart needed.
+     */
+    private void appendUiSounds(AppDialogPresenter settingsPresenter) {
+        List<OptionItem> options = new ArrayList<>();
+
+        for (int[] pair : new int[][] {
+                {R.string.novatv_ui_sounds_off, NovaTVData.UI_SOUNDS_OFF},
+                {R.string.novatv_ui_sounds_quiet, NovaTVData.UI_SOUNDS_QUIET},
+                {R.string.novatv_ui_sounds_normal, NovaTVData.UI_SOUNDS_NORMAL}}) {
+            options.add(UiOptionItem.from(getContext().getString(pair[0]), option -> {
+                mNovaTVData.setUiSounds(pair[1]);
+                NovaUiSounds.preview(getContext(), pair[1]);
+            }, mNovaTVData.getUiSounds() == pair[1]));
+        }
+
+        settingsPresenter.appendRadioCategory(getContext().getString(R.string.novatv_ui_sounds), options);
     }
 
     // Same formula as GridFragmentHelper.getMaxColsNumFloatInt() (app module)

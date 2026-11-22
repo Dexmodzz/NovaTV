@@ -19,4 +19,8 @@
     <string name="novatv_player_title_position">Videotitel in de speler</string>
     <string name="novatv_player_title_top">Bovenaan</string>
     <string name="novatv_player_title_above_info">Boven de video-info (bij de balk)</string>
+    <string name="novatv_ui_sounds">Navigatiegeluiden</string>
+    <string name="novatv_ui_sounds_off">Uit</string>
+    <string name="novatv_ui_sounds_quiet">Zacht</string>
+    <string name="novatv_ui_sounds_normal">Normaal</string>
 </resources>

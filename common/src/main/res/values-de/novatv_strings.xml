@@ -19,4 +19,8 @@
     <string name="novatv_player_title_position">Videotitel im Player</string>
     <string name="novatv_player_title_top">Oben</string>
     <string name="novatv_player_title_above_info">Über den Videoinfos (an der Leiste)</string>
+    <string name="novatv_ui_sounds">Navigationstöne</string>
+    <string name="novatv_ui_sounds_off">Aus</string>
+    <string name="novatv_ui_sounds_quiet">Leise</string>
+    <string name="novatv_ui_sounds_normal">Normal</string>
 </resources>

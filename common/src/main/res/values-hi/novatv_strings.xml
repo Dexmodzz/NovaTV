@@ -19,4 +19,8 @@
     <string name="novatv_player_title_position">प्लेयर में वीडियो का शीर्षक</string>
     <string name="novatv_player_title_top">ऊपर</string>
     <string name="novatv_player_title_above_info">वीडियो जानकारी के ऊपर (बार के पास)</string>
+    <string name="novatv_ui_sounds">नेविगेशन ध्वनियाँ</string>
+    <string name="novatv_ui_sounds_off">बंद</string>
+    <string name="novatv_ui_sounds_quiet">धीमी</string>
+    <string name="novatv_ui_sounds_normal">सामान्य</string>
 </resources>

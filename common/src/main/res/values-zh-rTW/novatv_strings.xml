@@ -19,4 +19,8 @@
     <string name="novatv_player_title_position">播放器中的影片標題</string>
     <string name="novatv_player_title_top">頂部</string>
     <string name="novatv_player_title_above_info">影片資訊上方（靠近進度列）</string>
+    <string name="novatv_ui_sounds">導覽音效</string>
+    <string name="novatv_ui_sounds_off">關閉</string>
+    <string name="novatv_ui_sounds_quiet">輕柔</string>
+    <string name="novatv_ui_sounds_normal">正常</string>
 </resources>

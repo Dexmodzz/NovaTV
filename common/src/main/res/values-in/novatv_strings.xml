@@ -19,4 +19,8 @@
     <string name="novatv_player_title_position">Judul video di pemutar</string>
     <string name="novatv_player_title_top">Di atas</string>
     <string name="novatv_player_title_above_info">Di atas info video (dekat bilah)</string>
+    <string name="novatv_ui_sounds">Suara navigasi</string>
+    <string name="novatv_ui_sounds_off">Mati</string>
+    <string name="novatv_ui_sounds_quiet">Pelan</string>
+    <string name="novatv_ui_sounds_normal">Normal</string>
 </resources>

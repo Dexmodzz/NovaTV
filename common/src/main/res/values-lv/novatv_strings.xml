@@ -19,4 +19,8 @@
     <string name="novatv_player_title_position">Video nosaukums atskaņotājā</string>
     <string name="novatv_player_title_top">Augšā</string>
     <string name="novatv_player_title_above_info">Virs video informācijas (pie joslas)</string>
+    <string name="novatv_ui_sounds">Navigācijas skaņas</string>
+    <string name="novatv_ui_sounds_off">Izslēgtas</string>
+    <string name="novatv_ui_sounds_quiet">Klusas</string>
+    <string name="novatv_ui_sounds_normal">Parastas</string>
 </resources>

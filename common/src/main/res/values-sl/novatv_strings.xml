@@ -19,4 +19,8 @@
     <string name="novatv_player_title_position">Naslov videoposnetka v predvajalniku</string>
     <string name="novatv_player_title_top">Zgoraj</string>
     <string name="novatv_player_title_above_info">Nad podatki o videoposnetku (ob vrstici)</string>
+    <string name="novatv_ui_sounds">Zvoki navigacije</string>
+    <string name="novatv_ui_sounds_off">Izklopljeni</string>
+    <string name="novatv_ui_sounds_quiet">Tihi</string>
+    <string name="novatv_ui_sounds_normal">Običajni</string>
 </resources>

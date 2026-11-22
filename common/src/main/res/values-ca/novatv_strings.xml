@@ -19,4 +19,8 @@
     <string name="novatv_player_title_position">Títol del vídeo al reproductor</string>
     <string name="novatv_player_title_top">A dalt</string>
     <string name="novatv_player_title_above_info">Sobre la informació del vídeo (prop de la barra)</string>
+    <string name="novatv_ui_sounds">Sons de navegació</string>
+    <string name="novatv_ui_sounds_off">Desactivats</string>
+    <string name="novatv_ui_sounds_quiet">Baixos</string>
+    <string name="novatv_ui_sounds_normal">Normals</string>
 </resources>

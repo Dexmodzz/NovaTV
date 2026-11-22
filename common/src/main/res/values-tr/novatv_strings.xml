@@ -19,4 +19,8 @@
     <string name="novatv_player_title_position">Oynatıcıda video başlığı</string>
     <string name="novatv_player_title_top">Üstte</string>
     <string name="novatv_player_title_above_info">Video bilgilerinin üstünde (çubuğun yanında)</string>
+    <string name="novatv_ui_sounds">Gezinme sesleri</string>
+    <string name="novatv_ui_sounds_off">Kapalı</string>
+    <string name="novatv_ui_sounds_quiet">Kısık</string>
+    <string name="novatv_ui_sounds_normal">Normal</string>
 </resources>

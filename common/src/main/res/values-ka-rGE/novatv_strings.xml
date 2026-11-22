@@ -19,4 +19,8 @@
     <string name="novatv_player_title_position">ვიდეოს სათაური ფლეერში</string>
     <string name="novatv_player_title_top">ზემოთ</string>
     <string name="novatv_player_title_above_info">ვიდეოს ინფორმაციის ზემოთ (ზოლთან)</string>
+    <string name="novatv_ui_sounds">ნავიგაციის ხმები</string>
+    <string name="novatv_ui_sounds_off">გამორთული</string>
+    <string name="novatv_ui_sounds_quiet">ჩუმი</string>
+    <string name="novatv_ui_sounds_normal">ნორმალური</string>
 </resources>

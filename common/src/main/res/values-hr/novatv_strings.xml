@@ -19,4 +19,8 @@
     <string name="novatv_player_title_position">Naslov videozapisa u playeru</string>
     <string name="novatv_player_title_top">Gore</string>
     <string name="novatv_player_title_above_info">Iznad podataka o videozapisu (uz traku)</string>
+    <string name="novatv_ui_sounds">Zvukovi navigacije</string>
+    <string name="novatv_ui_sounds_off">Isključeni</string>
+    <string name="novatv_ui_sounds_quiet">Tihi</string>
+    <string name="novatv_ui_sounds_normal">Normalni</string>
 </resources>

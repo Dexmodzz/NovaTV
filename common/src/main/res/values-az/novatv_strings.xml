@@ -19,4 +19,8 @@
     <string name="novatv_player_title_position">Pleyerdə video başlığı</string>
     <string name="novatv_player_title_top">Yuxarıda</string>
     <string name="novatv_player_title_above_info">Video məlumatının üstündə (zolağın yanında)</string>
+    <string name="novatv_ui_sounds">Naviqasiya səsləri</string>
+    <string name="novatv_ui_sounds_off">Söndürülüb</string>
+    <string name="novatv_ui_sounds_quiet">Zəif</string>
+    <string name="novatv_ui_sounds_normal">Normal</string>
 </resources>

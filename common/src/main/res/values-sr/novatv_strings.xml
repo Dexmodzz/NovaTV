@@ -19,4 +19,8 @@
     <string name="novatv_player_title_position">Наслов видеа у плејеру</string>
     <string name="novatv_player_title_top">Горе</string>
     <string name="novatv_player_title_above_info">Изнад података о видеу (поред траке)</string>
+    <string name="novatv_ui_sounds">Звукови навигације</string>
+    <string name="novatv_ui_sounds_off">Искључени</string>
+    <string name="novatv_ui_sounds_quiet">Тихи</string>
+    <string name="novatv_ui_sounds_normal">Нормални</string>
 </resources>

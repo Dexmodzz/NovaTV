@@ -19,4 +19,8 @@
     <string name="novatv_player_title_position">Video pealkiri pleieris</string>
     <string name="novatv_player_title_top">Üleval</string>
     <string name="novatv_player_title_above_info">Video teabe kohal (riba juures)</string>
+    <string name="novatv_ui_sounds">Navigeerimishelid</string>
+    <string name="novatv_ui_sounds_off">Väljas</string>
+    <string name="novatv_ui_sounds_quiet">Vaiksed</string>
+    <string name="novatv_ui_sounds_normal">Tavalised</string>
 </resources>

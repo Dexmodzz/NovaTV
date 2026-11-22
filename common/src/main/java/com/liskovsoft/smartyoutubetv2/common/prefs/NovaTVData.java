@@ -15,6 +15,7 @@ public final class NovaTVData {
     private static final String KEY_PREVIEW_DELAY_MS = "preview_delay_ms";
     private static final String KEY_FOCUS_ANIMATIONS = "focus_animations";
     private static final String KEY_PLAYER_TITLE_POSITION = "player_title_position";
+    private static final String KEY_UI_SOUNDS = "ui_sounds";
 
     public static final int ACCENT_ORANGE = 0;
     public static final int ACCENT_BLUE = 1;
@@ -29,6 +30,11 @@ public final class NovaTVData {
     public static final int PLAYER_TITLE_TOP = 0;
     /** Player: title + channel right above the views/date/likes line, near the seek bar */
     public static final int PLAYER_TITLE_ABOVE_INFO = 1;
+
+    /** Navigation sounds (NovaUiSounds) */
+    public static final int UI_SOUNDS_OFF = 0;
+    public static final int UI_SOUNDS_QUIET = 1;
+    public static final int UI_SOUNDS_NORMAL = 2;
 
     private static NovaTVData sInstance;
     private final SharedPreferences mPrefs;
@@ -77,6 +83,15 @@ public final class NovaTVData {
 
     public void setPlayerTitlePosition(int position) {
         mPrefs.edit().putInt(KEY_PLAYER_TITLE_POSITION, position).apply();
+    }
+
+    public int getUiSounds() {
+        int level = mPrefs.getInt(KEY_UI_SOUNDS, UI_SOUNDS_NORMAL);
+        return level >= UI_SOUNDS_OFF && level <= UI_SOUNDS_NORMAL ? level : UI_SOUNDS_NORMAL;
+    }
+
+    public void setUiSounds(int level) {
+        mPrefs.edit().putInt(KEY_UI_SOUNDS, level).apply();
     }
 
     /**

@@ -19,4 +19,8 @@
     <string name="novatv_player_title_position">ప్లేయర్‌లో వీడియో శీర్షిక</string>
     <string name="novatv_player_title_top">పైన</string>
     <string name="novatv_player_title_above_info">వీడియో సమాచారం పైన (బార్ దగ్గర)</string>
+    <string name="novatv_ui_sounds">నావిగేషన్ శబ్దాలు</string>
+    <string name="novatv_ui_sounds_off">ఆఫ్</string>
+    <string name="novatv_ui_sounds_quiet">తక్కువ</string>
+    <string name="novatv_ui_sounds_normal">సాధారణం</string>
 </resources>

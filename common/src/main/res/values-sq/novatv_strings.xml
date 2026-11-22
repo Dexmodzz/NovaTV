@@ -19,4 +19,8 @@
     <string name="novatv_player_title_position">Titulli i videos në luajtës</string>
     <string name="novatv_player_title_top">Lart</string>
     <string name="novatv_player_title_above_info">Mbi informacionin e videos (pranë shiritit)</string>
+    <string name="novatv_ui_sounds">Tingujt e navigimit</string>
+    <string name="novatv_ui_sounds_off">Të çaktivizuar</string>
+    <string name="novatv_ui_sounds_quiet">Të ulët</string>
+    <string name="novatv_ui_sounds_normal">Normalë</string>
 </resources>

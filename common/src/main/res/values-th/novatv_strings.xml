@@ -19,4 +19,8 @@
     <string name="novatv_player_title_position">ชื่อวิดีโอในเครื่องเล่น</string>
     <string name="novatv_player_title_top">ด้านบน</string>
     <string name="novatv_player_title_above_info">เหนือข้อมูลวิดีโอ (ใกล้แถบ)</string>
+    <string name="novatv_ui_sounds">เสียงการนำทาง</string>
+    <string name="novatv_ui_sounds_off">ปิด</string>
+    <string name="novatv_ui_sounds_quiet">เบา</string>
+    <string name="novatv_ui_sounds_normal">ปกติ</string>
 </resources>

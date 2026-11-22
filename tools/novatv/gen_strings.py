@@ -306,6 +306,56 @@ CH = {
     'zh': ['订阅', '取消订阅'],
     'zh-rTW': ['訂閱', '取消訂閱'],
 }
+# Settings: navigation sounds [title, off, quiet, normal] (common module)
+SND = {
+    'en': ['Navigation sounds', 'Off', 'Quiet', 'Normal'],
+    'it': ['Suoni di navigazione', 'Disattivati', 'Bassi', 'Normali'],
+    'ar': ['أصوات التنقل', 'إيقاف', 'منخفضة', 'عادية'],
+    'az': ['Naviqasiya səsləri', 'Söndürülüb', 'Zəif', 'Normal'],
+    'bg': ['Звуци при навигация', 'Изключени', 'Тихи', 'Нормални'],
+    'ca': ['Sons de navegació', 'Desactivats', 'Baixos', 'Normals'],
+    'cs': ['Zvuky navigace', 'Vypnuto', 'Tiché', 'Normální'],
+    'da': ['Navigationslyde', 'Fra', 'Lave', 'Normale'],
+    'de': ['Navigationstöne', 'Aus', 'Leise', 'Normal'],
+    'el': ['Ήχοι πλοήγησης', 'Απενεργοποιημένοι', 'Χαμηλοί', 'Κανονικοί'],
+    'es': ['Sonidos de navegación', 'Desactivados', 'Bajos', 'Normales'],
+    'et': ['Navigeerimishelid', 'Väljas', 'Vaiksed', 'Tavalised'],
+    'fa-rIR': ['صداهای پیمایش', 'خاموش', 'آرام', 'معمولی'],
+    'fi': ['Navigointiäänet', 'Pois', 'Hiljaiset', 'Normaalit'],
+    'fr': ['Sons de navigation', 'Désactivés', 'Faibles', 'Normaux'],
+    'gl-rES': ['Sons de navegación', 'Desactivados', 'Baixos', 'Normais'],
+    'he': ['צלילי ניווט', 'כבוי', 'שקטים', 'רגילים'],
+    'hi': ['नेविगेशन ध्वनियाँ', 'बंद', 'धीमी', 'सामान्य'],
+    'hr': ['Zvukovi navigacije', 'Isključeni', 'Tihi', 'Normalni'],
+    'hu': ['Navigációs hangok', 'Ki', 'Halk', 'Normál'],
+    'hy': ['Նավիգացիայի ձայներ', 'Անջատված', 'Ցածր', 'Սովորական'],
+    'in': ['Suara navigasi', 'Mati', 'Pelan', 'Normal'],
+    'ja': ['操作音', 'オフ', '小さめ', '標準'],
+    'ka-rGE': ['ნავიგაციის ხმები', 'გამორთული', 'ჩუმი', 'ნორმალური'],
+    'ko': ['탐색 소리', '끄기', '작게', '보통'],
+    'lt': ['Naršymo garsai', 'Išjungti', 'Tylūs', 'Įprasti'],
+    'lv': ['Navigācijas skaņas', 'Izslēgtas', 'Klusas', 'Parastas'],
+    'ms': ['Bunyi navigasi', 'Mati', 'Perlahan', 'Biasa'],
+    'nb': ['Navigasjonslyder', 'Av', 'Lave', 'Normale'],
+    'nl': ['Navigatiegeluiden', 'Uit', 'Zacht', 'Normaal'],
+    'pl': ['Dźwięki nawigacji', 'Wyłączone', 'Ciche', 'Normalne'],
+    'pt-rBR': ['Sons de navegação', 'Desativados', 'Baixos', 'Normais'],
+    'pt-rPT': ['Sons de navegação', 'Desativados', 'Baixos', 'Normais'],
+    'ro': ['Sunete de navigare', 'Dezactivate', 'Încete', 'Normale'],
+    'ru': ['Звуки навигации', 'Выкл.', 'Тихие', 'Обычные'],
+    'sk': ['Zvuky navigácie', 'Vypnuté', 'Tiché', 'Normálne'],
+    'sl': ['Zvoki navigacije', 'Izklopljeni', 'Tihi', 'Običajni'],
+    'sq': ['Tingujt e navigimit', 'Të çaktivizuar', 'Të ulët', 'Normalë'],
+    'sr': ['Звукови навигације', 'Искључени', 'Тихи', 'Нормални'],
+    'sv': ['Navigeringsljud', 'Av', 'Låga', 'Normala'],
+    'te': ['నావిగేషన్ శబ్దాలు', 'ఆఫ్', 'తక్కువ', 'సాధారణం'],
+    'th': ['เสียงการนำทาง', 'ปิด', 'เบา', 'ปกติ'],
+    'tr': ['Gezinme sesleri', 'Kapalı', 'Kısık', 'Normal'],
+    'uk': ['Звуки навігації', 'Вимкнено', 'Тихі', 'Звичайні'],
+    'vi': ['Âm thanh điều hướng', 'Tắt', 'Nhỏ', 'Bình thường'],
+    'zh': ['导航音效', '关闭', '轻柔', '正常'],
+    'zh-rTW': ['導覽音效', '關閉', '輕柔', '正常'],
+}
 # Same language, legacy/alternative locale codes used by SmartTube
 ALIASES = {'iw': 'he', 'mo': 'ro'}
 
@@ -326,6 +376,7 @@ def write(path, body):
 def main():
     n = len(COMMON_KEYS) + len(APP_KEYS)
     assert set(CH) == set(T), set(CH) ^ set(T)
+    assert set(SND) == set(T), set(SND) ^ set(T)
     for lang, values in list(T.items()) + [(a, T[b]) for a, b in ALIASES.items()]:
         assert len(values) == n, (lang, len(values))
         suffix = '' if lang == 'en' else '-' + lang
@@ -337,6 +388,9 @@ def main():
             common += '    <string name="%s">%s</string>\n' % (key, esc(value))
         if lang == 'en':
             common += '    <string name="novatv_seconds">%s s</string>\n'
+        for key, value in zip(['novatv_ui_sounds', 'novatv_ui_sounds_off', 'novatv_ui_sounds_quiet', 'novatv_ui_sounds_normal'],
+                              SND[ALIASES.get(lang, lang)]):
+            common += '    <string name="%s">%s</string>\n' % (key, esc(value))
         write(os.path.join(COMMON, 'values' + suffix, 'novatv_strings.xml'), common)
 
         chip_all, voice, sb_one, sb_other = values[len(COMMON_KEYS):]

@@ -19,4 +19,8 @@
     <string name="novatv_player_title_position">Название видео в плеере</string>
     <string name="novatv_player_title_top">Сверху</string>
     <string name="novatv_player_title_above_info">Над информацией о видео (у полосы)</string>
+    <string name="novatv_ui_sounds">Звуки навигации</string>
+    <string name="novatv_ui_sounds_off">Выкл.</string>
+    <string name="novatv_ui_sounds_quiet">Тихие</string>
+    <string name="novatv_ui_sounds_normal">Обычные</string>
 </resources>

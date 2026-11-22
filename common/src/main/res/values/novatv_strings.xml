@@ -21,4 +21,8 @@
     <string name="novatv_player_title_top">Top</string>
     <string name="novatv_player_title_above_info">Above the video info (near the bar)</string>
     <string name="novatv_seconds">%s s</string>
+    <string name="novatv_ui_sounds">Navigation sounds</string>
+    <string name="novatv_ui_sounds_off">Off</string>
+    <string name="novatv_ui_sounds_quiet">Quiet</string>
+    <string name="novatv_ui_sounds_normal">Normal</string>
 </resources>

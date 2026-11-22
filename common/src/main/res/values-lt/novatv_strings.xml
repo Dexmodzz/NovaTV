@@ -19,4 +19,8 @@
     <string name="novatv_player_title_position">Vaizdo įrašo pavadinimas grotuve</string>
     <string name="novatv_player_title_top">Viršuje</string>
     <string name="novatv_player_title_above_info">Virš vaizdo įrašo informacijos (prie juostos)</string>
+    <string name="novatv_ui_sounds">Naršymo garsai</string>
+    <string name="novatv_ui_sounds_off">Išjungti</string>
+    <string name="novatv_ui_sounds_quiet">Tylūs</string>
+    <string name="novatv_ui_sounds_normal">Įprasti</string>
 </resources>

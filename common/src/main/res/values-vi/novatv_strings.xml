@@ -19,4 +19,8 @@
     <string name="novatv_player_title_position">Tiêu đề video trong trình phát</string>
     <string name="novatv_player_title_top">Ở trên cùng</string>
     <string name="novatv_player_title_above_info">Phía trên thông tin video (gần thanh)</string>
+    <string name="novatv_ui_sounds">Âm thanh điều hướng</string>
+    <string name="novatv_ui_sounds_off">Tắt</string>
+    <string name="novatv_ui_sounds_quiet">Nhỏ</string>
+    <string name="novatv_ui_sounds_normal">Bình thường</string>
 </resources>

@@ -19,4 +19,8 @@
     <string name="novatv_player_title_position">Назва відео в плеєрі</string>
     <string name="novatv_player_title_top">Угорі</string>
     <string name="novatv_player_title_above_info">Над інформацією про відео (біля смуги)</string>
+    <string name="novatv_ui_sounds">Звуки навігації</string>
+    <string name="novatv_ui_sounds_off">Вимкнено</string>
+    <string name="novatv_ui_sounds_quiet">Тихі</string>
+    <string name="novatv_ui_sounds_normal">Звичайні</string>
 </resources>

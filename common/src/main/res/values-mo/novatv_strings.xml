@@ -19,4 +19,8 @@
     <string name="novatv_player_title_position">Titlul videoclipului în player</string>
     <string name="novatv_player_title_top">Sus</string>
     <string name="novatv_player_title_above_info">Deasupra informațiilor video (lângă bară)</string>
+    <string name="novatv_ui_sounds">Sunete de navigare</string>
+    <string name="novatv_ui_sounds_off">Dezactivate</string>
+    <string name="novatv_ui_sounds_quiet">Încete</string>
+    <string name="novatv_ui_sounds_normal">Normale</string>
 </resources>

@@ -10,17 +10,19 @@ import android.view.KeyEvent;
 import android.view.View;
 
 import com.liskovsoft.smartyoutubetv2.common.R;
+import com.liskovsoft.smartyoutubetv2.common.prefs.NovaTVData;
 
 /**
  * NovaTV: soft navigation sounds, in place of the system click (muted in the app themes with
  * {@code android:soundEffectsEnabled=false}).<br/>
  * A short wooden "tock" when the remote moves the selection, a lower one on OK.
- * Silent when the system sound effects are turned off in the TV settings.
+ * Volume (or off) from the NovaTV settings. Silent when the system sound effects are turned off in the TV settings.
  */
 public final class NovaUiSounds {
     private static final long MIN_INTERVAL_MS = 55; // holding a direction key repeats fast
-    private static final float FOCUS_VOLUME = 0.35f;
-    private static final float SELECT_VOLUME = 0.4f;
+    /** Volumes per level (NovaTVData.UI_SOUNDS_*): off, quiet, normal */
+    private static final float[] FOCUS_VOLUMES = {0f, 0.09f, 0.2f};
+    private static final float[] SELECT_VOLUMES = {0f, 0.11f, 0.25f};
     private static SoundPool sPool;
     private static int sFocusId;
     private static int sSelectId;
@@ -34,6 +36,11 @@ public final class NovaUiSounds {
      */
     public static void onKey(Activity activity, KeyEvent event) {
         if (event.getAction() != KeyEvent.ACTION_DOWN || !isEnabled(activity)) {
+            return;
+        }
+
+        int level = NovaTVData.instance(activity).getUiSounds();
+        if (level == NovaTVData.UI_SOUNDS_OFF) {
             return;
         }
 
@@ -52,7 +59,7 @@ public final class NovaUiSounds {
                 decor.post(() -> {
                     View after = activity.getCurrentFocus();
                     if (after != null && after != before) {
-                        play(sFocusId, FOCUS_VOLUME);
+                        play(sFocusId, FOCUS_VOLUMES[level]);
                     }
                 });
                 break;
@@ -62,7 +69,7 @@ public final class NovaUiSounds {
                 View focus = activity.getCurrentFocus();
                 if (event.getRepeatCount() == 0 && focus != null && focus.isClickable()) {
                     init(activity);
-                    play(sSelectId, SELECT_VOLUME);
+                    play(sSelectId, SELECT_VOLUMES[level]);
                 }
                 break;
         }
@@ -73,6 +80,19 @@ public final class NovaUiSounds {
      */
     public static void preload(Context context) {
         init(context);
+    }
+
+    /**
+     * Settings: let the user hear the chosen level.
+     */
+    public static void preview(Context context, int level) {
+        if (level < 0 || level >= FOCUS_VOLUMES.length || level == NovaTVData.UI_SOUNDS_OFF) {
+            return;
+        }
+
+        init(context);
+        sLastPlayMs = 0;
+        play(sFocusId, FOCUS_VOLUMES[level]);
     }
 
     private static boolean isEnabled(Context context) {
