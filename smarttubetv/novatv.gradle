@@ -1,4 +1,4 @@
 // NovaTV: app version shown to users and used in the APK name.
 // Kept out of build.gradle's defaultConfig, so upstream version bumps never conflict with it.
 // versionCode stays the upstream one (it only grows), so every NovaTV build installs over the previous one.
-android.defaultConfig.versionName = "2.1.3"
+android.defaultConfig.versionName = "2.1.4"
