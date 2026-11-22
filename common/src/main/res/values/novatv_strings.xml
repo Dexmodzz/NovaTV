@@ -25,4 +25,6 @@
     <string name="novatv_ui_sounds_off">Off</string>
     <string name="novatv_ui_sounds_quiet">Quiet</string>
     <string name="novatv_ui_sounds_normal">Normal</string>
+    <string name="novatv_ui_sound_type">Sound type</string>
+    <string name="novatv_ui_sound_n">Sound %d</string>
 </resources>

@@ -23,4 +23,6 @@
     <string name="novatv_ui_sounds_off">Mati</string>
     <string name="novatv_ui_sounds_quiet">Perlahan</string>
     <string name="novatv_ui_sounds_normal">Biasa</string>
+    <string name="novatv_ui_sound_type">Jenis bunyi</string>
+    <string name="novatv_ui_sound_n">Bunyi %d</string>
 </resources>

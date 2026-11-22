@@ -23,4 +23,6 @@
     <string name="novatv_ui_sounds_off">Wyłączone</string>
     <string name="novatv_ui_sounds_quiet">Ciche</string>
     <string name="novatv_ui_sounds_normal">Normalne</string>
+    <string name="novatv_ui_sound_type">Rodzaj dźwięku</string>
+    <string name="novatv_ui_sound_n">Dźwięk %d</string>
 </resources>

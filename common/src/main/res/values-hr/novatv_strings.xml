@@ -23,4 +23,6 @@
     <string name="novatv_ui_sounds_off">Isključeni</string>
     <string name="novatv_ui_sounds_quiet">Tihi</string>
     <string name="novatv_ui_sounds_normal">Normalni</string>
+    <string name="novatv_ui_sound_type">Vrsta zvuka</string>
+    <string name="novatv_ui_sound_n">Zvuk %d</string>
 </resources>

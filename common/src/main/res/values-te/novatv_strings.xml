@@ -23,4 +23,6 @@
     <string name="novatv_ui_sounds_off">ఆఫ్</string>
     <string name="novatv_ui_sounds_quiet">తక్కువ</string>
     <string name="novatv_ui_sounds_normal">సాధారణం</string>
+    <string name="novatv_ui_sound_type">శబ్దం రకం</string>
+    <string name="novatv_ui_sound_n">శబ్దం %d</string>
 </resources>

@@ -23,4 +23,6 @@
     <string name="novatv_ui_sounds_off">כבוי</string>
     <string name="novatv_ui_sounds_quiet">שקטים</string>
     <string name="novatv_ui_sounds_normal">רגילים</string>
+    <string name="novatv_ui_sound_type">סוג צליל</string>
+    <string name="novatv_ui_sound_n">צליל %d</string>
 </resources>

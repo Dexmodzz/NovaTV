@@ -23,4 +23,6 @@
     <string name="novatv_ui_sounds_off">Uit</string>
     <string name="novatv_ui_sounds_quiet">Zacht</string>
     <string name="novatv_ui_sounds_normal">Normaal</string>
+    <string name="novatv_ui_sound_type">Geluidstype</string>
+    <string name="novatv_ui_sound_n">Geluid %d</string>
 </resources>

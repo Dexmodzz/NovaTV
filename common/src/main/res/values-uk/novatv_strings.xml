@@ -23,4 +23,6 @@
     <string name="novatv_ui_sounds_off">Вимкнено</string>
     <string name="novatv_ui_sounds_quiet">Тихі</string>
     <string name="novatv_ui_sounds_normal">Звичайні</string>
+    <string name="novatv_ui_sound_type">Тип звуку</string>
+    <string name="novatv_ui_sound_n">Звук %d</string>
 </resources>

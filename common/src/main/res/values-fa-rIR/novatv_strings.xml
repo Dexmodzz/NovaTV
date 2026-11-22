@@ -23,4 +23,6 @@
     <string name="novatv_ui_sounds_off">خاموش</string>
     <string name="novatv_ui_sounds_quiet">آرام</string>
     <string name="novatv_ui_sounds_normal">معمولی</string>
+    <string name="novatv_ui_sound_type">نوع صدا</string>
+    <string name="novatv_ui_sound_n">صدای %d</string>
 </resources>

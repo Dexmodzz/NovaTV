@@ -23,4 +23,6 @@
     <string name="novatv_ui_sounds_off">Väljas</string>
     <string name="novatv_ui_sounds_quiet">Vaiksed</string>
     <string name="novatv_ui_sounds_normal">Tavalised</string>
+    <string name="novatv_ui_sound_type">Heli tüüp</string>
+    <string name="novatv_ui_sound_n">Heli %d</string>
 </resources>

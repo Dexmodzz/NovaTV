@@ -23,4 +23,6 @@
     <string name="novatv_ui_sounds_off">Fra</string>
     <string name="novatv_ui_sounds_quiet">Lave</string>
     <string name="novatv_ui_sounds_normal">Normale</string>
+    <string name="novatv_ui_sound_type">Lydtype</string>
+    <string name="novatv_ui_sound_n">Lyd %d</string>
 </resources>

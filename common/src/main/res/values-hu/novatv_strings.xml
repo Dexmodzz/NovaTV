@@ -23,4 +23,6 @@
     <string name="novatv_ui_sounds_off">Ki</string>
     <string name="novatv_ui_sounds_quiet">Halk</string>
     <string name="novatv_ui_sounds_normal">Normál</string>
+    <string name="novatv_ui_sound_type">Hang típusa</string>
+    <string name="novatv_ui_sound_n">%d. hang</string>
 </resources>

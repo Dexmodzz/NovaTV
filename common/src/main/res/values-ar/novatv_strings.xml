@@ -23,4 +23,6 @@
     <string name="novatv_ui_sounds_off">إيقاف</string>
     <string name="novatv_ui_sounds_quiet">منخفضة</string>
     <string name="novatv_ui_sounds_normal">عادية</string>
+    <string name="novatv_ui_sound_type">نوع الصوت</string>
+    <string name="novatv_ui_sound_n">الصوت %d</string>
 </resources>

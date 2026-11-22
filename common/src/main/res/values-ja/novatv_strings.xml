@@ -23,4 +23,6 @@
     <string name="novatv_ui_sounds_off">オフ</string>
     <string name="novatv_ui_sounds_quiet">小さめ</string>
     <string name="novatv_ui_sounds_normal">標準</string>
+    <string name="novatv_ui_sound_type">音の種類</string>
+    <string name="novatv_ui_sound_n">サウンド %d</string>
 </resources>

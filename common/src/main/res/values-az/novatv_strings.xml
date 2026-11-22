@@ -23,4 +23,6 @@
     <string name="novatv_ui_sounds_off">Söndürülüb</string>
     <string name="novatv_ui_sounds_quiet">Zəif</string>
     <string name="novatv_ui_sounds_normal">Normal</string>
+    <string name="novatv_ui_sound_type">Səs növü</string>
+    <string name="novatv_ui_sound_n">Səs %d</string>
 </resources>

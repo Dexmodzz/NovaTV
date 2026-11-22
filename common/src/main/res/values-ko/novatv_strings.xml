@@ -23,4 +23,6 @@
     <string name="novatv_ui_sounds_off">끄기</string>
     <string name="novatv_ui_sounds_quiet">작게</string>
     <string name="novatv_ui_sounds_normal">보통</string>
+    <string name="novatv_ui_sound_type">소리 종류</string>
+    <string name="novatv_ui_sound_n">소리 %d</string>
 </resources>

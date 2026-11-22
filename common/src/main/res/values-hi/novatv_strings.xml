@@ -23,4 +23,6 @@
     <string name="novatv_ui_sounds_off">बंद</string>
     <string name="novatv_ui_sounds_quiet">धीमी</string>
     <string name="novatv_ui_sounds_normal">सामान्य</string>
+    <string name="novatv_ui_sound_type">ध्वनि का प्रकार</string>
+    <string name="novatv_ui_sound_n">ध्वनि %d</string>
 </resources>

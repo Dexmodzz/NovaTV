@@ -23,4 +23,6 @@
     <string name="novatv_ui_sounds_off">ปิด</string>
     <string name="novatv_ui_sounds_quiet">เบา</string>
     <string name="novatv_ui_sounds_normal">ปกติ</string>
+    <string name="novatv_ui_sound_type">ประเภทเสียง</string>
+    <string name="novatv_ui_sound_n">เสียง %d</string>
 </resources>

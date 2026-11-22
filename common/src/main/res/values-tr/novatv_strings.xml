@@ -23,4 +23,6 @@
     <string name="novatv_ui_sounds_off">Kapalı</string>
     <string name="novatv_ui_sounds_quiet">Kısık</string>
     <string name="novatv_ui_sounds_normal">Normal</string>
+    <string name="novatv_ui_sound_type">Ses türü</string>
+    <string name="novatv_ui_sound_n">Ses %d</string>
 </resources>

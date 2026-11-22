@@ -23,4 +23,6 @@
     <string name="novatv_ui_sounds_off">Izslēgtas</string>
     <string name="novatv_ui_sounds_quiet">Klusas</string>
     <string name="novatv_ui_sounds_normal">Parastas</string>
+    <string name="novatv_ui_sound_type">Skaņas veids</string>
+    <string name="novatv_ui_sound_n">Skaņa %d</string>
 </resources>

@@ -23,4 +23,6 @@
     <string name="novatv_ui_sounds_off">Të çaktivizuar</string>
     <string name="novatv_ui_sounds_quiet">Të ulët</string>
     <string name="novatv_ui_sounds_normal">Normalë</string>
+    <string name="novatv_ui_sound_type">Lloji i tingullit</string>
+    <string name="novatv_ui_sound_n">Tingulli %d</string>
 </resources>

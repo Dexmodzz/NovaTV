@@ -72,6 +72,7 @@ public class NovaTVSettingsPresenter extends BasePresenter<Void> {
         appendClock(settingsPresenter);
         appendAnimations(settingsPresenter);
         appendUiSounds(settingsPresenter);
+        appendUiSoundType(settingsPresenter);
 
         settingsPresenter.showDialog(getContext().getString(R.string.novatv_settings), mOnFinish);
     }
@@ -211,11 +212,28 @@ public class NovaTVSettingsPresenter extends BasePresenter<Void> {
                 {R.string.novatv_ui_sounds_normal, NovaTVData.UI_SOUNDS_NORMAL}}) {
             options.add(UiOptionItem.from(getContext().getString(pair[0]), option -> {
                 mNovaTVData.setUiSounds(pair[1]);
-                NovaUiSounds.preview(getContext(), pair[1]);
+                NovaUiSounds.preview(getContext());
             }, mNovaTVData.getUiSounds() == pair[1]));
         }
 
         settingsPresenter.appendRadioCategory(getContext().getString(R.string.novatv_ui_sounds), options);
+    }
+
+    /**
+     * Navigation sound: 15 to choose from, each plays when it's picked.
+     */
+    private void appendUiSoundType(AppDialogPresenter settingsPresenter) {
+        List<OptionItem> options = new ArrayList<>();
+
+        for (int i = 0; i < NovaUiSounds.getSoundCount(); i++) {
+            int type = i;
+            options.add(UiOptionItem.from(getContext().getString(R.string.novatv_ui_sound_n, i + 1), option -> {
+                mNovaTVData.setUiSoundType(type);
+                NovaUiSounds.preview(getContext());
+            }, mNovaTVData.getUiSoundType() == type));
+        }
+
+        settingsPresenter.appendRadioCategory(getContext().getString(R.string.novatv_ui_sound_type), options);
     }
 
     // Same formula as GridFragmentHelper.getMaxColsNumFloatInt() (app module)

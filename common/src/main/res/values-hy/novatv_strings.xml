@@ -23,4 +23,6 @@
     <string name="novatv_ui_sounds_off">Անջատված</string>
     <string name="novatv_ui_sounds_quiet">Ցածր</string>
     <string name="novatv_ui_sounds_normal">Սովորական</string>
+    <string name="novatv_ui_sound_type">Ձայնի տեսակ</string>
+    <string name="novatv_ui_sound_n">Ձայն %d</string>
 </resources>

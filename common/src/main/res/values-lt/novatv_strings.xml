@@ -23,4 +23,6 @@
     <string name="novatv_ui_sounds_off">Išjungti</string>
     <string name="novatv_ui_sounds_quiet">Tylūs</string>
     <string name="novatv_ui_sounds_normal">Įprasti</string>
+    <string name="novatv_ui_sound_type">Garso tipas</string>
+    <string name="novatv_ui_sound_n">Garsas %d</string>
 </resources>

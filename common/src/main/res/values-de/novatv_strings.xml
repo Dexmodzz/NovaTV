@@ -23,4 +23,6 @@
     <string name="novatv_ui_sounds_off">Aus</string>
     <string name="novatv_ui_sounds_quiet">Leise</string>
     <string name="novatv_ui_sounds_normal">Normal</string>
+    <string name="novatv_ui_sound_type">Klangtyp</string>
+    <string name="novatv_ui_sound_n">Klang %d</string>
 </resources>

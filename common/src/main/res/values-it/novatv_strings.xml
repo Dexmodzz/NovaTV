@@ -23,4 +23,6 @@
     <string name="novatv_ui_sounds_off">Disattivati</string>
     <string name="novatv_ui_sounds_quiet">Bassi</string>
     <string name="novatv_ui_sounds_normal">Normali</string>
+    <string name="novatv_ui_sound_type">Tipo di suono</string>
+    <string name="novatv_ui_sound_n">Suono %d</string>
 </resources>

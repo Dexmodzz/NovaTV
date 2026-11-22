@@ -23,4 +23,6 @@
     <string name="novatv_ui_sounds_off">Mati</string>
     <string name="novatv_ui_sounds_quiet">Pelan</string>
     <string name="novatv_ui_sounds_normal">Normal</string>
+    <string name="novatv_ui_sound_type">Jenis suara</string>
+    <string name="novatv_ui_sound_n">Suara %d</string>
 </resources>

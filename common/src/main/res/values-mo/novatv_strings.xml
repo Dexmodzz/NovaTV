@@ -23,4 +23,6 @@
     <string name="novatv_ui_sounds_off">Dezactivate</string>
     <string name="novatv_ui_sounds_quiet">Încete</string>
     <string name="novatv_ui_sounds_normal">Normale</string>
+    <string name="novatv_ui_sound_type">Tip de sunet</string>
+    <string name="novatv_ui_sound_n">Sunetul %d</string>
 </resources>

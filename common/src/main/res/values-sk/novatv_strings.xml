@@ -23,4 +23,6 @@
     <string name="novatv_ui_sounds_off">Vypnuté</string>
     <string name="novatv_ui_sounds_quiet">Tiché</string>
     <string name="novatv_ui_sounds_normal">Normálne</string>
+    <string name="novatv_ui_sound_type">Typ zvuku</string>
+    <string name="novatv_ui_sound_n">Zvuk %d</string>
 </resources>

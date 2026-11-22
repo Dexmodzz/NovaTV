@@ -23,4 +23,6 @@
     <string name="novatv_ui_sounds_off">გამორთული</string>
     <string name="novatv_ui_sounds_quiet">ჩუმი</string>
     <string name="novatv_ui_sounds_normal">ნორმალური</string>
+    <string name="novatv_ui_sound_type">ხმის ტიპი</string>
+    <string name="novatv_ui_sound_n">ხმა %d</string>
 </resources>

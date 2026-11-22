@@ -23,4 +23,6 @@
     <string name="novatv_ui_sounds_off">Tắt</string>
     <string name="novatv_ui_sounds_quiet">Nhỏ</string>
     <string name="novatv_ui_sounds_normal">Bình thường</string>
+    <string name="novatv_ui_sound_type">Loại âm thanh</string>
+    <string name="novatv_ui_sound_n">Âm thanh %d</string>
 </resources>

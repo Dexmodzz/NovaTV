@@ -23,4 +23,6 @@
     <string name="novatv_ui_sounds_off">Απενεργοποιημένοι</string>
     <string name="novatv_ui_sounds_quiet">Χαμηλοί</string>
     <string name="novatv_ui_sounds_normal">Κανονικοί</string>
+    <string name="novatv_ui_sound_type">Τύπος ήχου</string>
+    <string name="novatv_ui_sound_n">Ήχος %d</string>
 </resources>

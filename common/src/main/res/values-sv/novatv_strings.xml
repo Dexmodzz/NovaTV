@@ -23,4 +23,6 @@
     <string name="novatv_ui_sounds_off">Av</string>
     <string name="novatv_ui_sounds_quiet">Låga</string>
     <string name="novatv_ui_sounds_normal">Normala</string>
+    <string name="novatv_ui_sound_type">Ljudtyp</string>
+    <string name="novatv_ui_sound_n">Ljud %d</string>
 </resources>

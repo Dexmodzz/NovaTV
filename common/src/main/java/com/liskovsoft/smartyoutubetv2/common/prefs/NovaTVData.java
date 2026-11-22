@@ -16,6 +16,7 @@ public final class NovaTVData {
     private static final String KEY_FOCUS_ANIMATIONS = "focus_animations";
     private static final String KEY_PLAYER_TITLE_POSITION = "player_title_position";
     private static final String KEY_UI_SOUNDS = "ui_sounds";
+    private static final String KEY_UI_SOUND_TYPE = "ui_sound_type";
 
     public static final int ACCENT_ORANGE = 0;
     public static final int ACCENT_BLUE = 1;
@@ -92,6 +93,15 @@ public final class NovaTVData {
 
     public void setUiSounds(int level) {
         mPrefs.edit().putInt(KEY_UI_SOUNDS, level).apply();
+    }
+
+    /** Index of the navigation sound (0 = wooden tock) */
+    public int getUiSoundType() {
+        return Math.max(0, mPrefs.getInt(KEY_UI_SOUND_TYPE, 0));
+    }
+
+    public void setUiSoundType(int type) {
+        mPrefs.edit().putInt(KEY_UI_SOUND_TYPE, type).apply();
     }
 
     /**

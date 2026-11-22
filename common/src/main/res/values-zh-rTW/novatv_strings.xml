@@ -23,4 +23,6 @@
     <string name="novatv_ui_sounds_off">關閉</string>
     <string name="novatv_ui_sounds_quiet">輕柔</string>
     <string name="novatv_ui_sounds_normal">正常</string>
+    <string name="novatv_ui_sound_type">音效類型</string>
+    <string name="novatv_ui_sound_n">音效 %d</string>
 </resources>

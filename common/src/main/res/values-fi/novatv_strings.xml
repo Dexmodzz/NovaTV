@@ -23,4 +23,6 @@
     <string name="novatv_ui_sounds_off">Pois</string>
     <string name="novatv_ui_sounds_quiet">Hiljaiset</string>
     <string name="novatv_ui_sounds_normal">Normaalit</string>
+    <string name="novatv_ui_sound_type">Äänen tyyppi</string>
+    <string name="novatv_ui_sound_n">Ääni %d</string>
 </resources>
