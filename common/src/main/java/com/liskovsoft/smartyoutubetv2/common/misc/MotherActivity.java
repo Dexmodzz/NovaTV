@@ -71,6 +71,7 @@ public class MotherActivity extends FragmentActivity {
         //    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         //}
         NovaFonts.install(this); // NovaTV: must run before any view is inflated
+        NovaUiSounds.preload(this); // NovaTV
         super.onCreate(savedInstanceState);
 
         Log.d(TAG, "Starting %s...", this.getClass().getSimpleName());
@@ -145,6 +146,8 @@ public class MotherActivity extends FragmentActivity {
                 mScreensaverManager.enable();
             }
         }
+
+        NovaUiSounds.onKey(this, event); // NovaTV: soft navigation sounds
 
         try {
             return super.dispatchKeyEvent(event);
