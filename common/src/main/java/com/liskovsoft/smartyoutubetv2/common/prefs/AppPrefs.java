@@ -101,7 +101,9 @@ public class AppPrefs extends SharedPreferencesBase implements AccountChangeList
 
     public String getSidebarData() {
         // Always use multiple profiles
-        return getData(getProfileKey(SIDEBAR_DATA,  true));
+        String data = getData(getProfileKey(SIDEBAR_DATA,  true));
+        // NovaTV: a new profile starts with the default sections layout
+        return data != null ? data : getData(SIDEBAR_DATA);
     }
 
     public void setSidebarData(String data) {

@@ -75,6 +75,9 @@ public class MainApplication extends MultiDexApplication implements Configuratio
             // UnsatisfiedLinkError
         }
 
+        // NovaTV: fresh install starts with the NovaTV default configuration (before any setting is read)
+        com.liskovsoft.smartyoutubetv2.common.misc.NovaDefaults.applyIfFreshInstall(this);
+
         if (conscryptProvider != null && NetworkData.instance(this).isConscryptEnabled()) {
             try {
                 Security.insertProviderAt(conscryptProvider, 1);

@@ -122,6 +122,7 @@ git grep -n "NovaTV" -- ':!README*.md'
 | `common/.../presenters/settings/NovaTVSettingsPresenter.java` | Schermata delle impostazioni "NovaTV". Dove esiste già un'impostazione originale (schema di colore, scala della griglia, anteprima, orologio, 12/24h) scrive quella stessa impostazione. |
 | `common/.../misc/NovaFonts.java` | Applica Inter ai `TextView` creati dai layout (factory di `LayoutInflater`), su tutte le versioni di Android. |
 | `common/src/main/res/values*/novatv_strings.xml` | Testi della schermata NovaTV, un file per lingua (generati, vedi [Traduzioni](#4-traduzioni)). |
+| `common/.../misc/NovaDefaults.java`, `common/src/main/assets/novatv_defaults/app_prefs/*` | Configurazione predefinita di NovaTV (layout, schede, sezioni, player, schermata NovaTV). Scritta una sola volta, solo su una nuova installazione, prima che venga letta qualsiasi impostazione; un aggiornamento non tocca mai le impostazioni salvate. Non contiene account, cronologia o dati personali. |
 | `common/src/main/res/drawable-nodpi/settings_novatv.png` | Icona (tavolozza) del riquadro NovaTV; generata da `tools/novatv/gen_settings_icon.py`. |
 | `common/.../misc/NovaUiSounds.java`, `common/res/raw/novatv_sound_01..15.wav` | Suoni di navigazione leggeri (originali, generati da `tools/novatv/gen_sounds.py`): un breve suono quando la selezione si sposta, lo stesso un po' più basso su OK. Nelle impostazioni NovaTV: disattivati / bassi / normali e 15 suoni tra cui scegliere (ognuno si sente quando lo scegli; `NovaTVData.ui_sounds`, `ui_sound_type`). Il clic di sistema è silenziato nei temi dell'app (`android:soundEffectsEnabled`); nessun suono quando gli effetti sonori sono disattivati nelle impostazioni della TV. I suoni non si sovrappongono mai scorrendo veloce. |
 
@@ -179,6 +180,8 @@ git grep -n "NovaTV" -- ':!README*.md'
 | `smarttubetv/src/*/res/values/strings.xml` | Nome dell'app. |
 | `leanbackassistant/src/*/res/values/strings.xml`, `.../xml/searchable.xml` | Authority della ricerca vocale con i nuovi pacchetti. |
 | `smarttubetv/src/*/res/mipmap-*/app_icon*.png`, `app_banner.png` | Icona e banner di NovaTV. |
+| `smarttubetv/.../ui/main/MainApplication.java` | Chiama `NovaDefaults.applyIfFreshInstall()` prima che venga letta qualsiasi impostazione. |
+| `common/.../prefs/AppPrefs.java` | Un nuovo profilo senza una propria disposizione delle sezioni usa quella predefinita (`sidebar_data`). |
 | `common/.../dialogs/AppUpdatePresenter.java` | L'aggiornamento interno non parte per i pacchetti NovaTV. |
 
 **Temi e impostazioni**
