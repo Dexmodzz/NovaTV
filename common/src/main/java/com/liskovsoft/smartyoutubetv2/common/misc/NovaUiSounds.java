@@ -14,7 +14,7 @@ import com.liskovsoft.smartyoutubetv2.common.R;
 /**
  * NovaTV: soft navigation sounds, in place of the system click (muted in the app themes with
  * {@code android:soundEffectsEnabled=false}).<br/>
- * A short rounded tick when the remote moves the selection, a lower one on OK.
+ * A short wooden "tock" when the remote moves the selection, a lower one on OK.
  * Silent when the system sound effects are turned off in the TV settings.
  */
 public final class NovaUiSounds {
