@@ -98,6 +98,8 @@
     <dimen name="nova_rail_account_top">78dp</dimen>
     <dimen name="nova_rail_account_start">31dp</dimen>
     <dimen name="nova_rail_account_ring">3dp</dimen>
+    <!-- Shorts grid: top of the selected row, below the clock and date -->
+    <dimen name="nova_shorts_grid_top">74dp</dimen>
     <!-- Player (phase 4) -->
     <dimen name="nova_player_button_size">48dp</dimen>
     <dimen name="nova_player_play_size">56dp</dimen>

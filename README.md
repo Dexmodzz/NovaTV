@@ -176,6 +176,7 @@ git grep -n "NovaTV" -- ':!README.md'
 | `PlaybackFragment.java` | `NovaSeekDispatcher` on the player adapter. |
 | `NavigateTitleView.java` | The top header no longer shows the profile avatar (moved to the rail). |
 | `tv/ui/browse/BrowseFragment.java` | Rail focus: search bar -> avatar -> sections. |
+| `tv/ui/browse/video/ShortsGridFragment.java` | Shorts cards (taller than half the screen) start right below the clock and date instead of being centered over them. |
 | `res/values/novatv_themes.xml` | `brandColor` transparent: the rail panel is the rail background. |
 | `res/values/styles.xml`, `common/.../misc/MotherActivity.java` | System click muted in the four base themes; `NovaUiSounds` hooked in `dispatchKeyEvent` and preloaded in `onCreate`. |
 | `exoplayer-amzn-2.10.6/.../chunk/ChunkSampleStream.java`, `.../sabr/SabrMediaPeriod.java` | `getBufferedSyncPositionUs()`: SABR streams have no segment index, so a non-exact seek snaps to the start of a buffered chunk (always a keyframe). |
