@@ -41,7 +41,8 @@
     <!-- ===================== Dark (default) ===================== -->
     <style name="App.Theme.Nova.Dark.Browse" parent="App.Theme.Leanback.Browse">
         <item name="android:windowBackground">@color/nova_bg</item>
-        <item name="brandColor">@color/nova_bg</item>
+        <!-- Transparent rail background: the raised panel (lb_headers_fragment.xml) is the background -->
+        <item name="brandColor">@android:color/transparent</item>
         <item name="brandAccentColor">@color/nova_accent</item>
         <item name="shelfBackground">@color/nova_bg</item>
         <item name="cardDefaultBackground">@color/nova_surface</item>
@@ -78,7 +79,8 @@
     <!-- ===================== OLED (pure black) ===================== -->
     <style name="App.Theme.Nova.Oled.Browse" parent="App.Theme.Nova.Dark.Browse">
         <item name="android:windowBackground">@color/nova_bg_oled</item>
-        <item name="brandColor">@color/nova_bg_oled</item>
+        <!-- Transparent rail background: the raised panel (lb_headers_fragment.xml) is the background -->
+        <item name="brandColor">@android:color/transparent</item>
         <item name="shelfBackground">@color/nova_bg_oled</item>
     </style>
     <style name="App.Theme.Nova.Oled.Player" parent="App.Theme.Nova.Dark.Player">

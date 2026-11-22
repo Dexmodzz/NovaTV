@@ -375,9 +375,8 @@ public class NavigateTitleView extends TitleView implements OnDataChange, Accoun
 
         updateChipsVisibility();
 
-        if (mIsAccountViewEnabled) {
-            mAccountView.setVisibility(mSearchVisibility);
-        }
+        // NovaTV: the profile avatar lives in the side rail (NovaRailAccountView)
+        mAccountView.setVisibility(View.GONE);
 
         if (mIsLanguageViewEnabled) {
             mLanguageView.setVisibility(mSearchVisibility);
@@ -486,7 +485,7 @@ public class NavigateTitleView extends TitleView implements OnDataChange, Accoun
         if (mSearchPill != null) {
             mSearchPill.setVisibility(mIsSearchPillEnabled ? View.VISIBLE : View.GONE);
         }
-        mAccountView.setVisibility(mIsAccountViewEnabled ? View.VISIBLE : View.GONE);
+        mAccountView.setVisibility(View.GONE); // NovaTV: the avatar is in the side rail (NovaRailAccountView)
         mLanguageView.setVisibility(mIsLanguageViewEnabled ? View.VISIBLE : View.GONE);
         mGlobalClock.setVisibility(mIsGlobalClockEnabled ? View.VISIBLE : View.GONE);
         mGlobalDate.setVisibility(mIsGlobalClockEnabled ? View.VISIBLE : View.GONE);

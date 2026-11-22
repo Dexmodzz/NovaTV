@@ -503,12 +503,64 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
      * Category sections have no visible rail item. When the rail opens while one of them is selected,
      * select Home first (categories live "inside" Home), otherwise Leanback would move to a random section.
      */
+    /**
+     * NovaTV: the profile avatar on top of the rail sits between the search bar and the first section:
+     * search bar -> avatar -> sections (and back). Right from the avatar goes to the content as usual.
+     * @return the view to focus, or null to keep the stock behavior
+     */
+    private View novaGetRailAccount(View root, View focused, int direction) {
+        View account = root.findViewById(R.id.nova_rail_account);
+        HeadersSupportFragment headers = getHeadersSupportFragment();
+
+        if (account == null || account.getVisibility() != View.VISIBLE || !isShowingHeaders() || headers == null
+                || headers.getVerticalGridView() == null || isInHeadersTransition()) {
+            return null;
+        }
+
+        View grid = headers.getVerticalGridView();
+
+        if (focused == account) {
+            if (direction == View.FOCUS_DOWN) {
+                // Back to the section that is selected (the grid alone would pick the next one)
+                androidx.recyclerview.widget.RecyclerView.ViewHolder holder = headers.getVerticalGridView()
+                        .findViewHolderForAdapterPosition(headers.getSelectedPosition());
+                return holder != null ? holder.itemView : grid;
+            }
+            if (direction == View.FOCUS_LEFT) {
+                return account;
+            }
+            return null; // up: search bar, right: content
+        }
+
+        boolean inRail = focused != null && isDescendant(grid, focused);
+        boolean inTitle = getTitleView() != null && getTitleView().hasFocus();
+
+        if ((inRail && direction == View.FOCUS_UP) || (inTitle && direction == View.FOCUS_DOWN)) {
+            return account;
+        }
+
+        return null;
+    }
+
+    private static boolean isDescendant(View parent, View view) {
+        for (View v = view; v != null; v = v.getParent() instanceof View ? (View) v.getParent() : null) {
+            if (v == parent) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     private void novaSetupRailFocus(View root) {
         BrowseFrameLayout frame = root != null ? root.findViewById(R.id.browse_frame) : null;
 
         if (frame != null && frame.getOnFocusSearchListener() != null) {
             BrowseFrameLayout.OnFocusSearchListener stockListener = frame.getOnFocusSearchListener();
             frame.setOnFocusSearchListener((focused, direction) -> {
+                View account = novaGetRailAccount(root, focused, direction);
+                if (account != null) {
+                    return account;
+                }
                 View result = stockListener.onFocusSearch(focused, direction);
                 if (result != null && getHeadersSupportFragment() != null && result == getHeadersSupportFragment().getVerticalGridView()) {
                     novaSelectRailSectionIfHidden();

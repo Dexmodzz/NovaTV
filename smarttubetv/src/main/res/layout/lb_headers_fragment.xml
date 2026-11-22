@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- NovaTV: side rail as a floating, slightly raised panel with the profile avatar on top.
+     Original ids (browse_headers_root, browse_headers, fade_out_edge) are kept: Leanback looks them up. -->
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/browse_headers_root"
+    android:transitionGroup="true"
+    android:layout_width="@dimen/lb_browse_headers_width"
+    android:layout_height="match_parent"
+    android:paddingEnd="@dimen/lb_browse_header_padding_end"
+    android:elevation="@dimen/lb_browse_headers_z"
+    android:clipChildren="false"
+    android:clipToPadding="false">
+
+    <View
+        android:id="@+id/nova_rail_panel"
+        android:layout_width="@dimen/nova_rail_panel_width"
+        android:layout_height="match_parent"
+        android:layout_marginStart="@dimen/nova_rail_panel_start"
+        android:layout_marginTop="@dimen/nova_rail_panel_top"
+        android:layout_marginBottom="@dimen/nova_rail_panel_bottom"
+        android:background="@drawable/novatv_rail_panel_bg"
+        android:elevation="@dimen/nova_rail_panel_elevation" />
+
+    <androidx.leanback.widget.VerticalGridView
+        android:id="@+id/browse_headers"
+        android:layout_width="@dimen/lb_browse_headers_width"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="@dimen/nova_rail_panel_bottom"
+        android:paddingTop="@dimen/nova_rail_list_top"
+        android:clipToPadding="true"
+        android:elevation="@dimen/nova_rail_panel_elevation"
+        style="?attr/headersVerticalGridStyle"/>
+
+    <com.liskovsoft.smartyoutubetv2.tv.ui.widgets.browse.NovaRailAccountView
+        android:id="@+id/nova_rail_account"
+        android:layout_width="@dimen/nova_rail_account_size"
+        android:layout_height="@dimen/nova_rail_account_size"
+        android:layout_marginTop="@dimen/nova_rail_account_top"
+        android:layout_marginStart="@dimen/nova_rail_account_start"
+        android:padding="@dimen/nova_rail_account_ring"
+        android:background="@drawable/novatv_rail_account_bg"
+        android:elevation="@dimen/nova_rail_panel_elevation"
+        android:scaleType="centerCrop"
+        android:focusable="true"
+        android:clickable="true"
+        android:longClickable="true"
+        android:contentDescription="@string/settings_accounts" />
+
+    <View
+        android:id="@+id/fade_out_edge"
+        android:layout_alignParentEnd="true"
+        android:layout_width="@dimen/lb_browse_header_fading_length"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        android:background="@drawable/lb_headers_right_fading" />
+</RelativeLayout>
