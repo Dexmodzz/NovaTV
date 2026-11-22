@@ -21,8 +21,8 @@ import com.liskovsoft.smartyoutubetv2.common.prefs.NovaTVData;
 public final class NovaUiSounds {
     private static final long MIN_INTERVAL_MS = 55; // holding a direction key repeats fast
     /** Volumes per level (NovaTVData.UI_SOUNDS_*): off, quiet, normal */
-    private static final float[] FOCUS_VOLUMES = {0f, 0.09f, 0.2f};
-    private static final float[] SELECT_VOLUMES = {0f, 0.11f, 0.25f};
+    private static final float[] FOCUS_VOLUMES = {0f, 0.035f, 0.08f};
+    private static final float[] SELECT_VOLUMES = {0f, 0.045f, 0.1f};
     private static SoundPool sPool;
     private static int sFocusId;
     private static int sSelectId;
