@@ -1,5 +1,7 @@
 # NovaTV
 
+**English** | [Italiano](README_IT.md)
+
 A modern, dark interface for watching videos on Android TV, made for the remote control.
 
 - Clean dark design (Dark or pure-black OLED), four accent colors, rounded cards with channel avatars
@@ -16,27 +18,28 @@ No YouTube/Google logo, name, icon or font is used: the font is Inter (SIL OFL, 
 
 ## Screenshots
 
-Real screenshots from an Android TV, in English and Italian. Video covers, titles, channel names,
-pictures and search terms are replaced by grey placeholders: only the NovaTV interface is shown.
-Everything you see here (header, side menu, cards, channel page, player, settings screen) is what NovaTV changes
-compared to the original app (see [Credits](#6-credits)).
+Real screenshots from an Android TV. Video covers, titles, channel names, pictures and search terms are
+replaced by grey placeholders: only the NovaTV interface is shown. Everything you see here (header, side menu,
+cards, channel page, player, settings screen) is what NovaTV changes compared to the original app
+(see [Credits](#6-credits)).
 
 <table>
-<tr><th width="50%">English</th><th width="50%">Italiano</th></tr>
-<tr><td><img src="docs/screenshots/home_en.png" alt="home (English)"></td><td><img src="docs/screenshots/home_it.png" alt="home (Italiano)"></td></tr>
-<tr><td colspan="2">Home: logo, full-width search bar with mic, clock and date; rounded cards with the channel avatar, "channel" and "views · date" on separate lines, white focus ring.</td></tr>
-<tr><td><img src="docs/screenshots/rail_en.png" alt="rail (English)"></td><td><img src="docs/screenshots/rail_it.png" alt="rail (Italiano)"></td></tr>
-<tr><td colspan="2">Side menu: a floating, slightly raised panel with your profile picture on top (OK = switch account, long press = account settings) and icon + label sections.</td></tr>
-<tr><td><img src="docs/screenshots/search_en.png" alt="search (English)"></td><td><img src="docs/screenshots/search_it.png" alt="search (Italiano)"></td></tr>
-<tr><td colspan="2">Search: the same bar as Home, suggestions as chips, channels as round cards with name and subscribers below, accent-colored watch progress.</td></tr>
-<tr><td><img src="docs/screenshots/channel_en.png" alt="channel (English)"></td><td><img src="docs/screenshots/channel_it.png" alt="channel (Italiano)"></td></tr>
-<tr><td colspan="2">Channel page like the web: search bar on top, banner, profile picture over its edge, name, @handle · subscribers · videos and a Subscribe / Unsubscribe button that shows the state of your account.</td></tr>
-<tr><td><img src="docs/screenshots/player_en.png" alt="player (English)"></td><td><img src="docs/screenshots/player_it.png" alt="player (Italiano)"></td></tr>
-<tr><td colspan="2">Player: title, info line (views · date · likes) and channel at the top, clock on the right, round buttons, white Play/Pause, thicker bar with times on both sides.</td></tr>
-<tr><td><img src="docs/screenshots/shorts_en.png" alt="shorts (English)"></td><td><img src="docs/screenshots/shorts_it.png" alt="shorts (Italiano)"></td></tr>
-<tr><td colspan="2">Shorts: tall cards that start below the clock and date.</td></tr>
-<tr><td><img src="docs/screenshots/settings_en.png" alt="settings (English)"></td><td><img src="docs/screenshots/settings_it.png" alt="settings (Italiano)"></td></tr>
-<tr><td colspan="2">Settings: the dedicated NovaTV screen (theme, accent, cards per row, preview, player title, clock, animations, navigation sounds).</td></tr>
+<tr>
+<td width="50%"><img src="docs/screenshots/home_en.png" alt="Home"><br><b>Home</b>: logo, full-width search bar with mic, clock and date; rounded cards with the channel avatar, "channel" and "views · date" on separate lines, white focus ring.</td>
+<td width="50%"><img src="docs/screenshots/rail_en.png" alt="Side menu"><br><b>Side menu</b>: a floating, slightly raised panel with your profile picture on top (OK = switch account, long press = account settings) and icon + label sections.</td>
+</tr>
+<tr>
+<td><img src="docs/screenshots/search_en.png" alt="Search"><br><b>Search</b>: the same bar as Home, suggestions as chips, channels as round cards with name and subscribers below, accent-colored watch progress.</td>
+<td><img src="docs/screenshots/channel_en.png" alt="Channel page"><br><b>Channel page</b> like the web: search bar on top, banner, profile picture over its edge, name, @handle · subscribers · videos and a Subscribe / Unsubscribe button that shows the state of your account.</td>
+</tr>
+<tr>
+<td><img src="docs/screenshots/player_en.png" alt="Player"><br><b>Player</b>: title, info line (views · date · likes) and channel at the top, clock on the right, round buttons, white Play/Pause, thicker bar with times on both sides.</td>
+<td><img src="docs/screenshots/shorts_en.png" alt="Shorts"><br><b>Shorts</b>: tall cards that start below the clock and date.</td>
+</tr>
+<tr>
+<td><img src="docs/screenshots/settings_en.png" alt="NovaTV settings"><br><b>Settings</b>: the dedicated NovaTV screen (theme, accent, cards per row, preview, player title, clock, animations, navigation sounds).</td>
+<td></td>
+</tr>
 </table>
 
 ---
@@ -106,7 +109,7 @@ General rule: **new code lives in new files** (`novatv_*`, `Nova*`); upstream fi
 always marked with a `NovaTV` comment. To find them all:
 
 ```bash
-git grep -n "NovaTV" -- ':!README.md'
+git grep -n "NovaTV" -- ':!README*.md'
 ```
 
 ### 3.1 New files
@@ -132,7 +135,7 @@ git grep -n "NovaTV" -- ':!README.md'
 | `tv/util/NovaInitialDrawable.java` | Colored circle with the channel initial, shown until the avatar is loaded. |
 | `common/.../misc/NovaUiSounds.java`, `common/res/raw/novatv_sound_01..15.wav`, `tools/novatv/gen_sounds.py` | Soft navigation sounds (original, generated by the script): a short sound when the selection moves, the same one a bit lower on OK. In the NovaTV settings: off / quiet / normal and 15 sounds to choose from (each plays when picked; `NovaTVData.ui_sounds`, `ui_sound_type`). The system click is muted in the app themes (`android:soundEffectsEnabled`); silent when sound effects are off in the TV settings. |
 | `res/layout/lb_headers_fragment.xml`, `tv/ui/widgets/browse/NovaRailAccountView.java` | Side rail as a floating, slightly raised panel (`novatv_rail_panel_bg`) with the profile avatar on top (OK = next account / list, long press = account settings, hidden when the accounts button is off). Original ids kept. |
-| `docs/screenshots/*.png`, `tools/novatv/mask_screenshots.py` | README screenshots (English and Italian) and the script that replaces the video content with grey placeholders. |
+| `docs/screenshots/*.png`, `tools/novatv/mask_screenshots.py` | Screenshots of `README.md` (`*_en.png`) and `README_IT.md` (`*_it.png`) and the script that replaces the video content with grey placeholders. |
 | `tv/util/NovaSpinnerDrawable.java` | Loading spinner: thin white arc on a faint ring, grows and shrinks while turning (pages, player, loading cards). |
 | `tv/ui/playback/other/NovaSeekDispatcher.java` | User seeks (forward/back keys, seek bar) land on the nearest keyframe (max 4 s away), so the video resumes at once instead of decoding up to the exact frame. Other seeks (segment skipping, saved position, remote) stay exact. |
 
@@ -327,7 +330,7 @@ Files where a conflict is possible, and how to solve it:
 | `NavigateTitleView.java`, `BrowseFragment.java`, `PlaybackFragment.java`, `ControlBar.java`, `SearchSupportFragment.java`, `ChannelHeaderPresenter.java`, `ChannelFragment.java` | Keep upstream's changes and put the `NovaTV` blocks back. |
 | `MainUIData.java` (color schemes) | If upstream adds a scheme, add it at the end pointing to `App.Theme.Nova.Dark` or `.Oled`, without changing the order of the others (the saved index must stay valid). |
 | `build.gradle` | Keep upstream's news (version, dependencies) and the NovaTV changes: `app.novatv*` applicationId, `NovaTV` APK name, Firebase condition, fallback signing (`signingConfigs.debug`). |
-| `README.md`, `PRIVACY.md`, `LICENSE` | Keep the NovaTV version: `git checkout --ours <file>` (the LICENSE already keeps the original copyright notice). |
+| `README.md`, `README_IT.md`, `PRIVACY.md`, `LICENSE` | Keep the NovaTV version: `git checkout --ours <file>` (the LICENSE already keeps the original copyright notice). |
 | `.png` icons/banners, `strings.xml` (`app_name`) | Keep the NovaTV version: `git checkout --ours <file>`. |
 | `ExoPlayerInitializer.java`, `exoplayer-amzn-2.10.6/.../ChunkSampleStream.java`, `SabrMediaPeriod.java` | Keep upstream's changes and put the `NovaTV` lines back (buffer thresholds, `getBufferedSyncPositionUs`). |
 | `leanback-1.0.0/.../GridLayoutManager.java` | Look for `MOD: NovaTV` (two spots in `onInterceptFocusSearch`) and reapply the change. |
